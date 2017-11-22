@@ -1,0 +1,4 @@
+flex lex.l
+byacc parser.y
+cc -o Program y.tab.c -ll -Ly
+./Program<text.t
