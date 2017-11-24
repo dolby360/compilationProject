@@ -1,8 +1,23 @@
 
 %{
-    #include "print_ast.h";
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+    #include <ctype.h>
     void yyerror(const char *c);
+    #include "ast.h"
+
+
+    program* ourProgram;
 %}
+
+
+
+%union{
+	char ch;
+	int num;			
+    char* str;	
+}
 
 %token KEY_BOOLEAN,KEY_CHAR,KEY_VOID,KEY_INT,KEY_STRING,KEY_INTP,KEY_CHARP
 %token KEY_IF,KEY_ELSE
@@ -17,20 +32,30 @@
 %token SEMICOLON,COMMA
 %token BRA_O,BRA_C,PARAN_O,PARAN_C,SQ_BRA_O,SQ_BRA_C
 
-%%
-S:          PROCEDURES { printf("Syntax and Parsing: ok \n");
-            print_ast($1);
-            }
-PROCEDURES: PROCEDURES OP_PLUS PROCEDURES { $$ = mknode('+',$1,$3); } 
-            |KEY_INT { $$ = mknode(yytext,NULL,NULL); };
+%token NULL_LITERAL IDENTIFIER STRING_LITERAL CHAR_LITERAL
 
+%token  TRUE_LITERAL FALSE_LITERAL INTEGER_LITERAL HEX_LITERAL OCTA_LITERAL BINARY_LITERAL 
+
+%type <str> IDENTIFIER NULL_LITERAL STRING_LITERAL
+%type <ch> CHAR_LITERAL
+%type <num> INTEGER_LITERAL HEX_LITERAL OCTA_LITERAL BINARY_LITERAL
+
+
+
+%%
+S:  G { printf("Syntax and Parsing: ok \n"); ourProgram = makeProgram($1)};|
+    G {$$=makeProcedurList()};
 %%
 
 #include "lex.yy.c"
 main(){
+
+    //printAst(ourProgram);
+
     return yyparse();
 }
-int yyerror(){
-    printf("ERROR\n");
-    return 0;
+
+void yyerror(const char *c){
+	fprintf(stderr,"line %d: %s\n",yylineno - 1,c);
+	
 }

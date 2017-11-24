@@ -1,4 +1,6 @@
-flex lex.l
-byacc parser.y
+#!/bin/bash
+
+lex lex.l
+yacc parser.y
 cc -o Program y.tab.c -ll -Ly
 ./Program<text.t
