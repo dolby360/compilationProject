@@ -2,5 +2,5 @@
 
 lex lex.l
 yacc parser.y
-cc -o Program y.tab.c -ll -Ly
+cc -Wall print_ast.c ast.c -o Program y.tab.c -ll -Ly
 ./Program<text.t

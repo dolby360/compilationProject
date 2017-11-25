@@ -3,6 +3,6 @@
 
 #include ast.h;
 
-void print_ast(node* nodeToPrint);
+void print_ast(ifNode* ast);
 
 #endif

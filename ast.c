@@ -4,39 +4,27 @@
 #include "ast.h"
 
 
+exper* makeExper(int token,exper* e,char* cLeft,char* cRight,int l,int r){
+    exper* toReturn = (exper*)malloc(sizeof(exper));
 
-program* makeProgram(procedurList* pl){
-    program* toReturn = (program*)malloc(sizeof(program));          
-    toReturn.token = 0;
-    toReturn.procedurNode = NULL;
+    toReturn->token = token;
+    toReturn->exp = (exper*)malloc(sizeof(exper));
+    toReturn->leftCharVariable = cLeft;
+    toReturn->rightCharVariable = cRight;
+    toReturn->leftIntVariable = l;
+    toReturn->rightIntVariable = r;
 
     return toReturn;
 }
 
-procedurList* makeProcedurList(){
-    procedurList* procedurToReturn = (procedurList*)malloc(sizeof(procedurList));
 
-    procedurToReturn.numberInTheNest = 0;
-}
+ifNode* makeIfNode(int token,int nest,expr* e){
+    ifNode* toReturn = (ifNode*)malloc(sizeof(ifNode));
 
-/*
-node* mknode(char* token,node *left, node *right){
-    char* newStr = (char*)malloc(sizeof(token) + 1);
-    node* newNode= (node*)malloc(sizeof(node));
-    newNode->left = left;
-    newNode->right = right;
-    strcpy(newStr,token);
-    newNode->token = newStr;
-
-    return newNode;
-}
-*/
-
-
-/*
-void pirntConditions(char* cond){
+    toReturn->token = token;
+    toReturn->nest = nest;
+    toReturn->exp = e;
     
+    return toReturn;
 }
-*/
-
 

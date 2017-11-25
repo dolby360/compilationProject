@@ -5,18 +5,19 @@
     #include <string.h>
     #include <ctype.h>
     void yyerror(const char *c);
+
     #include "ast.h"
-
-
     program* ourProgram;
 %}
-
-
 
 %union{
 	char ch;
 	int num;			
     char* str;	
+
+
+    program* p;
+    procedurList* procedurList_;
 }
 
 %token KEY_BOOLEAN,KEY_CHAR,KEY_VOID,KEY_INT,KEY_STRING,KEY_INTP,KEY_CHARP
@@ -34,7 +35,7 @@
 
 %token NULL_LITERAL IDENTIFIER STRING_LITERAL CHAR_LITERAL
 
-%token  TRUE_LITERAL FALSE_LITERAL INTEGER_LITERAL HEX_LITERAL OCTA_LITERAL BINARY_LITERAL 
+%token TRUE_LITERAL FALSE_LITERAL INTEGER_LITERAL HEX_LITERAL OCTA_LITERAL BINARY_LITERAL 
 
 %type <str> IDENTIFIER NULL_LITERAL STRING_LITERAL
 %type <ch> CHAR_LITERAL
@@ -43,9 +44,15 @@
 
 
 %%
-S:  G { printf("Syntax and Parsing: ok \n"); ourProgram = makeProgram($1)};|
-    G {$$=makeProcedurList()};
+
+S:  KEY_IF PARAN_O expr PARAN_C BRA_O BRA_C{ printf("finished\n"); };
+expr:   INTEGER_LITERAL OP_EQ INTEGER_LITERAL {printf("%d = %d\n",$1,$3);}
+        
+;
 %%
+
+
+
 
 #include "lex.yy.c"
 main(){
@@ -59,3 +66,5 @@ void yyerror(const char *c){
 	fprintf(stderr,"line %d: %s\n",yylineno - 1,c);
 	
 }
+
+
