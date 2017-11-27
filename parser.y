@@ -6,18 +6,17 @@
     #include <ctype.h>
     void yyerror(const char *c);
 
-    #include "ast.h"
-    program* ourProgram;
+    #define YYSTRPE struct node*
+
+    #include "print_ast.h"
+    node* ourProgram;
+
 %}
 
 %union{
 	char ch;
 	int num;			
     char* str;	
-
-
-    program* p;
-    procedurList* procedurList_;
 }
 
 %token KEY_BOOLEAN,KEY_CHAR,KEY_VOID,KEY_INT,KEY_STRING,KEY_INTP,KEY_CHARP
@@ -44,20 +43,25 @@
 
 
 %%
+S: block_grammer
 
-S:  KEY_IF PARAN_O expr PARAN_C BRA_O BRA_C{ printf("finished\n"); };
-expr:   INTEGER_LITERAL OP_EQ INTEGER_LITERAL {printf("%d = %d\n",$1,$3);}
+block_grammer: PROCEDUR IDENTIFIER PARAN_O parameters_grammer PARAN_C;
+
+PROCEDUR: KEY_INT|KEY_BOOLEAN|KEY_CHARP|KEY_INTP|KEY_STRING|KEY_VOID;
+
+if_grammer:  KEY_IF PARAN_O expr PARAN_C BRA_O BRA_C{ printf("finished\n");$$=makeNode("IF",$3,NULL);};
+
+expr_grammer:   INTEGER_LITERAL OP_EQ INTEGER_LITERAL {$$=makeNode("==",$1,$3);};
         
+parameters_grammer: ;
 ;
 %%
-
-
 
 
 #include "lex.yy.c"
 main(){
 
-    //printAst(ourProgram);
+    print_ast(ourProgram);
 
     return yyparse();
 }

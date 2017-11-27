@@ -3,28 +3,14 @@
 
 #include "ast.h"
 
+node* makeNode(char* token ,node* nodeLeft ,node* nodeRight){
+    node* nodeToReturn = (node*)malloc(sizeof(node));
 
-exper* makeExper(int token,exper* e,char* cLeft,char* cRight,int l,int r){
-    exper* toReturn = (exper*)malloc(sizeof(exper));
+    nodeToReturn->token = (char*)malloc(sizeof(token + 1));
+    strcpy(nodeToReturn->token,token);
 
-    toReturn->token = token;
-    toReturn->exp = (exper*)malloc(sizeof(exper));
-    toReturn->leftCharVariable = cLeft;
-    toReturn->rightCharVariable = cRight;
-    toReturn->leftIntVariable = l;
-    toReturn->rightIntVariable = r;
+    nodeToReturn->left = nodeLeft;
+    nodeToReturn->right = nodeRight;
 
-    return toReturn;
+    return nodeToReturn;
 }
-
-
-ifNode* makeIfNode(int token,int nest,expr* e){
-    ifNode* toReturn = (ifNode*)malloc(sizeof(ifNode));
-
-    toReturn->token = token;
-    toReturn->nest = nest;
-    toReturn->exp = e;
-    
-    return toReturn;
-}
-

@@ -1,8 +1,8 @@
 #ifndef PRINT_AST
 #define PRINT_AST
 
-#include ast.h;
+#include "ast.h";
 
-void print_ast(ifNode* ast);
+void print_ast(node* ast);
 
 #endif

@@ -1,4 +1,8 @@
 
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
 
-#define EXP_ 0
-#define IFNODE_ 1
+
+
+
+#endif

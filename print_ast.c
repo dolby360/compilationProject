@@ -1,6 +1,6 @@
-#include "ast.h"
+#include "print_ast.h"
 
-void print_ast(ifNode* ast){
+void print_ast(node* ast){
 
     printf("******************\n\n\n");
     printf("Hi matherFucker\n");
