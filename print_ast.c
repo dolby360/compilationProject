@@ -1,8 +1,27 @@
 #include "print_ast.h"
 
-void print_ast(node* ast){
+void printPreOrder(node* root,int nest){
+    int i;
 
-    printf("******************\n\n\n");
-    printf("Hi matherFucker\n");
-    printf("******************\n\n\n");
+    if(root)
+    {
+        for(i = 0;i<nest;i++){
+            printf("\t");
+        }
+
+        if(strcmp(root->token,"") == 0){/*Do nothing*/}
+        //else {printf("-> %s\n",root->token);}
+        else if(
+        strcmp(root->token,"}") == 0 || 
+        strcmp(root->token,";") == 0 ||
+        strcmp(root->token,")") == 0 
+        )
+        {printf("-> %s\n",root->token);}
+        
+        else{printf("%s",root->token);}
+
+        printPreOrder(root->left,nest++);
+        printPreOrder(root->right,nest++);
+    }
+
 }

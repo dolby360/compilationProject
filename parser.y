@@ -17,6 +17,8 @@
 	char ch;
 	int num;			
     char* str;	
+
+    node* n;
 }
 
 %token KEY_BOOLEAN,KEY_CHAR,KEY_VOID,KEY_INT,KEY_STRING,KEY_INTP,KEY_CHARP
@@ -40,28 +42,75 @@
 %type <ch> CHAR_LITERAL
 %type <num> INTEGER_LITERAL HEX_LITERAL OCTA_LITERAL BINARY_LITERAL
 
+%type <n> PROGRAM
+%type <n> MULTI_PROC
+%type <n> PROC
+%type <n> ID
+%type <n> MULT_PARAMS
+%type <n> BLOCK_W_RETURN
+%type <n> KEY_BOOLEAN 
+%type <n> KEY_CHAR   
+%type <n> KEY_CHARP  
+%type <n> KEY_INT    
+%type <n> KEY_INTP   
+%type <n> KEY_STRING 
+%type <n> KEY_VOID
+%type <n> PROCEDURE
 
+%type <str> COMMA
 
 %%
-S: block_grammer
+S: PROGRAM {printPreOrder($1,0);};
 
-block_grammer: PROCEDUR IDENTIFIER PARAN_O parameters_grammer PARAN_C;
+PROGRAM:  MULTI_PROC {$$=makeNode("Begin:",$1,NULL);};
 
-PROCEDUR: KEY_INT|KEY_BOOLEAN|KEY_CHARP|KEY_INTP|KEY_STRING|KEY_VOID;
+MULTI_PROC : MULTI_PROC PROC { $$ = makeNode("", $1, $2); }
+           | PROC { $$ = $1; }
+           ;
 
-if_grammer:  KEY_IF PARAN_O expr PARAN_C BRA_O BRA_C{ printf("finished\n");$$=makeNode("IF",$3,NULL);};
+PROC :  PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C BLOCK_W_RETURN {
+                                                                node* dec_proc = makeNode($1->token, $2, $4);
+                                                                node* block_proc = makeNode("",NULL, $6);
+                                                                $$ = makeNode("",dec_proc,block_proc);
+                                                                }
+        |PROCEDURE ID PARAN_O PARAN_C BLOCK_W_RETURN    {
+                                                        node* dec_proc = makeNode("", $2, NULL);
+                                                        node* block_proc = makeNode("", NULL, $5);
+                                                        $$ = makeNode("",dec_proc,block_proc);
+                                                        };
 
-expr_grammer:   INTEGER_LITERAL OP_EQ INTEGER_LITERAL {$$=makeNode("==",$1,$3);};
-        
-parameters_grammer: ;
-;
+PROCEDURE:  KEY_BOOLEAN { $$=makeNode("boolean",NULL,NULL); }
+            |KEY_CHAR   { $$=makeNode("char",NULL,NULL); }
+            |KEY_CHARP  { $$=makeNode("charp",NULL,NULL); }
+            |KEY_INT    { $$=makeNode("int",NULL,NULL); }
+            |KEY_INTP   { $$=makeNode("intp",NULL,NULL); }
+            |KEY_STRING { $$=makeNode("string",NULL,NULL); }
+            |KEY_VOID   { $$=makeNode("void",NULL,NULL); }
+
+
+
+
+MULT_PARAMS:    PROCEDURE ID COMMA MULT_PARAMS 
+                                        {
+                                        node* l = makeNode($1->token, NULL, $2);
+                                        node* r = makeNode(",", NULL,$4 );
+                                        $$ = makeNode("",l,r);
+                                        }
+                |PROCEDURE ID {$$=makeNode($1->token,$2,NULL);};
+
+
+
+
+
+BLOCK_W_RETURN: BRA_O KEY_RETURN SEMICOLON BRA_C {$$=makeNode("",NULL,NULL);};;
+ID: IDENTIFIER {$$=makeNode(yytext,NULL,NULL);};
 %%
 
 
 #include "lex.yy.c"
 main(){
 
-    print_ast(ourProgram);
+    //print_ast(ourProgram);
 
     return yyparse();
 }

@@ -1,6 +1,4 @@
 
-
-
 #include "ast.h"
 
 node* makeNode(char* token ,node* nodeLeft ,node* nodeRight){
@@ -14,3 +12,5 @@ node* makeNode(char* token ,node* nodeLeft ,node* nodeRight){
 
     return nodeToReturn;
 }
+
+
