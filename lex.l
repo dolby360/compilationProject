@@ -17,6 +17,7 @@ int convertInt(char* num, int base) {
 
 %}
 
+
 ID 	[a-zA-Z][a-zA-Z0-9_]*
 INT 	0|[1-9][0-9]*
 HEX 	0[x|X][0-9A-F]*
@@ -25,6 +26,7 @@ BIN	[0-1]+b
 STRING	\"[^\n\"]*\" 
 
 %%
+
 "null"|"NULL"   {return NULL_LITERAL;}
 
 boolean         {return KEY_BOOLEAN;}
@@ -41,9 +43,8 @@ do              {return KEY_DO;}
 for             {return KEY_FOR;}
 return          {return KEY_RETURN;}
 null            {return KEY_NULL;}
-
 \&\&            {return OP_AND;}
-\/              {return OP_DIV;;}
+\/              {return OP_DIV;}
 \=\=            {return OP_EQ;}
 \=              {return ASSIGN;}
 \>\=            {return OP_GE;}

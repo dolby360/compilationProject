@@ -6,11 +6,10 @@
     #include <ctype.h>
     void yyerror(const char *c);
 
-    #define YYSTRPE struct node*
+    #define YYSTPARAN_CE struct node*
 
     #include "print_ast.h"
-    node* ourProgram;
-
+    node* ouPARAN_Crogram;
 %}
 
 %union{
@@ -21,7 +20,7 @@
     node* n;
 }
 
-%token KEY_BOOLEAN,KEY_CHAR,KEY_VOID,KEY_INT,KEY_STRING,KEY_INTP,KEY_CHARP
+%token KEY_BOOLEAN,KEY_CHAR,KEY_VOID,KEY_INT,KEY_STRING,KEY_INTP,KEY_CHAPARAN_C
 %token KEY_IF,KEY_ELSE
 %token KEY_WHILE,KEY_DO,KEY_FOR
 %token KEY_RETURN,KEY_NULL
@@ -38,26 +37,19 @@
 
 %token TRUE_LITERAL FALSE_LITERAL INTEGER_LITERAL HEX_LITERAL OCTA_LITERAL BINARY_LITERAL 
 
-%type <str> IDENTIFIER NULL_LITERAL STRING_LITERAL
+%token APOSTROPHE KEY_CHARP
+
+%type <str> IDENTIFIER NULL_LITERAL STRING_LITERAL 
 %type <ch> CHAR_LITERAL
 %type <num> INTEGER_LITERAL HEX_LITERAL OCTA_LITERAL BINARY_LITERAL
 
-%type <n> PROGRAM
-%type <n> MULTI_PROC
-%type <n> PROC
-%type <n> ID
-%type <n> MULT_PARAMS
-%type <n> BLOCK_W_RETURN
-%type <n> KEY_BOOLEAN 
-%type <n> KEY_CHAR   
-%type <n> KEY_CHARP  
-%type <n> KEY_INT    
-%type <n> KEY_INTP   
-%type <n> KEY_STRING 
-%type <n> KEY_VOID
-%type <n> PROCEDURE
+%type <n> PROGRAM MULTI_PROC PROC ID MULT_PARAMS BLOCK_W_RETURN KEY_BOOLEAN
+%type <n> KEY_CHAR KEY_CHAPARAN_C KEY_INT KEY_INTP KEY_STRING KEY_VOID PROCEDURE
+%type <n> MULT_STATEMENT RETURN_STATEMENT STATEMENT ASSIGN VARS
+%type <n> COND WHILE_STATEMENT BLOCK ASSIGNMENT
+%type <n> LHS EXP STR PTR STR_INDEX DEREF BOOL_TYPE PROC_CALL PAR_EXP SIZE_OF MULT_EXP
 
-%type <str> COMMA
+%type <str> COMMA       
 
 %%
 S: PROGRAM {printPreOrder($1,0);};
@@ -89,20 +81,116 @@ PROCEDURE:  KEY_BOOLEAN { $$=makeNode("boolean",NULL,NULL); }
 
 
 
-
 MULT_PARAMS:    PROCEDURE ID COMMA MULT_PARAMS 
                                         {
-                                        node* l = makeNode($1->token, NULL, $2);
-                                        node* r = makeNode(",", NULL,$4 );
+                                        node* l = makeNode($1->token, $2, NULL);
+                                        node* r = makeNode(",", $4,NULL );
                                         $$ = makeNode("",l,r);
                                         }
                 |PROCEDURE ID {$$=makeNode($1->token,$2,NULL);};
 
 
+BLOCK_W_RETURN : BRA_O MULT_STATEMENT RETURN_STATEMENT BRA_C {$$ = makeNode("",$2,$3);}
+               | BRA_O RETURN_STATEMENT SEMICOLON BRA_C {$$ = makeNode("",NULL,$2);}
+               ;
+
+MULT_STATEMENT : MULT_STATEMENT STATEMENT { $$ = makeNode("", $1,$2); }
+                | STATEMENT { $$ = $1 ; }
+
+STATEMENT   : ASSIGNMENT SEMICOLON { $$ = makeNode("STATEMENT", $1, NULL); }
+            | VARS SEMICOLON { $$ = makeNode("STATEMENT", $1, NULL); }
+            | COND { $$ = makeNode("STATEMENT", $1, NULL); }
+            | WHILE_STATEMENT { $$ = makeNode("STATEMENT", $1, NULL); }
+            | BLOCK { $$ = makeNode("STATEMENT", $1, NULL); }
+            | PROC { $$ = makeNode("STATEMENT", $1, NULL); }
+            ;
+
+RETURN_STATEMENT: KEY_RETURN EXP { $$ = makeNode("return",$2,NULL); };
 
 
+VARS:               { $$ = makeNode("",NULL,NULL); };
+COND:               { $$ = makeNode("",NULL,NULL); };
+WHILE_STATEMENT:    { $$ = makeNode("",NULL,NULL); };
+BLOCK:              { $$ = makeNode("",NULL,NULL); };
+PROC:               { $$ = makeNode("",NULL,NULL); };
 
-BLOCK_W_RETURN: BRA_O KEY_RETURN SEMICOLON BRA_C {$$=makeNode("",NULL,NULL);};;
+
+ASSIGNMENT : LHS ASSIGN EXP { $$ = makeNode("ASSIGNMENT", $1, $3); }
+           | LHS ASSIGN STR { $$ = makeNode("STRING ASSIGNMENT", $1, $3);}
+           | LHS ASSIGN PTR { $$ = makeNode("POINTER ASSIGNMENT", $1, $3);}
+           | LHS ASSIGN KEY_NULL {$$ = makeNode("NULL POINTER ASSIGNMENT", $1, makeNode("NULL POINTER",NULL,NULL)); }
+           ;
+
+
+LHS : ID { $$ = makeNode("ASSIGNMENT TARGET: VARIABLE", $1, NULL); }
+    | STR_INDEX { $$ = makeNode("ASSIGNMENT TARGET: STRING", $1, NULL); }
+    | DEREF { $$ = makeNode("ASSIGNMENT TARGET: DEREFERENCE", $1, NULL); }
+    ;
+
+STR_INDEX : ID SQ_BRA_O EXP SQ_BRA_C { $$ = makeNode("STRING INDEX", $1, $3) ;};
+
+EXP : ID                    { $$ = makeNode(yytext, $1, NULL); }
+    | INTEGER_LITERAL       { $$ = makeNode("INTEGER", $1, NULL); }
+    | CHAR_LITERAL          { $$ = makeNode(yytext, $1, NULL); }
+    | STR_INDEX             { $$ = $1; }
+    | BOOL_TYPE             { $$ = makeNode("BOOLEAN", $1, NULL); }
+    | OP_DEREFERENCE EXP    { $$ = makeNode("DEREFERENCE", $2, NULL); }
+    | PROC_CALL             { $$ = $1; }
+    | PAR_EXP               { $$ = $1; }
+    | SIZE_OF               { $$ = $1; }
+    | OP_NOT EXP            { $$ = makeNode("!", $2, NULL); }
+    | EXP OP_PLUS EXP       { $$ = makeNode("+",$1,$3); }
+    | EXP OP_NOT EXP        { $$ = makeNode("-",$1,$3); }
+    | EXP OP_MULTI EXP      { $$ = makeNode("*",$1,$3); }
+    | EXP OP_DIV EXP        { $$ = makeNode("/",$1,$3); }
+    | EXP OP_LT EXP         { $$ = makeNode("<",$1,$3); }
+    | EXP OP_GT EXP         { $$ = makeNode(">",$1,$3); }
+    | EXP OP_LE EXP         { $$ = makeNode("<=",$1,$3); }
+    | EXP OP_GE EXP         { $$ = makeNode(">=",$1,$3); }
+    | EXP OP_EQ EXP         { $$ = makeNode("==",$1,$3); }
+    | EXP OP_NE EXP         { $$ = makeNode("!=",$1,$3); }
+    | EXP OP_AND EXP        { $$ = makeNode("&&",$1,$3); }
+    | EXP OP_OR EXP         { $$ = makeNode("||",$1,$3); }
+    | PTR OP_LT PTR         { $$ = makeNode("<",$1,$3); }
+    | PTR OP_GT PTR         { $$ = makeNode(">",$1,$3); }
+    | PTR OP_LE PTR         { $$ = makeNode("<=",$1,$3); }
+    | PTR OP_GE PTR         { $$ = makeNode(">=",$1,$3); }
+    | PTR OP_EQ PTR         { $$ = makeNode("==",$1,$3); }
+    | PTR OP_NE PTR         { $$ = makeNode("!=",$1,$3); }
+    | PTR OP_AND PTR        { $$ = makeNode("&&",$1,$3); }
+    | PTR OP_OR PTR         { $$ = makeNode("||",$1,$3); }
+    ;
+
+
+BOOL_TYPE : TRUE_LITERAL { $$ = makeNode("true", NULL, NULL); }
+          | FALSE_LITERAL { $$ = makeNode("false", NULL, NULL); }
+          ;
+
+PROC_CALL : ID PARAN_O MULT_EXP PARAN_C SEMICOLON{ $$ = makeNode("Procedure Call",$1, $3); }
+          | ID PARAN_O PARAN_C SEMICOLON{ $$ = makeNode("Procedure Call No Params",$1, NULL); }
+          ;
+
+PAR_EXP : PARAN_O EXP PARAN_C { $$ = makeNode("PARANTHESES EXPRESSION",$2,NULL); }
+        ;
+
+SIZE_OF : OP_ABS ID OP_ABS { $$ = makeNode("ABS",$2,NULL); }
+        | OP_ABS STR OP_ABS { $$ = makeNode("ABS",$2,NULL); }
+        ;
+
+PTR : OP_ADDRESS_OF ID { $$ = makeNode("&", $2, NULL); }
+    | OP_ADDRESS_OF STR_INDEX { $$ = makeNode("&", $2, NULL); }
+    ;
+
+DEREF : OP_DEREFERENCE ID { $$ = makeNode("^", $2, NULL); }
+      ;
+
+MULT_EXP : MULT_EXP COMMA EXP { $$ = makeNode(""/*Multiple Expressions*/,$1,$3); }
+         | EXP { $$ = $1; }
+         ;
+
+STR : STRING_LITERAL { $$ = makeNode(yytext,NULL,NULL); }
+    ;
+
 ID: IDENTIFIER {$$=makeNode(yytext,NULL,NULL);};
 %%
 
