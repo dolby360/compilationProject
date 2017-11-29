@@ -107,13 +107,13 @@ STATEMENT   : ASSIGNMENT SEMICOLON { $$ = makeNode("STATEMENT", $1, NULL); }
 
 RETURN_STATEMENT: KEY_RETURN EXP { $$ = makeNode("return",$2,NULL); };
 
-
-VARS:               { $$ = makeNode("",NULL,NULL); };
 COND:               { $$ = makeNode("",NULL,NULL); };
 WHILE_STATEMENT:    { $$ = makeNode("",NULL,NULL); };
 BLOCK:              { $$ = makeNode("",NULL,NULL); };
 PROC:               { $$ = makeNode("",NULL,NULL); };
 
+VARS : PROCEDURE ID { $$ = makeNode("",$2 ,$4); } 
+     ;
 
 ASSIGNMENT : LHS ASSIGN EXP { $$ = makeNode("ASSIGNMENT", $1, $3); }
            | LHS ASSIGN STR { $$ = makeNode("STRING ASSIGNMENT", $1, $3);}
