@@ -1,5 +1,5 @@
 int main(int i,char k,int b)
 {
-    char ss;
+    char g;
     return i;
 }

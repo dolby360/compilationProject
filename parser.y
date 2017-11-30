@@ -91,7 +91,7 @@ MULT_PARAMS:    PROCEDURE ID COMMA MULT_PARAMS
 
 
 BLOCK_W_RETURN : BRA_O MULT_STATEMENT RETURN_STATEMENT BRA_C {$$ = makeNode("",$2,$3);}
-               | BRA_O RETURN_STATEMENT SEMICOLON BRA_C {$$ = $2;}
+               | BRA_O RETURN_STATEMENT BRA_C {$$ = $2;}
                ;
 
 MULT_STATEMENT : MULT_STATEMENT STATEMENT { $$ = makeNode("", $1,$2); }
@@ -105,7 +105,7 @@ STATEMENT   : ASSIGNMENT SEMICOLON  { $$ = makeNode("", $1, NULL); }
             | PROC                  { $$ = makeNode("", $1, NULL); }
             ;
 
-RETURN_STATEMENT: KEY_RETURN EXP { $$ = makeNode("return",$2,NULL); };
+RETURN_STATEMENT: KEY_RETURN EXP SEMICOLON { $$ = makeNode("return",$2,NULL); };
 
 COND:               { $$ = makeNode("",NULL,NULL); };
 WHILE_STATEMENT:    { $$ = makeNode("",NULL,NULL); };
