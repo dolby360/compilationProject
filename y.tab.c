@@ -891,7 +891,7 @@ case 42:
 break;
 case 43:
 #line 140 "parser.y"
-	{ printf("\n\n%s\n\n",yytext);yyval.n = makeNode(yytext, yystack.l_mark[0].n, NULL); }
+	{ yyval.n = makeNode(yystack.l_mark[0].n->token, yystack.l_mark[0].n, NULL); }
 break;
 case 44:
 #line 141 "parser.y"

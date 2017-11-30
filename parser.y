@@ -137,7 +137,7 @@ LHS : ID { $$ = makeNode("", $1, NULL); }
 
 STR_INDEX : ID SQ_BRA_O EXP SQ_BRA_C { $$ = makeNode("STRING INDEX", $1, $3) ;};
 
-EXP : ID                    { printf("\n\n%s\n\n",yytext);$$ = makeNode(yytext, $1, NULL); }
+EXP : ID                    { $$ = makeNode($1->token, $1, NULL); }
     | INTEGER_LITERAL       { $$ = makeNode(yytext, $1, NULL); }
     | CHAR_LITERAL          { $$ = makeNode(yytext, $1, NULL); }
     | STR_INDEX             { $$ = $1; }
