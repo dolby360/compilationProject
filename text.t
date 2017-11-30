@@ -1,5 +1,7 @@
-int main(int i,char k,int b)
+int main()
 {
-    char g;
-    return i;
+    if(dascx > a1)
+    {
+        boolean b;
+    }
 }
