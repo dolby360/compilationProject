@@ -891,7 +891,7 @@ case 42:
 break;
 case 43:
 #line 140 "parser.y"
-	{ yyval.n = makeNode(yystack.l_mark[0].n->token, yystack.l_mark[0].n, NULL); }
+	{ yyval.n = yystack.l_mark[0].n; }
 break;
 case 44:
 #line 141 "parser.y"
