@@ -1,4 +1,16 @@
-int main()
+int main(int k)
 {
-    if( wefsdsthasf == gdfx ){}
+    while(true){
+        int i = 0;
+    }
+    if( wefsdsthasf == gdfx )
+    {
+        i = k;
+    }
+
+    int p(){
+        int b = o;
+    }
+
+    return g;
 }

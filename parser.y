@@ -115,9 +115,19 @@ STATEMENT   : ASSIGNMENT SEMICOLON  { $$ = makeNode("", $1, NULL); }
 
 RETURN_STATEMENT: KEY_RETURN EXP SEMICOLON { $$ = makeNode("return",$2,NULL); };
 
-
-WHILE_STATEMENT:    { $$ = makeNode("",NULL,NULL); };
-PROC:               { $$ = makeNode("",NULL,NULL); };
+PROC : PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C BLOCK_W_RETURN 
+                                            {
+                                            node* input = makeNode("", $2, $4);
+                                            node* output = makeNode("", $6,NULL);
+                                            $$ = makeNode("",input,output);
+                                            }
+        
+        |PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C BLOCK_W 
+                                            {
+                                            node* input = makeNode("", $2, $4);
+                                            node* output = makeNode("", $6, NULL);
+                                            $$ = makeNode("",input,output);
+                                            };
 
 VARS :  PROCEDURE EXP           { $$ = makeNode($1->token,$2,NULL); } 
         |PROCEDURE ASSIGNMENT   { $$ = $2; } 
@@ -169,6 +179,8 @@ EXP : ID                    { $$ = $1; }
     | PTR OP_OR PTR         { $$ = makeNode("||",$1,$3); }
     ;
 
+WHILE_STATEMENT : KEY_WHILE PARAN_O EXP PARAN_C BLOCK {$$ = makeNode("while",$3,$5); }
+                ;
 
 BLOCK : BRA_O MULT_STATEMENT BRA_C {$$ = $2;}
       | BRA_O BRA_C {$$ = makeNode("{}",NULL,NULL);}
