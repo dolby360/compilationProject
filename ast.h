@@ -8,12 +8,13 @@
 
 typedef struct node{
     char* token;
-    struct node* left;
-    struct node* right;
-    
+    struct node* nodeOne;
+    struct node* nodeTwo;
+    struct node* nodeThree;
+    struct node* nodeFour;
 }node;
 
-node* makeNode(char* token ,node* nodeLeft ,node* nodeRight);
+node* makeNode(char* token_ ,node* nodeOne_ ,node* nodeTwo_,node* nodeThree_, node* nodeFour_);
 
 
 
