@@ -8,7 +8,7 @@ node* makeNode(char* token_ ,node* nodeOne_ ,node* nodeTwo_,node* nodeThree_, no
     strcpy(nodeToReturn->token,token_);
 
     //Debug;
-    printf("test    =>  %s\n",nodeToReturn->token);
+    //printf("test    =>  %s\n",nodeToReturn->token);
 
     nodeToReturn->nodeOne = nodeOne_ ;
     nodeToReturn->nodeTwo = nodeTwo_;

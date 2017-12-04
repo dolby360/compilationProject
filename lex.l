@@ -1,5 +1,6 @@
 option yylineo
 %{
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -69,6 +70,9 @@ null            {return KEY_NULL;}
 \)              {return PARAN_C;}
 \[              {return SQ_BRA_O;}
 \]              {return SQ_BRA_C;}
+[//].*			{return COMMENT;}
+
+	
 
 true|TRUE       {yylval.num = 1;return TRUE_LITERAL;}
 false|FALSE     {yylval.num = 0;return FALSE_LITERAL;}
@@ -84,13 +88,13 @@ false|FALSE     {yylval.num = 0;return FALSE_LITERAL;}
                 printf("NOT A PRINTABLE CHAR");
      }
 
-{INT}		{yylval.str=convertInt(yytext,10);return INTEGER_LITERAL;}
-{HEX}		{yylval.str=convertInt(yytext,16);return HEX_LITERAL;}
-{OCT}		{yylval.str=convertInt(yytext,8);return OCTA_LITERAL;}
-{BIN}		{yylval.str=convertInt(yytext,2);return BINARY_LITERAL;}
+{INT}		{yylval.str=yytext;/*convertInt(yytext,10);*/return INTEGER_LITERAL;}
+{HEX}		{yylval.str=yytext;/*convertInt(yytext,16);*/return HEX_LITERAL;}
+{OCT}		{yylval.str=yytext;/*convertInt(yytext,8);*/return OCTA_LITERAL;}
+{BIN}		{yylval.str=yytext;/*convertInt(yytext,2);*/return BINARY_LITERAL;}
 {ID}		{yylval.str=strdup(yytext);return IDENTIFIER;}
 {STRING}	{yylval.str=strdup(yytext);return STRING_LITERAL;}
 
 
-.|\n
+.|\n		
 %%

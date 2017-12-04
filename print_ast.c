@@ -15,10 +15,10 @@ void printPreOrder(node* root,int nest){
         if(strcmp(root->token,"") == 0){/*Do nothing*/}
         else{printf("->%s\n",root->token);}
 
-        printPreOrder(root->nodeOne,nest++);
-        printPreOrder(root->nodeTwo,nest++);
-        printPreOrder(root->nodeThree,nest++);
-        printPreOrder(root->nodeFour,nest++);
+        printPreOrder(root->nodeOne,nest+1);
+        printPreOrder(root->nodeTwo,nest+1);
+        printPreOrder(root->nodeThree,nest+1);
+        printPreOrder(root->nodeFour,nest+1);
         
     }
 

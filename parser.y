@@ -37,9 +37,9 @@
 
 %token TRUE_LITERAL FALSE_LITERAL INTEGER_LITERAL HEX_LITERAL OCTA_LITERAL BINARY_LITERAL 
 
-%token APOSTROPHE KEY_CHARP
+%token APOSTROPHE KEY_CHARP COMMENT
 
-%type <str> 
+
 %type <str> IDENTIFIER NULL_LITERAL STRING_LITERAL 
 %type <ch>  CHAR_LITERAL
 %type <str> INTEGER_LITERAL HEX_LITERAL OCTA_LITERAL BINARY_LITERAL
@@ -47,7 +47,7 @@
 %type <n> PROGRAM MULTI_PROC PROC ID MULT_PARAMS BLOCK_W_RETURN KEY_BOOLEAN
 %type <n> KEY_CHAR KEY_CHAPARAN_C KEY_INT KEY_INTP KEY_STRING KEY_VOID PROCEDURE
 %type <n> MULT_STATEMENT RETURN_STATEMENT STATEMENT ASSIGN VARS
-%type <n> COND WHILE_STATEMENT BLOCK ASSIGNMENT BLOCK_W
+%type <n> COND WHILE_STATEMENT BLOCK ASSIGNMENT BLOCK_W PROC_STETMENT PROC_STETMENT_MULT_PARAMS
 %type <n> LHS EXP STR PTR STR_INDEX DEREF BOOL_TYPE PROC_CALL PAR_EXP SIZE_OF MULT_EXP
 
 %type <str> COMMA       
@@ -61,18 +61,25 @@ MULTI_PROC : MULTI_PROC PROC { $$ = makeNode("", $1, $2,NULL,NULL); }
            | PROC { $$ = $1; }
            ;
 
-PROC :  PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C BLOCK_W_RETURN { $$ = makeNode($1->token,$2,$4,$6,NULL);}
+PROC :  PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C OPTIONAL_COMMENT BLOCK_W_RETURN OPTIONAL_COMMENT{ $$ = makeNode($1->token,$2,$4,$7,NULL);}
 
-        |PROCEDURE ID PARAN_O PARAN_C BLOCK_W_RETURN    { $$ = makeNode($1->token,$2,$5,NULL,NULL);  }
+        |PROCEDURE ID PARAN_O PARAN_C OPTIONAL_COMMENT BLOCK_W_RETURN OPTIONAL_COMMENT{ $$ = makeNode($1->token,$2,$6,NULL,NULL);  }
 
-        |PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C BLOCK_W   {$$ = makeNode($1->token,$2,$4,$6,NULL);}
+        |PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C OPTIONAL_COMMENT BLOCK_W OPTIONAL_COMMENT{ $$ = makeNode($1->token,$2,$4,$7,NULL); }
                                             
-        |PROCEDURE ID PARAN_O PARAN_C BLOCK_W   { $$ = makeNode($1->token,$2,$5,NULL,NULL); }
+        |PROCEDURE ID PARAN_O PARAN_C OPTIONAL_COMMENT BLOCK_W OPTIONAL_COMMENT{ $$ = makeNode($1->token,$2,$6,NULL,NULL); }
 
-        |BLOCK_W_RETURN { $$ = $1;}
+        |BLOCK_W_RETURN OPTIONAL_COMMENT{ $$ = $1;}
 
-        |BLOCK_W   {$$ = $1;}
+        |BLOCK_W OPTIONAL_COMMENT  {$$ = $1;}
         ;
+
+PROC_STETMENT: ID PARAN_O PROC_STETMENT_MULT_PARAMS PARAN_C OPTIONAL_COMMENT{ $$ = makeNode($1->token,$3,NULL,NULL,NULL);}
+                ;
+
+PROC_STETMENT_MULT_PARAMS:  ID COMMA MULT_PARAMS { $$ = makeNode("",$1,$3,NULL,NULL); }
+                            |ID {$$=$1;}
+                            ;
 
 PROCEDURE:  KEY_BOOLEAN { $$=makeNode("boolean",NULL,NULL,NULL,NULL); }
             |KEY_CHAR   { $$=makeNode("char",NULL,NULL,NULL,NULL); }
@@ -82,7 +89,6 @@ PROCEDURE:  KEY_BOOLEAN { $$=makeNode("boolean",NULL,NULL,NULL,NULL); }
             |KEY_STRING { $$=makeNode("string",NULL,NULL,NULL,NULL); }
             |KEY_VOID   { $$=makeNode("void",NULL,NULL,NULL,NULL); }
             ;
-
 
 
 MULT_PARAMS:    PROCEDURE ID COMMA MULT_PARAMS { $$ = makeNode("",$2,$4,NULL,NULL); }
@@ -106,7 +112,12 @@ STATEMENT   : ASSIGNMENT SEMICOLON  { $$ = $1; }
             | WHILE_STATEMENT       { $$ = $1; }
             | BLOCK                 { $$ = $1; }
             | PROC                  { $$ = $1; }
+            | COMMENT               { $$ = NULL;}
             ;
+
+OPTIONAL_COMMENT:   COMMENT {}
+                    |       {}
+                    ;
 
 RETURN_STATEMENT: KEY_RETURN EXP SEMICOLON { $$ = makeNode("return",$2,NULL,NULL,NULL); };
 
@@ -117,7 +128,7 @@ PROC:   PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C BLOCK_W_RETURN
         |PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C BLOCK_W 
         {
         $$ = makeNode ($1->token,$2,$4,$6,NULL);
-        };
+        };  
 
 VARS :  PROCEDURE EXP           { $$ = makeNode ("",$1,$2,NULL,NULL); } 
         |PROCEDURE ASSIGNMENT   { $$ = makeNode ("",$1,$2,NULL,NULL); } 
@@ -148,7 +159,7 @@ EXP : ID                    { $$ = $1; }
     | SIZE_OF               { $$ = $1; }
     | OP_NOT EXP            { $$ = makeNode("!", $2, NULL,NULL,NULL); }
     | EXP OP_PLUS EXP       { $$ = makeNode("+",$1,$3,NULL,NULL); }
-    | EXP OP_NOT EXP        { $$ = makeNode("-",$1,$3,NULL,NULL); }
+    | EXP OP_MINUS EXP      { $$ = makeNode("-",$1,$3,NULL,NULL); }
     | EXP OP_MULTI EXP      { $$ = makeNode("*",$1,$3,NULL,NULL); }
     | EXP OP_DIV EXP        { $$ = makeNode("/",$1,$3,NULL,NULL); }
     | EXP OP_LT EXP         { $$ = makeNode("<",$1,$3,NULL,NULL); }
@@ -167,6 +178,7 @@ EXP : ID                    { $$ = $1; }
     | PTR OP_NE PTR         { $$ = makeNode("!=",$1,$3,NULL,NULL); }
     | PTR OP_AND PTR        { $$ = makeNode("&&",$1,$3,NULL,NULL); }
     | PTR OP_OR PTR         { $$ = makeNode("||",$1,$3,NULL,NULL); }
+    | PROC_STETMENT         { $$ = $1; }
     ;
 
 WHILE_STATEMENT : KEY_WHILE PARAN_O EXP PARAN_C BLOCK { $$ = makeNode("while",$3,$5,NULL,NULL); }
@@ -221,9 +233,11 @@ main(){
     return yyparse();
 }
 
-void yyerror(const char *c){
-	fprintf(stderr,"line %d: %s\n",yylineno - 1,c);
-	
+void yyerror(const char *msg){
+	//fprintf(stderr,"line %d: %s\n",yylineno - 1,msg);
+	fflush(stdout);
+	fprintf(stderr, "Error: %s at line %d\n", msg,yylineno);
+	fprintf(stderr, "Parser does not expect '%s'\n",yytext);
 }
 
 
