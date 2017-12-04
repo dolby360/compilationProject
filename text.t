@@ -11,5 +11,11 @@ int foo(int i, char j, string k)
     int total; 
     k=5;
     total = i+square(k);
+    
+    for(i;i<2;i+1)
+    {
+        
+    }
+
     return total-10;
 }

@@ -40,6 +40,7 @@ charp           {return KEY_CHARP;}
 if              {return KEY_IF;}
 else            {return KEY_ELSE;}
 while           {return KEY_WHILE;}
+for           	{return KEY_FOR;}
 do              {return KEY_DO;}
 for             {return KEY_FOR;}
 return          {return KEY_RETURN;}
