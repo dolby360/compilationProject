@@ -6,7 +6,7 @@ int foo(int i, char j, string k)
     {
         int temp;
         temp = t* t;
-        return temp;
+        return 1;
     }
     int total; 
     k=5;
