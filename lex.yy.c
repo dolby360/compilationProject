@@ -1069,22 +1069,22 @@ YY_RULE_SETUP
 case 45:
 YY_RULE_SETUP
 #line 87 "lex.l"
-{yylval.num=convertInt(yytext,10);return INTEGER_LITERAL;}
+{yylval.str=convertInt(yytext,10);return INTEGER_LITERAL;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
 #line 88 "lex.l"
-{yylval.num=convertInt(yytext,16);return HEX_LITERAL;}
+{yylval.str=convertInt(yytext,16);return HEX_LITERAL;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
 #line 89 "lex.l"
-{yylval.num=convertInt(yytext,8);return OCTA_LITERAL;}
+{yylval.str=convertInt(yytext,8);return OCTA_LITERAL;}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
 #line 90 "lex.l"
-{yylval.num=convertInt(yytext,2);return BINARY_LITERAL;}
+{yylval.str=convertInt(yytext,2);return BINARY_LITERAL;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP

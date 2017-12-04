@@ -7,6 +7,9 @@ node* makeNode(char* token_ ,node* nodeOne_ ,node* nodeTwo_,node* nodeThree_, no
     nodeToReturn->token = (char*)malloc(sizeof(token_ + 1));
     strcpy(nodeToReturn->token,token_);
 
+    //Debug;
+    printf("test    =>  %s\n",nodeToReturn->token);
+
     nodeToReturn->nodeOne = nodeOne_ ;
     nodeToReturn->nodeTwo = nodeTwo_;
     nodeToReturn->nodeThree = nodeThree_ ;

@@ -3,7 +3,7 @@
 void printPreOrder(node* root,int nest){
     int i;
 
-    if(root)
+    if(root != NULL)
     {
         for(i = 0;i<nest;i++){
             //printf("\t");

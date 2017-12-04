@@ -84,10 +84,10 @@ false|FALSE     {yylval.num = 0;return FALSE_LITERAL;}
                 printf("NOT A PRINTABLE CHAR");
      }
 
-{INT}		{yylval.num=convertInt(yytext,10);return INTEGER_LITERAL;}
-{HEX}		{yylval.num=convertInt(yytext,16);return HEX_LITERAL;}
-{OCT}		{yylval.num=convertInt(yytext,8);return OCTA_LITERAL;}
-{BIN}		{yylval.num=convertInt(yytext,2);return BINARY_LITERAL;}
+{INT}		{yylval.str=convertInt(yytext,10);return INTEGER_LITERAL;}
+{HEX}		{yylval.str=convertInt(yytext,16);return HEX_LITERAL;}
+{OCT}		{yylval.str=convertInt(yytext,8);return OCTA_LITERAL;}
+{BIN}		{yylval.str=convertInt(yytext,2);return BINARY_LITERAL;}
 {ID}		{yylval.str=strdup(yytext);return IDENTIFIER;}
 {STRING}	{yylval.str=strdup(yytext);return STRING_LITERAL;}
 

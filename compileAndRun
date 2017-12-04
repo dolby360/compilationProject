@@ -15,7 +15,7 @@ echo "**********"
 
 lex lex.l
 yacc parser.y
-cc -Wall print_ast.c ast.c -o Program y.tab.c -ll -Ly
+cc -Wall print_ast.c ast.c -o Program y.tab.c -ll -Ly 
 
 COUNTER=10
 until [  $COUNTER -lt 0 ]; do

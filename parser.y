@@ -39,9 +39,10 @@
 
 %token APOSTROPHE KEY_CHARP
 
+%type <str> 
 %type <str> IDENTIFIER NULL_LITERAL STRING_LITERAL 
-%type <ch> CHAR_LITERAL
-%type <num> INTEGER_LITERAL HEX_LITERAL OCTA_LITERAL BINARY_LITERAL
+%type <ch>  CHAR_LITERAL
+%type <str> INTEGER_LITERAL HEX_LITERAL OCTA_LITERAL BINARY_LITERAL
 
 %type <n> PROGRAM MULTI_PROC PROC ID MULT_PARAMS BLOCK_W_RETURN KEY_BOOLEAN
 %type <n> KEY_CHAR KEY_CHAPARAN_C KEY_INT KEY_INTP KEY_STRING KEY_VOID PROCEDURE
@@ -64,9 +65,13 @@ PROC :  PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C BLOCK_W_RETURN { $$ = makeNode(
 
         |PROCEDURE ID PARAN_O PARAN_C BLOCK_W_RETURN    { $$ = makeNode($1->token,$2,$5,NULL,NULL);  }
 
-        |PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C BLOCK_W   {$$ = makeNode($1->token,$2,$4,NULL,NULL);}
+        |PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C BLOCK_W   {$$ = makeNode($1->token,$2,$4,$6,NULL);}
                                             
-        |PROCEDURE ID PARAN_O PARAN_C BLOCK_W   {$$ = makeNode($1->token,$2,$5,NULL,NULL);}
+        |PROCEDURE ID PARAN_O PARAN_C BLOCK_W   { $$ = makeNode($1->token,$2,$5,NULL,NULL); }
+
+        |BLOCK_W_RETURN { $$ = $1;}
+
+        |BLOCK_W   {$$ = $1;}
         ;
 
 PROCEDURE:  KEY_BOOLEAN { $$=makeNode("boolean",NULL,NULL,NULL,NULL); }
@@ -105,7 +110,7 @@ STATEMENT   : ASSIGNMENT SEMICOLON  { $$ = $1; }
 
 RETURN_STATEMENT: KEY_RETURN EXP SEMICOLON { $$ = makeNode("return",$2,NULL,NULL,NULL); };
 
-PROC : PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C BLOCK_W_RETURN
+PROC:   PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C BLOCK_W_RETURN
         { 
         $$ = makeNode ($1->token,$2,$4,$6,NULL); 
         }
@@ -114,8 +119,8 @@ PROC : PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C BLOCK_W_RETURN
         $$ = makeNode ($1->token,$2,$4,$6,NULL);
         };
 
-VARS :  PROCEDURE EXP           { $$ = $2; } 
-        |PROCEDURE ASSIGNMENT   { $$ = $2; } 
+VARS :  PROCEDURE EXP           { $$ = makeNode ("",$1,$2,NULL,NULL); } 
+        |PROCEDURE ASSIGNMENT   { $$ = makeNode ("",$1,$2,NULL,NULL); } 
         ;
 
 ASSIGNMENT : LHS ASSIGN EXP { $$ = makeNode("=", $1, $3,NULL,NULL); }
@@ -133,8 +138,8 @@ LHS : ID { $$ = $1; }
 STR_INDEX : ID SQ_BRA_O EXP SQ_BRA_C { $$ = makeNode("STRING INDEX", $1, $3,NULL,NULL) ;};
 
 EXP : ID                    { $$ = $1; }
-    | INTEGER_LITERAL       { $$ = makeNode(yytext, $1, NULL,NULL,NULL); }
-    | CHAR_LITERAL          { $$ = makeNode(yytext, $1, NULL,NULL,NULL); }
+    | INTEGER_LITERAL       { $$ = makeNode(yytext, NULL, NULL,NULL,NULL); }
+    | CHAR_LITERAL          { $$ = makeNode(yytext, NULL, NULL,NULL,NULL); }
     | STR_INDEX             { $$ = $1; }
     | BOOL_TYPE             { $$ = makeNode("boolean", $1, NULL,NULL,NULL); }
     | OP_DEREFERENCE EXP    { $$ = makeNode("dereference", $2, NULL,NULL,NULL); }
@@ -164,7 +169,7 @@ EXP : ID                    { $$ = $1; }
     | PTR OP_OR PTR         { $$ = makeNode("||",$1,$3,NULL,NULL); }
     ;
 
-WHILE_STATEMENT : KEY_WHILE PARAN_O EXP PARAN_C BLOCK {$$ = makeNode("while",$3,$5,NULL,NULL); }
+WHILE_STATEMENT : KEY_WHILE PARAN_O EXP PARAN_C BLOCK { $$ = makeNode("while",$3,$5,NULL,NULL); }
                 ;
 
 BLOCK : BRA_O MULT_STATEMENT BRA_C {$$ = $2;}
@@ -204,7 +209,7 @@ MULT_EXP : MULT_EXP COMMA EXP { $$ = makeNode(""/*Multiple Expressions*/,$1,$3,N
 STR : STRING_LITERAL { $$ = makeNode(yytext,NULL,NULL,NULL,NULL); }
     ;
 
-ID: IDENTIFIER {$$=makeNode($1,NULL,NULL,NULL,NULL);};
+ID: IDENTIFIER {$$=makeNode(yytext,NULL,NULL,NULL,NULL);};
 %%
 
 
