@@ -19,13 +19,15 @@ int convertInt(char* num, int base) {
 %}
 
 
-ID 	[a-zA-Z][a-zA-Z0-9_]*
-INT 	0|[1-9][0-9]*
-HEX 	0[x|X][0-9A-F]*
-OCT	0[1-7][0-7]*
-BIN	[0-1]+b 
-STRING	\"[^\n\"]*\" 
+ID 				[a-zA-Z][a-zA-Z0-9_]*
+INT 			0|[1-9][0-9]*
+HEX 			0[x|X][0-9A-F]*
+OCT				0[1-7][0-7]*
+BIN				[0-1]+b 
+STRING			\"[^\n\"]*\" 
 
+COMMENT1	[//].*
+COMMENT2	[\/\*]([^\n]*\n+)+[\*][\/]
 %%
 
 "null"|"NULL"   {return NULL_LITERAL;}
@@ -71,8 +73,9 @@ null            {return KEY_NULL;}
 \)              {return PARAN_C;}
 \[              {return SQ_BRA_O;}
 \]              {return SQ_BRA_C;}
-[//].*			{return COMMENT;}
 
+{COMMENT1}		{return COMMENT;}
+{COMMENT2}		{return COMMENT;}
 	
 
 true|TRUE       {yylval.num = 1;return TRUE_LITERAL;}
