@@ -1,5 +1,11 @@
-INITIAL COMMIT.
+To run sample write:
 
-Please try to write commnents with link so everyone will understand 
-what has happend.
+chmod 755 compileAndRun
+
+./compileAndRun 1 #for test nuber 1
+./compileAndRun 2 #for test nuber 2
+./compileAndRun 3 #for test nuber 3
+./compileAndRun 4 #for test nuber 4
+./compileAndRun 5 #for test nuber 5
+
 
