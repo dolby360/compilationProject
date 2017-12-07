@@ -1,9 +1,9 @@
-option yylineo
+
 %{
 
 #include <stdlib.h>
 #include <string.h>
-
+//#include "y.tab.h"
 void yyerror(const char *);
 
 
@@ -17,7 +17,7 @@ int convertInt(char* num, int base) {
 }
 
 %}
-
+%option yylineno
 
 ID 				[a-zA-Z][a-zA-Z0-9_]*
 INT 			0|[1-9][0-9]*
