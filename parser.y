@@ -40,7 +40,7 @@
 %token APOSTROPHE KEY_CHARP COMMENT KET_FOR
 
 
-%type <n> IDENTIFIER NULL_LITERAL STRING_LITERAL  AFTER_ATETMENT_NO_PARAN
+%type <n> IDENTIFIER NULL_LITERAL STRING_LITERAL  AFTER_ATETMENT_NO_PARAN PROC_STATEMENT
 %type <ch>  CHAR_LITERAL
 %type <str> INTEGER_LITERAL HEX_LITERAL OCTA_LITERAL BINARY_LITERAL
 
@@ -95,11 +95,11 @@ MULT_PARAMS:    PROCEDURE ID COMMA MULT_PARAMS { $$ = makeNode("",$2,$4,NULL,NUL
                 |PROCEDURE ID {$$=$2;}
                 ;
 
-BLOCK_W:    BRA_O MULT_STATEMENT BRA_C {$$ = $2;}
+BLOCK_W:    BRA_O OPTIONAL_COMMENT MULT_STATEMENT BRA_C {$$ = $3;}
             | BRA_O BRA_C {}
             ; 
 
-BLOCK_W_RETURN : BRA_O MULT_STATEMENT RETURN_STATEMENT BRA_C {printf("ddddd\n");$$ = makeNode("",$2,$3,NULL,NULL);}
+BLOCK_W_RETURN : BRA_O OPTIONAL_COMMENT MULT_STATEMENT RETURN_STATEMENT BRA_C {$$ = makeNode("",$3,$4,NULL,NULL);}
                | BRA_O RETURN_STATEMENT BRA_C {$$ = $2;}
                ;
 
@@ -114,6 +114,7 @@ STATEMENT   : ASSIGNMENT SEMICOLON  { $$ = $1; }
             | BLOCK                 { $$ = $1; }
             | PROC                  { $$ = $1; }
             | PROC_CALL SEMICOLON   { $$ = $1; }
+            | PROC_STATEMENT        { $$ = $1; }
             | COMMENT               { $$ = NULL;}
             | FOR_STETMENT          { $$ = $1; }
             ;
@@ -125,9 +126,15 @@ OPTIONAL_COMMENT:   COMMENT                     {}
 
 RETURN_STATEMENT: KEY_RETURN EXP SEMICOLON { $$ = makeNode("return",$2,NULL,NULL,NULL); };
 
-PROC_CALL:      PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C{ $$ = makeNode ($1->token,$2,$4,NULL,NULL); }
-                |PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C{ $$ = makeNode ($1->token,$2,$4,NULL,NULL); }
-                ;  
+PROC_STATEMENT:      
+            PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C SEMICOLON{ $$ = makeNode ($1->token,$2,$4,NULL,NULL); }
+            |PROCEDURE ID PARAN_O PARAN_C SEMICOLON{ $$ = makeNode ($1->token,$2,NULL,NULL,NULL); }
+            ;  
+
+PROC_CALL : ID PARAN_O MULT_EXP PARAN_C { $$ = makeNode($1->token,$1, $3,NULL,NULL); }
+          | ID PARAN_O PARAN_C { $$ = makeNode($1->token,$1, NULL,NULL,NULL); }
+          ;
+
 
 VARS :  PROCEDURE EXP           { $$ = makeNode ("",$1,$2,NULL,NULL); } 
         |PROCEDURE MULT_EXP      { $$ = makeNode ("",$1,$2,NULL,NULL); } 
@@ -139,8 +146,8 @@ VARS :  PROCEDURE EXP           { $$ = makeNode ("",$1,$2,NULL,NULL); }
 ASSIGNMENT : LHS ASSIGN EXP { $$ = makeNode("=", $1, $3,NULL,NULL); }
            | LHS ASSIGN STR { $$ = makeNode("=", $1, $3,NULL,NULL);}
            | LHS ASSIGN PTR { $$ = makeNode("=", $1, $3,NULL,NULL);}
-           | LHS ASSIGN IDENTIFIER PARAN_O MULT_PARAMS PARAN_C { $$ = makeNode("=", $1, $3,$5,NULL);}
-           | LHS ASSIGN IDENTIFIER PARAN_O PARAN_C { $$ = makeNode("=", $1, $3,NULL,NULL);}
+           | LHS ASSIGN ID PARAN_O MULT_PARAMS PARAN_C  { $$ = makeNode("=", $1, $3,$5,NULL);   }
+           | LHS ASSIGN ID PARAN_O PARAN_C              { $$ = makeNode("=", $1, $3,NULL,NULL); }
            | LHS ASSIGN KEY_NULL {$$ = makeNode("=", $1, makeNode("NULL POINTER",NULL,NULL,NULL,NULL),NULL,NULL); }
            ;
 
@@ -187,6 +194,7 @@ EXP : ID                    { $$ = $1; }
     ;
 
 FOR_STETMENT: KEY_FOR PARAN_O ASSIGNMENT SEMICOLON EXP SEMICOLON EXP PARAN_C BLOCK { $$ = makeNode("while",$3,$5,NULL,NULL); }
+            | KEY_FOR PARAN_O ASSIGNMENT SEMICOLON EXP SEMICOLON ASSIGNMENT PARAN_C BLOCK { $$ = makeNode("while",$3,$5,NULL,NULL); }
             ;
 
 WHILE_STATEMENT : KEY_WHILE PARAN_O EXP PARAN_C BLOCK { $$ = makeNode("while",$3,$5,NULL,NULL); }
@@ -213,9 +221,7 @@ BOOL_TYPE : TRUE_LITERAL { $$ = makeNode("true", NULL,NULL,NULL,NULL); }
           | FALSE_LITERAL { $$ = makeNode("false", NULL, NULL,NULL,NULL); }
           ;
 
-PROC_CALL : ID PARAN_O MULT_EXP PARAN_C SEMICOLON{ $$ = makeNode($1->token,$1, $3,NULL,NULL); }
-          | ID PARAN_O PARAN_C SEMICOLON{ $$ = makeNode($1->token,$1, NULL,NULL,NULL); }
-          ;
+
 
 PAR_EXP : PARAN_O EXP PARAN_C { $$ = makeNode("",$2,NULL,NULL,NULL); }
         ;
