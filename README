@@ -11,5 +11,6 @@ chmod 755 compileAndRun
 ./compileAndRun 3 #for test nuber 3
 ./compileAndRun 4 #for test nuber 4
 ./compileAndRun 5 #for test nuber 5
+./compileAndRun 6 #for test nuber 6
 
 
