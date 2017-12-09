@@ -157,7 +157,7 @@ LHS : ID { $$ = $1; }
     | DEREF { $$ = $1; }
     ;
 
-STR_INDEX : ID SQ_BRA_O EXP SQ_BRA_C { $$ = makeNode("STRING INDEX", $1, $3,NULL,NULL) ;};
+STR_INDEX : ID SQ_BRA_O EXP SQ_BRA_C { $$ = makeNode("", $1, $3,NULL,NULL) ;};
 
 EXP : ID                    { $$ = $1; }
     | INTEGER_LITERAL       { $$ = makeNode(yytext, NULL, NULL,NULL,NULL); }
