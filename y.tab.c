@@ -655,7 +655,7 @@ static YYSTACKDATA yystack;
 
 
 #include "lex.yy.c"
-main(){
+int main(){
 
     //print_ast(ourProgram);
 

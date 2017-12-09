@@ -249,7 +249,7 @@ ID: IDENTIFIER {$$=makeNode(yytext,NULL,NULL,NULL,NULL);};
 
 
 #include "lex.yy.c"
-main(){
+int main(){
 
     //print_ast(ourProgram);
 
