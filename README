@@ -13,4 +13,4 @@ chmod 755 compileAndRun
 ./compileAndRun 5 #for test nuber 5
 ./compileAndRun 6 #for test nuber 6
 
-
+screenShots in screenShots forlder as PDF file.

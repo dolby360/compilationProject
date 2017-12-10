@@ -70,7 +70,7 @@ then
         echo "Test number 6 shuld pass"
         echo "pass_d"
         echo "*****************************************************************************************************"
-        ./Program<tests/pass_c.t
+        ./Program<tests/pass_d.t
 fi
 
 COUNTER=10

@@ -48,7 +48,7 @@
 %type <n> KEY_CHAR KEY_CHAPARAN_C KEY_INT KEY_INTP KEY_STRING KEY_VOID PROCEDURE
 %type <n> MULT_STATEMENT RETURN_STATEMENT STATEMENT ASSIGN VARS FOR_STETMENT
 %type <n> COND WHILE_STATEMENT BLOCK ASSIGNMENT BLOCK_W PROC_STETMENT PROC_STETMENT_MULT_PARAMS
-%type <n> LHS EXP STR PTR STR_INDEX DEREF BOOL_TYPE PROC_CALL PAR_EXP SIZE_OF MULT_EXP
+%type <n> LHS EXP STR PTR STR_INDEX DEREF BOOL_TYPE PROC_CALL PAR_EXP SIZE_OF MULT_EXP ASS_OR_EXP
 
 %type <str> COMMA       
 
@@ -146,7 +146,7 @@ VARS :  PROCEDURE EXP           { $$ = makeNode ("",$1,$2,NULL,NULL); }
 ASSIGNMENT : LHS ASSIGN EXP { $$ = makeNode("=", $1, $3,NULL,NULL); }
            | LHS ASSIGN STR { $$ = makeNode("=", $1, $3,NULL,NULL);}
            | LHS ASSIGN PTR { $$ = makeNode("=", $1, $3,NULL,NULL);}
-           | LHS ASSIGN ID PARAN_O MULT_PARAMS PARAN_C  { $$ = makeNode("=", $1, $3,$5,NULL);   }
+           | LHS ASSIGN ID PARAN_O MULT_EXP PARAN_C  { $$ = makeNode("=", $1, $3,$5,NULL);   }
            | LHS ASSIGN ID PARAN_O PARAN_C              { $$ = makeNode("=", $1, $3,NULL,NULL); }
            | LHS ASSIGN KEY_NULL {$$ = makeNode("=", $1, makeNode("NULL POINTER",NULL,NULL,NULL,NULL),NULL,NULL); }
            ;
@@ -193,8 +193,11 @@ EXP : ID                    { $$ = $1; }
     | PROC_STETMENT         { $$ = $1; }
     ;
 
-FOR_STETMENT: KEY_FOR PARAN_O ASSIGNMENT SEMICOLON EXP SEMICOLON EXP PARAN_C BLOCK { $$ = makeNode("while",$3,$5,NULL,NULL); }
-            | KEY_FOR PARAN_O ASSIGNMENT SEMICOLON EXP SEMICOLON ASSIGNMENT PARAN_C BLOCK { $$ = makeNode("while",$3,$5,NULL,NULL); }
+FOR_STETMENT: KEY_FOR PARAN_O ASS_OR_EXP SEMICOLON EXP SEMICOLON ASS_OR_EXP PARAN_C BLOCK { $$ = makeNode("while",$3,$5,NULL,NULL); }
+            ;
+
+ASS_OR_EXP: ASSIGNMENT  {$$ = $1;}
+            |EXP        {$$ = $1;}
             ;
 
 WHILE_STATEMENT : KEY_WHILE PARAN_O EXP PARAN_C BLOCK { $$ = makeNode("while",$3,$5,NULL,NULL); }
