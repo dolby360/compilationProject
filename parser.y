@@ -10,6 +10,7 @@
 
     #include "print_ast.h"
     node* ouPARAN_Crogram;
+
 %}
 
 %union{
@@ -33,14 +34,14 @@
 %token SEMICOLON,COMMA
 %token BRA_O,BRA_C,PARAN_O,PARAN_C,SQ_BRA_O,SQ_BRA_C
 
-%token NULL_LITERAL IDENTIFIER STRING_LITERAL CHAR_LITERAL
+%token  IDENTIFIER STRING_LITERAL CHAR_LITERAL
 
 %token TRUE_LITERAL FALSE_LITERAL INTEGER_LITERAL HEX_LITERAL OCTA_LITERAL BINARY_LITERAL 
 
 %token APOSTROPHE KEY_CHARP COMMENT KET_FOR
 
 
-%type <n> IDENTIFIER NULL_LITERAL STRING_LITERAL  AFTER_ATETMENT_NO_PARAN PROC_STATEMENT
+%type <n> IDENTIFIER  STRING_LITERAL  AFTER_ATETMENT_NO_PARAN PROC_STATEMENT
 %type <ch>  CHAR_LITERAL
 %type <str> INTEGER_LITERAL HEX_LITERAL OCTA_LITERAL BINARY_LITERAL
 
@@ -96,7 +97,7 @@ MULT_PARAMS:    PROCEDURE ID COMMA MULT_PARAMS { $$ = makeNode("",$2,$4,NULL,NUL
                 ;
 
 BLOCK_W:    BRA_O OPTIONAL_COMMENT MULT_STATEMENT BRA_C {$$ = $3;}
-            | BRA_O BRA_C {}
+            | BRA_O BRA_C {$$=NULL;}
             ; 
 
 BLOCK_W_RETURN : BRA_O OPTIONAL_COMMENT MULT_STATEMENT RETURN_STATEMENT BRA_C {$$ = makeNode("",$3,$4,NULL,NULL);}
@@ -168,7 +169,7 @@ EXP : ID                    { $$ = $1; }
     | PROC_CALL             { $$ = $1; }
     | PAR_EXP               { $$ = $1; }
     | SIZE_OF               { $$ = $1; }
-    | NULL_LITERAL          { $$ = makeNode("null",NULL,NULL,NULL,NULL);}
+    | KEY_NULL              { $$ = makeNode("null",NULL,NULL,NULL,NULL);}
     | OP_NOT EXP            { $$ = makeNode("!", $2, NULL,NULL,NULL); }
     | EXP OP_PLUS EXP       { $$ = makeNode("+",$1,$3,NULL,NULL); }
     | EXP OP_MINUS EXP      { $$ = makeNode("-",$1,$3,NULL,NULL); }

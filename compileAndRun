@@ -15,7 +15,7 @@ echo ""
 echo "**********"
 
 lex lex.l
-yacc parser.y
+yacc parser.y > /dev/null 2>&1
 cc -Wall print_ast.c ast.c -o Program y.tab.c -ll -Ly 
 
 COUNTER=10
@@ -27,15 +27,16 @@ done
 if [ "$getParam" -eq "1" ]
 then
 	echo "*****************************************************************************************************"
-        echo "Test number 1 shuld faild"
+        echo "Test number 1 should faild"
         echo "fail_a"
         echo "*****************************************************************************************************"
+        
         ./Program<tests/fail_a.t
 fi
 if [ "$getParam" -eq "2" ]
 then
         echo "*****************************************************************************************************"
-        echo "Test number 2 shuld faild"
+        echo "Test number 2 should faild"
         echo "fail_b"
         echo "*****************************************************************************************************"
         ./Program<tests/fail_b.t
@@ -43,7 +44,7 @@ fi
 if [ "$getParam" -eq "3" ]
 then
         echo "*****************************************************************************************************"
-        echo "Test number 3 shuld pass"
+        echo "Test number 3 should pass"
         echo "pass_a"
         echo "*****************************************************************************************************"
         ./Program<tests/pass_a.t
@@ -51,7 +52,7 @@ fi
 if [ "$getParam" -eq "4" ]
 then
         echo "*****************************************************************************************************"
-        echo "Test number 4 shuld pass"
+        echo "Test number 4 should pass"
         echo "pass_b"
         echo "*****************************************************************************************************"
         ./Program<tests/pass_b.t
@@ -59,7 +60,7 @@ fi
 if [ "$getParam" -eq "5" ]
 then
         echo "*****************************************************************************************************"
-        echo "Test number 5 shuld pass"
+        echo "Test number 5 should pass"
         echo "pass_c"
         echo "*****************************************************************************************************"
         ./Program<tests/pass_c.t
@@ -67,7 +68,7 @@ fi
 if [ "$getParam" -eq "6" ]
 then
         echo "*****************************************************************************************************"
-        echo "Test number 6 shuld pass"
+        echo "Test number 6 should pass"
         echo "pass_d"
         echo "*****************************************************************************************************"
         ./Program<tests/pass_d.t

@@ -17,9 +17,13 @@ int convertInt(char* num, int base) {
 }
 
 %}
+
 %option yylineno
 
-ID 				[a-zA-Z][a-zA-Z0-9_]*
+%option nounput
+%option noinput
+
+		
 INT 			0|[1-9][0-9]*
 HEX 			0[x|X][0-9A-F]*
 OCT				0[1-7][0-7]*
@@ -29,8 +33,6 @@ STRING			\"[^\n\"]*\"
 COMMENT1	[//].*
 COMMENT2	[\/\*]([^\n]*\n+)+[\*][\/]
 %%
-
-"null"|"NULL"   {return NULL_LITERAL;}
 
 boolean         {return KEY_BOOLEAN;}
 char            {return KEY_CHAR;}
@@ -42,7 +44,6 @@ charp           {return KEY_CHARP;}
 if              {return KEY_IF;}
 else            {return KEY_ELSE;}
 while           {return KEY_WHILE;}
-for           	{return KEY_FOR;}
 do              {return KEY_DO;}
 for             {return KEY_FOR;}
 return          {return KEY_RETURN;}
@@ -96,7 +97,7 @@ false|FALSE     {yylval.num = 0;return FALSE_LITERAL;}
 {HEX}		{yylval.str=yytext;/*convertInt(yytext,16);*/return HEX_LITERAL;}
 {OCT}		{yylval.str=yytext;/*convertInt(yytext,8);*/return OCTA_LITERAL;}
 {BIN}		{yylval.str=yytext;/*convertInt(yytext,2);*/return BINARY_LITERAL;}
-{ID}		{yylval.str=strdup(yytext);return IDENTIFIER;}
+[a-zA-Z][a-zA-Z0-9_]*		{yylval.str=strdup(yytext);return IDENTIFIER;}
 {STRING}	{yylval.str=strdup(yytext);return STRING_LITERAL;}
 
 
