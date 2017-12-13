@@ -9,7 +9,7 @@ void printSymbTable(node* root){
     (*smt)  = (symbTable*)malloc(sizeof(symbTable));
     head = *smt;
 
-    printP(root,0);
+    buildSymbTable(root,0);
     symbTable* hight = head;
 
     //head = head->next;
@@ -27,7 +27,7 @@ void printSymbTable(node* root){
     }
 }
 
-void printP(node* root,int nest){
+void buildSymbTable(node* root,int nest){
     int i;
     
 
@@ -82,10 +82,10 @@ void printP(node* root,int nest){
                 }
         }
 
-        printP(root->nodeOne,nest+1);
-        printP(root->nodeTwo,nest+1);
-        printP(root->nodeThree,nest+1);
-        printP(root->nodeFour,nest+1);
+        buildSymbTable(root->nodeOne,nest+1);
+        buildSymbTable(root->nodeTwo,nest+1);
+        buildSymbTable(root->nodeThree,nest+1);
+        buildSymbTable(root->nodeFour,nest+1);
     }
 }
 

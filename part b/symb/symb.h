@@ -26,7 +26,7 @@ static symbTable** smt;
 static symbTable* head;
 
 void getBackToTheHead(symbTable* theLastNodeInTheList);
-void printP(node* root,int nest);
+void buildSymbTable(node* root,int nest);
 void printSymbTable();
 void init();
 #endif
