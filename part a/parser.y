@@ -62,13 +62,13 @@ MULTI_PROC : OPTIONAL_COMMENT  PROC MULTI_PROC OPTIONAL_COMMENT { $$ = makeNode(
            | OPTIONAL_COMMENT PROC OPTIONAL_COMMENT { $$ = $2; }
            ;
 
-PROC :   ID PROCEDURE PARAN_O MULT_PARAMS PARAN_C OPTIONAL_COMMENT BLOCK_W_RETURN { $$ = makeNode($1->token,$2,$4,$7,NULL);}
+PROC :   PROCEDURE ID  PARAN_O MULT_PARAMS PARAN_C OPTIONAL_COMMENT BLOCK_W_RETURN { $$ = makeNode($1->token,$2,$4,$7,NULL);}
 
-        | ID PROCEDURE PARAN_O PARAN_C OPTIONAL_COMMENT BLOCK_W_RETURN { $$ = makeNode($1->token,$2,$6,NULL,NULL);  }
+        |PROCEDURE ID  PARAN_O PARAN_C OPTIONAL_COMMENT BLOCK_W_RETURN { $$ = makeNode($1->token,$2,$6,NULL,NULL);  }
 
-        | ID PROCEDURE PARAN_O MULT_PARAMS PARAN_C OPTIONAL_COMMENT BLOCK_W { $$ = makeNode($1->token,$2,$4,$7,NULL); }
+        |PROCEDURE ID  PARAN_O MULT_PARAMS PARAN_C OPTIONAL_COMMENT BLOCK_W { $$ = makeNode($1->token,$2,$4,$7,NULL); }
                                             
-        | ID PROCEDURE PARAN_O PARAN_C OPTIONAL_COMMENT BLOCK_W { $$ = makeNode($1->token,$2,$6,NULL,NULL); }
+        |PROCEDURE ID  PARAN_O PARAN_C OPTIONAL_COMMENT BLOCK_W { $$ = makeNode($1->token,$2,$6,NULL,NULL); }
 
         |BLOCK_W_RETURN { $$ = $1;}
 
@@ -96,11 +96,11 @@ MULT_PARAMS:    PROCEDURE ID COMMA MULT_PARAMS { $$ = makeNode($1->token,$2,$4,N
                 |PROCEDURE ID {$$ = makeNode($1->token,$2,NULL,NULL,NULL);}
                 ;
 
-BLOCK_W:    BRA_O OPTIONAL_COMMENT MULT_STATEMENT BRA_C {$$ = $3;}
+BLOCK_W:    BRA_O OPTIONAL_COMMENT MULT_STATEMENT BRA_C {$$ = makeNode("{",$3,NULL,NULL,makeNode("}",NULL,NULL,NULL,NULL));}
             | BRA_O BRA_C {$$=NULL;}
             ; 
 
-BLOCK_W_RETURN : BRA_O OPTIONAL_COMMENT MULT_STATEMENT RETURN_STATEMENT BRA_C {$$ = makeNode("",$3,$4,NULL,NULL);}
+BLOCK_W_RETURN : BRA_O OPTIONAL_COMMENT MULT_STATEMENT RETURN_STATEMENT BRA_C {$$ = makeNode("{",$3,$4,NULL,makeNode("}",NULL,NULL,NULL,NULL));}
                | BRA_O RETURN_STATEMENT BRA_C {$$ = $2;}
                ;
 
