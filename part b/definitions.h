@@ -7,4 +7,6 @@
 
 #define NEW_ENVIRONMENT(x) ((x) == (PROCEDURE_DEF) || (IF_DEF) ? (1) : (0))
 
+
+//#define DEBUG_MODE 
 #endif

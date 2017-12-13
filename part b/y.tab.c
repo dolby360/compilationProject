@@ -868,7 +868,7 @@ case 1:
 break;
 case 2:
 #line 59 "parser.y"
-	{yyval.n=makeNode("Begin:",yystack.l_mark[0].n,NULL,NULL,NULL);}
+	{yyval.n=makeNode("",yystack.l_mark[0].n,NULL,NULL,NULL);}
 break;
 case 3:
 #line 61 "parser.y"

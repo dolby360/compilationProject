@@ -7,18 +7,16 @@ void init(){
 void printSymbTable(node* root){
     smt = (symbTable**)malloc(sizeof(symbTable*));
     (*smt)  = (symbTable*)malloc(sizeof(symbTable));
+    (*smt)->name = NULL;
     head = *smt;
 
     buildSymbTable(root,0);
     symbTable* hight = head;
-
-    //head = head->next;
-    //head = head->next;
     
     while(hight){
         while(head){
             printf("%s",head->name);
-            printf(":  %d\t   ",head->scope);
+            printf("\t");
             head = head->next;
         }
         hight = hight->parent;
@@ -40,57 +38,71 @@ void buildSymbTable(node* root,int nest){
         }else{
             nest = nest-1;
         }
-        if(strcmp(root->token,"") == 0){/*Do nothing*/}
+        if( !root->token || strcmp(root->token,"") == 0){/*Do nothing*/}
         else{
+            if(NEW_ENVIRONMENT(root->tokenDef) && nest != 0){
+                while((*smt)->before){
+                    (*smt) = (*smt)->before;
+                }
 
-            if(*smt == NULL){
-                    (*smt)->type = root->tokenDef;
-                    (*smt)->name = (char*)malloc(sizeof(root->token));
-                    strcpy((*smt)->name,root->token);
-                    (*smt)->scope = nest;
-                    (*smt)->next = NULL;
-                    (*smt)->before = NULL;
-                    (*smt)->parent = NULL;
-                }
-                else{
-                    printf("%d",root->tokenDef);
-                    if(NEW_ENVIRONMENT(root->tokenDef)){
-                        getBackToTheHead(smt);
-                        (*smt)->parent = (symbTable*)malloc(sizeof(symbTable));
-                        (*smt)->parent->child = smt;
-                        (*smt) = (*smt)->parent;
-                        (*smt)->type = root->tokenDef;
-                        (*smt)->name = (char*)malloc(sizeof(root->token));
-                        strcpy((*smt)->name,root->token);
-                        (*smt)->scope = nest;
-                        (*smt)->next = NULL;
-                        //printf("\n\n%s",(*smt)->child->name);
-                    }else{
-                        /*Create Temp and concate to the list
-                        after that increase the pointer
-                        */
-                        (*smt)->next = (symbTable*)malloc(sizeof(symbTable));
-                        (*smt)->next->parent = NULL;
-                        (*smt)->next->type = root->tokenDef;
-                        (*smt)->next->name = (char*)malloc(sizeof(root->token));
-                        strcpy((*smt)->next->name,root->token);
-                        (*smt)->next->scope = nest;
-                        (*smt)->next->next = NULL;
-                        (*smt)->next->before = (*smt);
-                        (*smt) = (*smt)->next;
-                    }
-                }
+                (*smt)->parent = (symbTable*)malloc(sizeof(symbTable));
+                (*smt)->parent->child = (*smt);
+                (*smt) = (*smt)->parent;
+
+                #ifdef DEBUG_MODE
+                    printf("1)NEW ENV:   %s\n",(*smt)->child->name);
+                #endif
+
+                (*smt)->type = root->tokenDef;
+                (*smt)->name = (char*)malloc(sizeof(root->token));
+                strcpy((*smt)->name,root->token);
+                #ifdef DEBUG_MODE
+                    printf("NEW ENV:   %s\n",(*smt)->name);
+                #endif
+                //(*smt)->next = (symbTable*)malloc(sizeof(symbTable));
+                (*smt)->scope = nest;
+                (*smt)->before = NULL;
+                //(*smt) = (*smt)->next;
+            
+            }else if((*smt)->name == NULL){//In this case this is the first node;
+                
+                (*smt)->type = root->tokenDef;
+                (*smt)->name = (char*)malloc(sizeof(root->token));
+                strcpy((*smt)->name,root->token);
+                (*smt)->scope = nest;
+
+                (*smt)->next = NULL;
+                (*smt)->before = NULL;
+                (*smt)->parent = NULL;
+                (*smt)->child = NULL;
+
+                #ifdef DEBUG_MODE
+                    printf("first node:   %s\n",(*smt)->name);
+                #endif
+            }else{
+                /*Create Temp and concate to the list
+                after that increase the pointer
+                */
+                
+                (*smt)->next = (symbTable*)malloc(sizeof(symbTable));
+                (*smt)->next->parent = NULL;
+                (*smt)->next->type = root->tokenDef;
+                (*smt)->next->name = (char*)malloc(sizeof(root->token));
+                strcpy((*smt)->next->name,root->token);
+                (*smt)->next->scope = nest;
+                (*smt)->next->next = NULL;
+                (*smt)->next->before = (*smt);
+                (*smt) = (*smt)->next;
+                #ifdef DEBUG_MODE
+                    printf("(*smt)->next->name:   %s\n",(*smt)->name);
+                #endif
+            }
+
         }
 
         buildSymbTable(root->nodeOne,nest+1);
         buildSymbTable(root->nodeTwo,nest+1);
         buildSymbTable(root->nodeThree,nest+1);
         buildSymbTable(root->nodeFour,nest+1);
-    }
-}
-
-void getBackToTheHead(symbTable* theLastNodeInTheList){
-    while(theLastNodeInTheList->before){
-        theLastNodeInTheList = theLastNodeInTheList->before;
     }
 }

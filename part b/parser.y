@@ -56,7 +56,7 @@
 %%
 S: PROGRAM { printSymbTable($1); };
 
-PROGRAM:  MULTI_PROC {$$=makeNode("Begin:",$1,NULL,NULL,NULL);};
+PROGRAM:  MULTI_PROC {$$=makeNode("",$1,NULL,NULL,NULL);};
 
 MULTI_PROC : OPTIONAL_COMMENT  PROC MULTI_PROC OPTIONAL_COMMENT { $$ = makeNode("", $2, $3,NULL,NULL); }
            | OPTIONAL_COMMENT PROC OPTIONAL_COMMENT { $$ = $2; }
