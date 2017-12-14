@@ -20,6 +20,24 @@ node* makeNode(char* token_ ,node* nodeOne_ ,node* nodeTwo_,node* nodeThree_, no
     return nodeToReturn;
 }
 
+node* endOfBlock(){
+    node* nodeToReturn = (node*)malloc(sizeof(node));
+
+    nodeToReturn->token = (char*)malloc(sizeof("endOfBlock" + 1));
+    strcpy(nodeToReturn->token,"endOfBlock");
+
+    //Debug;
+    //printf("test    =>  %s\n",nodeToReturn->token);
+
+    nodeToReturn->nodeOne = NULL ;
+    nodeToReturn->nodeTwo = NULL;
+    nodeToReturn->nodeThree = NULL ;
+    nodeToReturn->nodeFour = NULL;
+
+    nodeToReturn->tokenDef = END_OF_BLOCK;
+
+    return nodeToReturn;
+}
 
 node* makeNodeWithDef(int def, char* token_ ,node* nodeOne_ ,node* nodeTwo_,node* nodeThree_, node* nodeFour_){
     node* nodeToReturn = (node*)malloc(sizeof(node));

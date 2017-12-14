@@ -29,7 +29,9 @@
     #include "ast/print_ast.h"
     #include "symb/symb.h"
     #include "definitions.h"
-#line 16 "parser.y"
+
+    
+#line 18 "parser.y"
 #ifdef YYSTYPE
 #undef  YYSTYPE_IS_DECLARED
 #define YYSTYPE_IS_DECLARED 1
@@ -44,7 +46,7 @@ typedef union{
     node* n;
 } YYSTYPE;
 #endif /* !YYSTYPE_IS_DECLARED */
-#line 48 "y.tab.c"
+#line 50 "y.tab.c"
 
 /* compatibility with bison */
 #ifdef YYPARSE_PARAM
@@ -641,7 +643,7 @@ typedef struct {
 } YYSTACKDATA;
 /* variables for the parser stack */
 static YYSTACKDATA yystack;
-#line 253 "parser.y"
+#line 255 "parser.y"
 
 
 
@@ -660,7 +662,7 @@ void yyerror(const char *msg){
 	fprintf(stderr, "Parser does not expect '%s'\n",yytext);
 }
 
-#line 664 "y.tab.c"
+#line 666 "y.tab.c"
 
 #if YYDEBUG
 #include <stdio.h>		/* needed for printf */
@@ -863,478 +865,478 @@ yyreduce:
     switch (yyn)
     {
 case 1:
-#line 57 "parser.y"
-	{ printSymbTable(yystack.l_mark[0].n); }
+#line 59 "parser.y"
+	{ printPreOrder(yystack.l_mark[0].n,0); printSymbTable(yystack.l_mark[0].n); }
 break;
 case 2:
-#line 59 "parser.y"
+#line 61 "parser.y"
 	{yyval.n=makeNode("",yystack.l_mark[0].n,NULL,NULL,NULL);}
 break;
 case 3:
-#line 61 "parser.y"
+#line 63 "parser.y"
 	{ yyval.n = makeNode("", yystack.l_mark[-2].n, yystack.l_mark[-1].n,NULL,NULL); }
 break;
 case 4:
-#line 62 "parser.y"
+#line 64 "parser.y"
 	{ yyval.n = yystack.l_mark[-1].n; }
 break;
 case 5:
-#line 65 "parser.y"
+#line 67 "parser.y"
 	{ yyval.n = makeNodeWithDef(PROCEDURE_DEF,yystack.l_mark[-6].n->token,yystack.l_mark[-5].n,yystack.l_mark[-3].n,yystack.l_mark[0].n,NULL);}
 break;
 case 6:
-#line 67 "parser.y"
+#line 69 "parser.y"
 	{ yyval.n = makeNode(yystack.l_mark[-5].n->token,yystack.l_mark[-4].n,yystack.l_mark[0].n,NULL,NULL);  }
 break;
 case 7:
-#line 69 "parser.y"
+#line 71 "parser.y"
 	{ yyval.n = makeNode(yystack.l_mark[-6].n->token,yystack.l_mark[-5].n,yystack.l_mark[-3].n,yystack.l_mark[0].n,NULL); }
 break;
 case 8:
-#line 71 "parser.y"
-	{ yyval.n = makeNodeWithDef(PROCEDURE_DEF,yystack.l_mark[-5].n->token,yystack.l_mark[-4].n,yystack.l_mark[0].n,NULL,NULL); }
+#line 73 "parser.y"
+	{ yyval.n = makeNodeWithDef(PROCEDURE_DEF,yystack.l_mark[-5].n->token,yystack.l_mark[-4].n,yystack.l_mark[0].n,endOfBlock(),NULL); }
 break;
 case 9:
-#line 73 "parser.y"
+#line 75 "parser.y"
 	{ yyval.n = yystack.l_mark[0].n;}
 break;
 case 10:
-#line 75 "parser.y"
+#line 77 "parser.y"
 	{yyval.n = yystack.l_mark[0].n;}
 break;
 case 11:
-#line 78 "parser.y"
+#line 80 "parser.y"
 	{ yyval.n = makeNode(yystack.l_mark[-4].n->token,yystack.l_mark[-2].n,NULL,NULL,NULL);}
 break;
 case 12:
-#line 81 "parser.y"
+#line 83 "parser.y"
 	{ yyval.n = makeNode("",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 13:
-#line 82 "parser.y"
+#line 84 "parser.y"
 	{yyval.n=yystack.l_mark[0].n;}
 break;
 case 14:
-#line 85 "parser.y"
+#line 87 "parser.y"
 	{ yyval.n=makeNode("boolean",NULL,NULL,NULL,NULL); }
 break;
 case 15:
-#line 86 "parser.y"
+#line 88 "parser.y"
 	{ yyval.n=makeNode("char",NULL,NULL,NULL,NULL); }
 break;
 case 16:
-#line 87 "parser.y"
+#line 89 "parser.y"
 	{ yyval.n=makeNode("charp",NULL,NULL,NULL,NULL); }
 break;
 case 17:
-#line 88 "parser.y"
+#line 90 "parser.y"
 	{ yyval.n=makeNode("int",NULL,NULL,NULL,NULL); }
 break;
 case 18:
-#line 89 "parser.y"
+#line 91 "parser.y"
 	{ yyval.n=makeNode("intp",NULL,NULL,NULL,NULL); }
 break;
 case 19:
-#line 90 "parser.y"
+#line 92 "parser.y"
 	{ yyval.n=makeNode("string",NULL,NULL,NULL,NULL); }
 break;
 case 20:
-#line 91 "parser.y"
+#line 93 "parser.y"
 	{ yyval.n=makeNode("void",NULL,NULL,NULL,NULL); }
 break;
 case 21:
-#line 95 "parser.y"
+#line 97 "parser.y"
 	{ yyval.n = makeNode(yystack.l_mark[-3].n->token,yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 22:
-#line 96 "parser.y"
+#line 98 "parser.y"
 	{yyval.n = makeNode(yystack.l_mark[-1].n->token,yystack.l_mark[0].n,NULL,NULL,NULL);}
 break;
 case 23:
-#line 99 "parser.y"
+#line 101 "parser.y"
 	{yyval.n = yystack.l_mark[-1].n;}
 break;
 case 24:
-#line 100 "parser.y"
+#line 102 "parser.y"
 	{yyval.n=NULL;}
 break;
 case 25:
-#line 103 "parser.y"
+#line 105 "parser.y"
 	{yyval.n = makeNode("",yystack.l_mark[-2].n,yystack.l_mark[-1].n,NULL,NULL);}
 break;
 case 26:
-#line 104 "parser.y"
+#line 106 "parser.y"
 	{yyval.n = yystack.l_mark[-1].n;}
 break;
 case 27:
-#line 107 "parser.y"
+#line 109 "parser.y"
 	{ yyval.n = makeNode("", yystack.l_mark[-1].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 28:
-#line 108 "parser.y"
+#line 110 "parser.y"
 	{ yyval.n = yystack.l_mark[0].n ; }
 break;
 case 29:
-#line 111 "parser.y"
+#line 113 "parser.y"
 	{ yyval.n = yystack.l_mark[-1].n; }
 break;
 case 30:
-#line 112 "parser.y"
+#line 114 "parser.y"
 	{ yyval.n = yystack.l_mark[-1].n; }
 break;
 case 31:
-#line 113 "parser.y"
-	{ yyval.n = yystack.l_mark[0].n; }
-break;
-case 32:
-#line 114 "parser.y"
-	{ yyval.n = yystack.l_mark[0].n; }
-break;
-case 33:
 #line 115 "parser.y"
 	{ yyval.n = yystack.l_mark[0].n; }
 break;
-case 34:
+case 32:
 #line 116 "parser.y"
 	{ yyval.n = yystack.l_mark[0].n; }
 break;
-case 35:
+case 33:
 #line 117 "parser.y"
-	{ yyval.n = yystack.l_mark[-1].n; }
+	{ yyval.n = yystack.l_mark[0].n; }
 break;
-case 36:
+case 34:
 #line 118 "parser.y"
 	{ yyval.n = yystack.l_mark[0].n; }
 break;
-case 37:
+case 35:
 #line 119 "parser.y"
-	{ yyval.n = NULL;}
+	{ yyval.n = yystack.l_mark[-1].n; }
 break;
-case 38:
+case 36:
 #line 120 "parser.y"
 	{ yyval.n = yystack.l_mark[0].n; }
 break;
+case 37:
+#line 121 "parser.y"
+	{ yyval.n = NULL;}
+break;
+case 38:
+#line 122 "parser.y"
+	{ yyval.n = yystack.l_mark[0].n; }
+break;
 case 39:
-#line 123 "parser.y"
-	{}
-break;
-case 40:
-#line 124 "parser.y"
-	{}
-break;
-case 41:
 #line 125 "parser.y"
 	{}
 break;
+case 40:
+#line 126 "parser.y"
+	{}
+break;
+case 41:
+#line 127 "parser.y"
+	{}
+break;
 case 42:
-#line 128 "parser.y"
+#line 130 "parser.y"
 	{ yyval.n = makeNode("return",yystack.l_mark[-1].n,NULL,NULL,NULL); }
 break;
 case 43:
-#line 131 "parser.y"
+#line 133 "parser.y"
 	{ yyval.n = makeNode (yystack.l_mark[-5].n->token,yystack.l_mark[-4].n,yystack.l_mark[-2].n,NULL,NULL); }
 break;
 case 44:
-#line 132 "parser.y"
+#line 134 "parser.y"
 	{ yyval.n = makeNode (yystack.l_mark[-4].n->token,yystack.l_mark[-3].n,NULL,NULL,NULL); }
 break;
 case 45:
-#line 135 "parser.y"
+#line 137 "parser.y"
 	{ yyval.n = makeNode(yystack.l_mark[-3].n->token,yystack.l_mark[-3].n, yystack.l_mark[-1].n,NULL,NULL); }
 break;
 case 46:
-#line 136 "parser.y"
+#line 138 "parser.y"
 	{ yyval.n = makeNode(yystack.l_mark[-2].n->token,yystack.l_mark[-2].n, NULL,NULL,NULL); }
 break;
 case 47:
-#line 140 "parser.y"
-	{ yyval.n = makeNode (yystack.l_mark[-1].n->token,yystack.l_mark[-1].n,yystack.l_mark[0].n,NULL,NULL); }
-break;
-case 48:
-#line 141 "parser.y"
-	{ yyval.n = makeNode (yystack.l_mark[-1].n->token,yystack.l_mark[-1].n,yystack.l_mark[0].n,NULL,NULL); }
-break;
-case 49:
 #line 142 "parser.y"
 	{ yyval.n = makeNode (yystack.l_mark[-1].n->token,yystack.l_mark[-1].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
+case 48:
+#line 143 "parser.y"
+	{ yyval.n = makeNode (yystack.l_mark[-1].n->token,yystack.l_mark[-1].n,yystack.l_mark[0].n,NULL,NULL); }
+break;
+case 49:
+#line 144 "parser.y"
+	{ yyval.n = makeNode (yystack.l_mark[-1].n->token,yystack.l_mark[-1].n,yystack.l_mark[0].n,NULL,NULL); }
+break;
 case 50:
-#line 147 "parser.y"
+#line 149 "parser.y"
 	{ yyval.n = makeNode("=", yystack.l_mark[-2].n, yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 51:
-#line 148 "parser.y"
+#line 150 "parser.y"
 	{ yyval.n = makeNode("=", yystack.l_mark[-2].n, yystack.l_mark[0].n,NULL,NULL);}
 break;
 case 52:
-#line 149 "parser.y"
+#line 151 "parser.y"
 	{ yyval.n = makeNode("=", yystack.l_mark[-2].n, yystack.l_mark[0].n,NULL,NULL);}
 break;
 case 53:
-#line 150 "parser.y"
+#line 152 "parser.y"
 	{ yyval.n = makeNode("=", yystack.l_mark[-5].n, yystack.l_mark[-3].n,yystack.l_mark[-1].n,NULL);   }
 break;
 case 54:
-#line 151 "parser.y"
+#line 153 "parser.y"
 	{ yyval.n = makeNode("=", yystack.l_mark[-4].n, yystack.l_mark[-2].n,NULL,NULL); }
 break;
 case 55:
-#line 152 "parser.y"
+#line 154 "parser.y"
 	{yyval.n = makeNode("=", yystack.l_mark[-2].n, makeNode("NULL POINTER",NULL,NULL,NULL,NULL),NULL,NULL); }
 break;
 case 56:
-#line 156 "parser.y"
-	{ yyval.n = yystack.l_mark[0].n; }
-break;
-case 57:
-#line 157 "parser.y"
-	{ yyval.n = yystack.l_mark[0].n; }
-break;
-case 58:
 #line 158 "parser.y"
 	{ yyval.n = yystack.l_mark[0].n; }
 break;
+case 57:
+#line 159 "parser.y"
+	{ yyval.n = yystack.l_mark[0].n; }
+break;
+case 58:
+#line 160 "parser.y"
+	{ yyval.n = yystack.l_mark[0].n; }
+break;
 case 59:
-#line 161 "parser.y"
+#line 163 "parser.y"
 	{ yyval.n = makeNode("", yystack.l_mark[-3].n, yystack.l_mark[-1].n,NULL,NULL) ;}
 break;
 case 60:
-#line 163 "parser.y"
+#line 165 "parser.y"
 	{ yyval.n = yystack.l_mark[0].n; }
 break;
 case 61:
-#line 164 "parser.y"
+#line 166 "parser.y"
 	{ yyval.n = makeNode(yytext, NULL, NULL,NULL,NULL); }
 break;
 case 62:
-#line 165 "parser.y"
+#line 167 "parser.y"
 	{ yyval.n = makeNode(yytext, NULL, NULL,NULL,NULL); }
 break;
 case 63:
-#line 166 "parser.y"
+#line 168 "parser.y"
 	{ yyval.n = yystack.l_mark[0].n; }
 break;
 case 64:
-#line 167 "parser.y"
+#line 169 "parser.y"
 	{ yyval.n = makeNode("boolean", yystack.l_mark[0].n, NULL,NULL,NULL); }
 break;
 case 65:
-#line 168 "parser.y"
+#line 170 "parser.y"
 	{ yyval.n = makeNode("dereference", yystack.l_mark[0].n, NULL,NULL,NULL); }
 break;
 case 66:
-#line 169 "parser.y"
-	{ yyval.n = yystack.l_mark[0].n; }
-break;
-case 67:
-#line 170 "parser.y"
-	{ yyval.n = yystack.l_mark[0].n; }
-break;
-case 68:
 #line 171 "parser.y"
 	{ yyval.n = yystack.l_mark[0].n; }
 break;
-case 69:
+case 67:
 #line 172 "parser.y"
+	{ yyval.n = yystack.l_mark[0].n; }
+break;
+case 68:
+#line 173 "parser.y"
+	{ yyval.n = yystack.l_mark[0].n; }
+break;
+case 69:
+#line 174 "parser.y"
 	{ yyval.n = makeNode("null",NULL,NULL,NULL,NULL);}
 break;
 case 70:
-#line 173 "parser.y"
+#line 175 "parser.y"
 	{ yyval.n = makeNode("!", yystack.l_mark[0].n, NULL,NULL,NULL); }
 break;
 case 71:
-#line 174 "parser.y"
+#line 176 "parser.y"
 	{ yyval.n = makeNode("+",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 72:
-#line 175 "parser.y"
+#line 177 "parser.y"
 	{ yyval.n = makeNode("-",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 73:
-#line 176 "parser.y"
+#line 178 "parser.y"
 	{ yyval.n = makeNode("*",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 74:
-#line 177 "parser.y"
+#line 179 "parser.y"
 	{ yyval.n = makeNode("/",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 75:
-#line 178 "parser.y"
+#line 180 "parser.y"
 	{ yyval.n = makeNode("<",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 76:
-#line 179 "parser.y"
+#line 181 "parser.y"
 	{ yyval.n = makeNode(">",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 77:
-#line 180 "parser.y"
+#line 182 "parser.y"
 	{ yyval.n = makeNode("<=",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL);}
 break;
 case 78:
-#line 181 "parser.y"
+#line 183 "parser.y"
 	{ yyval.n = makeNode(">=",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL);}
 break;
 case 79:
-#line 182 "parser.y"
+#line 184 "parser.y"
 	{ yyval.n = makeNode("==",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL);}
 break;
 case 80:
-#line 183 "parser.y"
+#line 185 "parser.y"
 	{ yyval.n = makeNode("!=",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL);}
 break;
 case 81:
-#line 184 "parser.y"
+#line 186 "parser.y"
 	{ yyval.n = makeNode("&&",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL);}
 break;
 case 82:
-#line 185 "parser.y"
+#line 187 "parser.y"
 	{ yyval.n = makeNode("||",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL);}
 break;
 case 83:
-#line 186 "parser.y"
+#line 188 "parser.y"
 	{ yyval.n = makeNode("<",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 84:
-#line 187 "parser.y"
+#line 189 "parser.y"
 	{ yyval.n = makeNode(">",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 85:
-#line 188 "parser.y"
+#line 190 "parser.y"
 	{ yyval.n = makeNode("<=",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL);}
 break;
 case 86:
-#line 189 "parser.y"
+#line 191 "parser.y"
 	{ yyval.n = makeNode(">=",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 87:
-#line 190 "parser.y"
+#line 192 "parser.y"
 	{ yyval.n = makeNode("==",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 88:
-#line 191 "parser.y"
+#line 193 "parser.y"
 	{ yyval.n = makeNode("!=",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 89:
-#line 192 "parser.y"
+#line 194 "parser.y"
 	{ yyval.n = makeNode("&&",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 90:
-#line 193 "parser.y"
+#line 195 "parser.y"
 	{ yyval.n = makeNode("||",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 91:
-#line 194 "parser.y"
+#line 196 "parser.y"
 	{ yyval.n = yystack.l_mark[0].n; }
 break;
 case 92:
-#line 197 "parser.y"
+#line 199 "parser.y"
 	{ yyval.n = makeNode("for",yystack.l_mark[-6].n,yystack.l_mark[-4].n,yystack.l_mark[-2].n,NULL); }
 break;
 case 93:
-#line 200 "parser.y"
+#line 202 "parser.y"
 	{yyval.n = yystack.l_mark[0].n;}
 break;
 case 94:
-#line 201 "parser.y"
+#line 203 "parser.y"
 	{yyval.n = yystack.l_mark[0].n;}
 break;
 case 95:
-#line 204 "parser.y"
+#line 206 "parser.y"
 	{ yyval.n = makeNode("while",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 96:
-#line 207 "parser.y"
+#line 209 "parser.y"
 	{yyval.n = yystack.l_mark[-1].n;}
 break;
 case 97:
-#line 208 "parser.y"
+#line 210 "parser.y"
 	{yyval.n = makeNode("{}",NULL,NULL,NULL,NULL);}
 break;
 case 98:
-#line 211 "parser.y"
+#line 213 "parser.y"
 	{yyval.n = makeNode("if",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 99:
-#line 212 "parser.y"
+#line 214 "parser.y"
 	{yyval.n = makeNode("if",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 100:
-#line 213 "parser.y"
-	{ yyval.n = makeNode("if", yystack.l_mark[-4].n, makeNode("else", yystack.l_mark[-2].n, yystack.l_mark[0].n,NULL,NULL),NULL,NULL);}
-break;
-case 101:
-#line 214 "parser.y"
-	{ yyval.n = makeNode("if", yystack.l_mark[-4].n, makeNode("else", yystack.l_mark[-2].n, yystack.l_mark[0].n,NULL,NULL),NULL,NULL);}
-break;
-case 102:
 #line 215 "parser.y"
 	{ yyval.n = makeNode("if", yystack.l_mark[-4].n, makeNode("else", yystack.l_mark[-2].n, yystack.l_mark[0].n,NULL,NULL),NULL,NULL);}
 break;
-case 103:
+case 101:
 #line 216 "parser.y"
 	{ yyval.n = makeNode("if", yystack.l_mark[-4].n, makeNode("else", yystack.l_mark[-2].n, yystack.l_mark[0].n,NULL,NULL),NULL,NULL);}
 break;
+case 102:
+#line 217 "parser.y"
+	{ yyval.n = makeNode("if", yystack.l_mark[-4].n, makeNode("else", yystack.l_mark[-2].n, yystack.l_mark[0].n,NULL,NULL),NULL,NULL);}
+break;
+case 103:
+#line 218 "parser.y"
+	{ yyval.n = makeNode("if", yystack.l_mark[-4].n, makeNode("else", yystack.l_mark[-2].n, yystack.l_mark[0].n,NULL,NULL),NULL,NULL);}
+break;
 case 104:
-#line 219 "parser.y"
+#line 221 "parser.y"
 	{yyval.n = yystack.l_mark[0].n;}
 break;
 case 105:
-#line 220 "parser.y"
+#line 222 "parser.y"
 	{yyval.n = NULL;}
 break;
 case 106:
-#line 221 "parser.y"
+#line 223 "parser.y"
 	{yyval.n = yystack.l_mark[-2].n;}
 break;
 case 107:
-#line 224 "parser.y"
+#line 226 "parser.y"
 	{ yyval.n = makeNode("true", NULL,NULL,NULL,NULL); }
 break;
 case 108:
-#line 225 "parser.y"
+#line 227 "parser.y"
 	{ yyval.n = makeNode("false", NULL, NULL,NULL,NULL); }
 break;
 case 109:
-#line 230 "parser.y"
+#line 232 "parser.y"
 	{ yyval.n = makeNode("",yystack.l_mark[-1].n,NULL,NULL,NULL); }
 break;
 case 110:
-#line 233 "parser.y"
+#line 235 "parser.y"
 	{ yyval.n = makeNode("ABS",yystack.l_mark[-1].n,NULL,NULL,NULL); }
 break;
 case 111:
-#line 234 "parser.y"
+#line 236 "parser.y"
 	{ yyval.n = makeNode("ABS",yystack.l_mark[-1].n,NULL,NULL,NULL); }
 break;
 case 112:
-#line 237 "parser.y"
+#line 239 "parser.y"
 	{ yyval.n = makeNode("&", yystack.l_mark[0].n, NULL,NULL,NULL); }
 break;
 case 113:
-#line 238 "parser.y"
+#line 240 "parser.y"
 	{ yyval.n = makeNode("&", yystack.l_mark[0].n ,NULL,NULL,NULL); }
 break;
 case 114:
-#line 241 "parser.y"
+#line 243 "parser.y"
 	{ yyval.n = makeNode("^", yystack.l_mark[0].n, NULL,NULL,NULL); }
 break;
 case 115:
-#line 244 "parser.y"
+#line 246 "parser.y"
 	{ yyval.n = makeNode(""/*Multiple Expressions*/,yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 116:
-#line 245 "parser.y"
+#line 247 "parser.y"
 	{ yyval.n = yystack.l_mark[0].n; }
 break;
 case 117:
-#line 248 "parser.y"
+#line 250 "parser.y"
 	{ yyval.n = makeNode(yytext,NULL,NULL,NULL,NULL); }
 break;
 case 118:
-#line 251 "parser.y"
+#line 253 "parser.y"
 	{yyval.n = makeNode(yytext,NULL,NULL,NULL,NULL); }
 break;
-#line 1338 "y.tab.c"
+#line 1340 "y.tab.c"
     }
     yystack.s_mark -= yym;
     yystate = *yystack.s_mark;

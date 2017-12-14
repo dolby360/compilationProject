@@ -11,6 +11,8 @@
     #include "ast/print_ast.h"
     #include "symb/symb.h"
     #include "definitions.h"
+
+    
 %}
 
 %union{
@@ -54,7 +56,7 @@
 %type <str> COMMA       
 
 %%
-S: PROGRAM { printSymbTable($1); };
+S: PROGRAM { printPreOrder($1,0); printSymbTable($1); };
 
 PROGRAM:  MULTI_PROC {$$=makeNode("",$1,NULL,NULL,NULL);};
 
@@ -68,7 +70,7 @@ PROC :  PROCEDURE ID  PARAN_O MULT_PARAMS PARAN_C OPTIONAL_COMMENT BLOCK_W_RETUR
 
         |PROCEDURE ID  PARAN_O MULT_PARAMS PARAN_C OPTIONAL_COMMENT BLOCK_W { $$ = makeNode($1->token,$2,$4,$7,NULL); }
                                             
-        |PROCEDURE ID  PARAN_O PARAN_C OPTIONAL_COMMENT BLOCK_W { $$ = makeNodeWithDef(PROCEDURE_DEF,$1->token,$2,$6,NULL,NULL); }
+        |PROCEDURE ID  PARAN_O PARAN_C OPTIONAL_COMMENT BLOCK_W { $$ = makeNodeWithDef(PROCEDURE_DEF,$1->token,$2,$6,endOfBlock(),NULL); }
 
         |BLOCK_W_RETURN { $$ = $1;}
 

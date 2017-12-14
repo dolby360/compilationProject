@@ -5,4 +5,5 @@ int main(){
 
         }
     }
+    int o = 34;
 }

@@ -22,7 +22,7 @@ typedef struct node{
 node* makeNode(char* token_ ,node* nodeOne_ ,node* nodeTwo_,node* nodeThree_, node* nodeFour_);
 
 node* makeNodeWithDef(int def, char* token_ ,node* nodeOne_ ,node* nodeTwo_,node* nodeThree_, node* nodeFour_);
-
+node* endOfBlock();
 node* getAstAsaTree();
 
 #endif
