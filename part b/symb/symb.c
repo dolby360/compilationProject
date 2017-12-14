@@ -42,7 +42,8 @@ void buildSymbTable(node* root,int nest){
         else{
             if(root->tokenDef == END_OF_BLOCK){
                 /*TODO:
-                Look up fnction and after checking that there are no problem drop whole layer
+                Look up fnction and after checking that there is no 
+                problem drop the whole layer
                 */
 
                 
