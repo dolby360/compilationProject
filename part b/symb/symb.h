@@ -30,9 +30,10 @@ static bool mainAlreadyExist;
 /*
 TODO: Function that free all memory.
 */
+
 void returnTheSmtPointerToTheBeginning();
 void checkMain();
-bool lookup(symbTable* looker);
+int lookup(symbTable* looker);
 void buildSymbTable(node* root,int nest);
 void printSymbTable();
 void init();
@@ -42,4 +43,6 @@ void testingAfterSymbolTableBuiltUp();
 void checkIfMainDoseNotExist();
 /*Mission two*/
 void checkIfMainGetArguments();
+/*Mission three*/
+void thereAreNoTwoFunctionsWithTheSameNameInTheScope();
 #endif

@@ -8,7 +8,7 @@ void init(){
     mainAlreadyExist;
 }
 
-bool lookup(symbTable* looker){
+int lookup(symbTable* looker){
     
 }
 
@@ -61,9 +61,54 @@ void checkIfMainGetArguments(){
             (*smt) = (*smt)->next;
         }
         hight = hight->parent;
+        if(!hight){
+            break;
+        }
         (*smt) = hight;
     }
     free(hight);
+}
+
+/*Mission three*/
+void thereAreNoTwoFunctionsWithTheSameNameInTheScope(){
+    char** functionsList;
+    functionsList = (char**)malloc(sizeof(char*));
+    int i=0;
+    int k = 1;
+    symbTable* hight = (*smt);
+    returnTheSmtPointerToTheBeginning();
+    
+    while(hight){
+        while((*smt)){
+            if((*smt)->type == 0){
+                functionsList[i] = (char*)malloc(sizeof((*smt)->next->name) + 1);
+                strcpy(functionsList[i],(*smt)->next->name);
+                #if DEBUG_MODE == 4
+                    printf("%s  ",functionsList[i]);    
+                #endif
+                functionsList[i+1] = NULL;
+                i = i+1;
+            }        
+            (*smt) = (*smt)->next;
+        }
+        
+        #if DEBUG_MODE == 4
+        while(functionsList[k]){
+            printf("ss%s  ",functionsList[k-1]);
+            k = k+1;
+            printf("\n");
+        }      
+        #endif
+            printf("I'm ok");
+        hight = hight->parent;
+        if(!hight){
+            break;
+        }
+        (*smt) = hight;
+        printf("\n");
+    }
+
+
 }
 
 void testingAfterSymbolTableBuiltUp(){
@@ -71,12 +116,15 @@ void testingAfterSymbolTableBuiltUp(){
     checkIfMainDoseNotExist();
     /*Mission two*/
     checkIfMainGetArguments();
+    /*Mission three*/
+    thereAreNoTwoFunctionsWithTheSameNameInTheScope();
 }
 
 void printSymbTable(node* root){
     init();
     buildSymbTable(root,0);
     testingAfterSymbolTableBuiltUp();
+    returnTheSmtPointerToTheBeginning();
     
     symbTable* hight = head;
     #if DEBUG_MODE == 0
@@ -140,7 +188,8 @@ void buildSymbTable(node* root,int nest){
                 //In this case we see new environment.
 
                 /*
-                Firstable 
+                Firstable we need to concat new node that is the function 
+                so we will be able to know all the function of this scope.
                 */
                 (*smt)->next = (symbTable*)malloc(sizeof(symbTable));
                 (*smt)->next->parent = NULL;
@@ -151,10 +200,29 @@ void buildSymbTable(node* root,int nest){
                 (*smt)->next->next = NULL;
                 (*smt)->next->before = (*smt);
                 (*smt) = (*smt)->next;
+
+                /*
+                Then a second node with the value
+                */
+
+                
+                (*smt)->next = (symbTable*)malloc(sizeof(symbTable));
+                (*smt)->next->parent = NULL;
+                (*smt)->next->type = root->nodeOne->tokenDef;
+                (*smt)->next->name = (char*)malloc(sizeof(root->nodeOne->token));
+                strcpy((*smt)->next->name,root->nodeOne->token);
+                (*smt)->next->scope = nest;
+                (*smt)->next->next = NULL;
+                (*smt)->next->before = (*smt);
+                (*smt) = (*smt)->next;
+                
                 #if DEBUG_MODE == 1
-                    printf("(*smt)->next->name:   %s\n",(*smt)->name);
+                    printf("1)NEW ENV:   %s\n",(*smt)->name);
                 #endif
 
+                /*
+                Now we just going upstairs to open new layer
+                */
 
                 while((*smt)->before){
                     (*smt) = (*smt)->before;
@@ -165,19 +233,17 @@ void buildSymbTable(node* root,int nest){
                 (*smt) = (*smt)->parent;
 
                 #if DEBUG_MODE == 1
-                    printf("1)NEW ENV:   %s\n",(*smt)->child->name);
+                    printf("2)NEW ENV:   %s\n",(*smt)->child->name);
                 #endif
 
                 (*smt)->type = root->tokenDef;
                 (*smt)->name = (char*)malloc(sizeof(root->token));
                 strcpy((*smt)->name,root->token);
                 #if DEBUG_MODE == 1
-                    printf("NEW ENV:   %s\n",(*smt)->name);
+                    printf("3)NEW ENV:   %s\n",(*smt)->name);
                 #endif
-                //(*smt)->next = (symbTable*)malloc(sizeof(symbTable));
                 (*smt)->scope = nest;
                 (*smt)->before = NULL;
-                //(*smt) = (*smt)->next;
             
             }else if((*smt)->name == NULL){
                 //In this case this is the first node;

@@ -1,9 +1,6 @@
-int main(int b){
+int main(){
     int f = l;
     int madin(){
-        char j(){
-
-        }
     }
-    int o = 34;
+    o = 34;
 }
