@@ -8,6 +8,7 @@ It may not recognize the folder.
 */
 #include "../ast/print_ast.h"
 
+
 typedef struct symbTable{
     int type;
     char* name;
@@ -24,9 +25,21 @@ typedef struct symbTable{
 
 static symbTable** smt;
 static symbTable* head;
+static bool mainAlreadyExist;
 
-void lookup(symbTable* looker);
+/*
+TODO: Function that free all memory.
+*/
+void returnTheSmtPointerToTheBeginning();
+void checkMain();
+bool lookup(symbTable* looker);
 void buildSymbTable(node* root,int nest);
 void printSymbTable();
+void init();
+void testingAfterSymbolTableBuiltUp();
 
+/*Mission one*/
+void checkIfMainDoseNotExist();
+/*Mission two*/
+void checkIfMainGetArguments();
 #endif

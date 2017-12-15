@@ -56,7 +56,7 @@
 %type <str> COMMA       
 
 %%
-S: PROGRAM { printPreOrder($1,0); printSymbTable($1); };
+S: PROGRAM { /*printPreOrder($1,0);*/ printSymbTable($1); };
 
 PROGRAM:  MULTI_PROC {$$=makeNode("",$1,NULL,NULL,NULL);};
 
@@ -66,9 +66,9 @@ MULTI_PROC : OPTIONAL_COMMENT  PROC MULTI_PROC OPTIONAL_COMMENT { $$ = makeNode(
 
 PROC :  PROCEDURE ID  PARAN_O MULT_PARAMS PARAN_C OPTIONAL_COMMENT BLOCK_W_RETURN { $$ = makeNodeWithDef(PROCEDURE_DEF,$1->token,$2,$4,$7,NULL);}
 
-        |PROCEDURE ID  PARAN_O PARAN_C OPTIONAL_COMMENT BLOCK_W_RETURN { $$ = makeNode($1->token,$2,$6,NULL,NULL);  }
+        |PROCEDURE ID  PARAN_O PARAN_C OPTIONAL_COMMENT BLOCK_W_RETURN { $$ = makeNodeWithDef(PROCEDURE_DEF,$1->token,$2,$6,NULL,NULL);  }
 
-        |PROCEDURE ID  PARAN_O MULT_PARAMS PARAN_C OPTIONAL_COMMENT BLOCK_W { $$ = makeNode($1->token,$2,$4,$7,NULL); }
+        |PROCEDURE ID  PARAN_O MULT_PARAMS PARAN_C OPTIONAL_COMMENT BLOCK_W { $$ = makeNodeWithDef(PROCEDURE_DEF,$1->token,$2,$4,$7,NULL); }
                                             
         |PROCEDURE ID  PARAN_O PARAN_C OPTIONAL_COMMENT BLOCK_W { $$ = makeNodeWithDef(PROCEDURE_DEF,$1->token,$2,$6,endOfBlock(),NULL); }
 
@@ -94,8 +94,8 @@ PROCEDURE:  KEY_BOOLEAN { $$=makeNode("boolean",NULL,NULL,NULL,NULL); }
             ;
 
 
-MULT_PARAMS:    PROCEDURE ID COMMA MULT_PARAMS { $$ = makeNode($1->token,$2,$4,NULL,NULL); }
-                |PROCEDURE ID {$$ = makeNode($1->token,$2,NULL,NULL,NULL);}
+MULT_PARAMS:    PROCEDURE ID COMMA MULT_PARAMS { $$ = makeNodeWithDef(PARAMS_DEF,$1->token,$2,$4,NULL,NULL); }
+                |PROCEDURE ID {$$ = makeNodeWithDef(PARAMS_DEF,$1->token,$2,NULL,NULL,NULL);}
                 ;
 
 BLOCK_W:    BRA_O OPTIONAL_COMMENT MULT_STATEMENT BRA_C {$$ = $3;}
@@ -139,9 +139,9 @@ PROC_CALL : ID PARAN_O MULT_EXP PARAN_C { $$ = makeNode($1->token,$1, $3,NULL,NU
           ;
 
 
-VARS :  PROCEDURE EXP           { $$ = makeNode ($1->token,$1,$2,NULL,NULL); } 
-        |PROCEDURE MULT_EXP      { $$ = makeNode ($1->token,$1,$2,NULL,NULL); } 
-        |PROCEDURE ASSIGNMENT   { $$ = makeNode ($1->token,$1,$2,NULL,NULL); } 
+VARS :  PROCEDURE EXP           { $$ = makeNodeWithDef (DECLARATION_DEF,"",$1,$2,NULL,NULL); } 
+        |PROCEDURE MULT_EXP      { $$ = makeNodeWithDef (DECLARATION_DEF,"",$1,$2,NULL,NULL); } 
+        |PROCEDURE ASSIGNMENT   { $$ = makeNodeWithDef (DECLARATION_DEF,"",$1,$2,NULL,NULL); } 
         ;
 
 

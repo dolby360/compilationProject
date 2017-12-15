@@ -866,7 +866,7 @@ yyreduce:
     {
 case 1:
 #line 59 "parser.y"
-	{ printPreOrder(yystack.l_mark[0].n,0); printSymbTable(yystack.l_mark[0].n); }
+	{ /*printPreOrder($1,0);*/ printSymbTable(yystack.l_mark[0].n); }
 break;
 case 2:
 #line 61 "parser.y"
@@ -886,11 +886,11 @@ case 5:
 break;
 case 6:
 #line 69 "parser.y"
-	{ yyval.n = makeNode(yystack.l_mark[-5].n->token,yystack.l_mark[-4].n,yystack.l_mark[0].n,NULL,NULL);  }
+	{ yyval.n = makeNodeWithDef(PROCEDURE_DEF,yystack.l_mark[-5].n->token,yystack.l_mark[-4].n,yystack.l_mark[0].n,NULL,NULL);  }
 break;
 case 7:
 #line 71 "parser.y"
-	{ yyval.n = makeNode(yystack.l_mark[-6].n->token,yystack.l_mark[-5].n,yystack.l_mark[-3].n,yystack.l_mark[0].n,NULL); }
+	{ yyval.n = makeNodeWithDef(PROCEDURE_DEF,yystack.l_mark[-6].n->token,yystack.l_mark[-5].n,yystack.l_mark[-3].n,yystack.l_mark[0].n,NULL); }
 break;
 case 8:
 #line 73 "parser.y"
@@ -946,11 +946,11 @@ case 20:
 break;
 case 21:
 #line 97 "parser.y"
-	{ yyval.n = makeNode(yystack.l_mark[-3].n->token,yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
+	{ yyval.n = makeNodeWithDef(PARAMS_DEF,yystack.l_mark[-3].n->token,yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 22:
 #line 98 "parser.y"
-	{yyval.n = makeNode(yystack.l_mark[-1].n->token,yystack.l_mark[0].n,NULL,NULL,NULL);}
+	{yyval.n = makeNodeWithDef(PARAMS_DEF,yystack.l_mark[-1].n->token,yystack.l_mark[0].n,NULL,NULL,NULL);}
 break;
 case 23:
 #line 101 "parser.y"
@@ -1050,15 +1050,15 @@ case 46:
 break;
 case 47:
 #line 142 "parser.y"
-	{ yyval.n = makeNode (yystack.l_mark[-1].n->token,yystack.l_mark[-1].n,yystack.l_mark[0].n,NULL,NULL); }
+	{ yyval.n = makeNodeWithDef (DECLARATION_DEF,"",yystack.l_mark[-1].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 48:
 #line 143 "parser.y"
-	{ yyval.n = makeNode (yystack.l_mark[-1].n->token,yystack.l_mark[-1].n,yystack.l_mark[0].n,NULL,NULL); }
+	{ yyval.n = makeNodeWithDef (DECLARATION_DEF,"",yystack.l_mark[-1].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 49:
 #line 144 "parser.y"
-	{ yyval.n = makeNode (yystack.l_mark[-1].n->token,yystack.l_mark[-1].n,yystack.l_mark[0].n,NULL,NULL); }
+	{ yyval.n = makeNodeWithDef (DECLARATION_DEF,"",yystack.l_mark[-1].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 50:
 #line 149 "parser.y"

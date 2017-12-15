@@ -1,6 +1,6 @@
-int main(){
+int main(int b){
     int f = l;
-    int b(){
+    int madin(){
         char j(){
 
         }
