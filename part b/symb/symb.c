@@ -71,10 +71,13 @@ void checkIfMainGetArguments(){
 
 /*Mission three*/
 void thereAreNoTwoFunctionsWithTheSameNameInTheScope(){
+    int loop1 = 0;
+    int loop2 = 0;
     char** functionsList;
     functionsList = (char**)malloc(sizeof(char*));
     int i=0;
     int k = 1;
+    
     symbTable* hight = (*smt);
     returnTheSmtPointerToTheBeginning();
     
@@ -91,7 +94,31 @@ void thereAreNoTwoFunctionsWithTheSameNameInTheScope(){
             }        
             (*smt) = (*smt)->next;
         }
-        
+       
+
+        printf("%d\n",i);
+        for(loop1 = 0; loop1 < i; loop1 = loop1 + 1){
+            for(loop2 = loop1 + 1; loop2 < i; loop2 = loop2 + 1){
+                printf("functionsList[%d] = %s\n",loop1,functionsList[loop1]);
+                printf("functionsList[%d] = %s\n",loop2,functionsList[loop2]);
+                if(strcpy(functionsList[loop1],functionsList[loop2]) == 0){
+                    printf("Two functions with the same name in the scope\n");
+                    exit(0);
+                }
+            }
+        }
+        i = 0;
+
+        /*
+        loop1 = 0;
+        loop2 = 0;
+        for(loop1 = 0;loop1 < i;loop){
+            for(){
+
+            }
+        }
+        */
+        /*
         #if DEBUG_MODE == 4
         while(functionsList[k]){
             printf("ss%s  ",functionsList[k-1]);
@@ -100,15 +127,15 @@ void thereAreNoTwoFunctionsWithTheSameNameInTheScope(){
         }      
         #endif
             printf("I'm ok");
+            */
         hight = hight->parent;
         if(!hight){
             break;
         }
         (*smt) = hight;
         printf("\n");
+        
     }
-
-
 }
 
 void testingAfterSymbolTableBuiltUp(){
@@ -116,8 +143,6 @@ void testingAfterSymbolTableBuiltUp(){
     checkIfMainDoseNotExist();
     /*Mission two*/
     checkIfMainGetArguments();
-    /*Mission three*/
-    thereAreNoTwoFunctionsWithTheSameNameInTheScope();
 }
 
 void printSymbTable(node* root){
@@ -163,6 +188,8 @@ void buildSymbTable(node* root,int nest){
                 problem drop the whole layer
                 */
 
+                /*Mission three*/
+                thereAreNoTwoFunctionsWithTheSameNameInTheScope();
                 
                 while((*smt)->before){
                     (*smt) = (*smt)->before;
@@ -203,9 +230,7 @@ void buildSymbTable(node* root,int nest){
 
                 /*
                 Then a second node with the value
-                */
-
-                
+                */                
                 (*smt)->next = (symbTable*)malloc(sizeof(symbTable));
                 (*smt)->next->parent = NULL;
                 (*smt)->next->type = root->nodeOne->tokenDef;
@@ -258,9 +283,36 @@ void buildSymbTable(node* root,int nest){
                 (*smt)->parent = NULL;
                 (*smt)->child = NULL;
 
+                /*
+                Then a second node with the value
+                */                
+                (*smt)->next = (symbTable*)malloc(sizeof(symbTable));
+                (*smt)->next->parent = NULL;
+                (*smt)->next->type = root->nodeOne->tokenDef;
+                (*smt)->next->name = (char*)malloc(sizeof(root->nodeOne->token));
+                strcpy((*smt)->next->name,root->nodeOne->token);
+                (*smt)->next->scope = nest;
+                (*smt)->next->next = NULL;
+                (*smt)->next->before = (*smt);
+
+                
+                
+                (*smt)->parent = (symbTable*)malloc(sizeof(symbTable));
+                (*smt)->parent->child = (*smt);
+                (*smt) = (*smt)->parent;
+
                 #if DEBUG_MODE == 1
-                    printf("first node:   %s\n",(*smt)->name);
+                    printf("2)first node:   %s\n",(*smt)->child->name);
                 #endif
+
+                (*smt)->type = root->tokenDef;
+                (*smt)->name = (char*)malloc(sizeof(root->token));
+                strcpy((*smt)->name,root->token);
+                #if DEBUG_MODE == 1
+                    printf("3)first node:   %s\n",(*smt)->name);
+                #endif
+                (*smt)->scope = nest;
+                (*smt)->before = NULL;
             }else{
                 /*
                 Here we are building a node for the general case. 

@@ -14,5 +14,5 @@
 typedef enum {false=0, true=1} bool;
 
 //Max debug mode for now 4
-#define DEBUG_MODE 4
+#define DEBUG_MODE 0
 #endif
