@@ -1,5 +1,6 @@
 #include "symb.h"
 
+
 void init(){
     smt = (symbTable**)malloc(sizeof(symbTable*));
     (*smt)  = (symbTable*)malloc(sizeof(symbTable));
@@ -78,64 +79,46 @@ void thereAreNoTwoFunctionsWithTheSameNameInTheScope(){
     int i=0;
     int k = 1;
     
-    symbTable* hight = (*smt);
-    returnTheSmtPointerToTheBeginning();
+
+
     
-    while(hight){
-        while((*smt)){
-            if((*smt)->type == 0){
-                functionsList[i] = (char*)malloc(sizeof((*smt)->next->name) + 1);
-                strcpy(functionsList[i],(*smt)->next->name);
-                #if DEBUG_MODE == 4
-                    printf("%s  ",functionsList[i]);    
-                #endif
-                functionsList[i+1] = NULL;
-                i = i+1;
-            }        
-            (*smt) = (*smt)->next;
-        }
-       
-
-        printf("%d\n",i);
-        for(loop1 = 0; loop1 < i; loop1 = loop1 + 1){
-            for(loop2 = loop1 + 1; loop2 < i; loop2 = loop2 + 1){
-                printf("functionsList[%d] = %s\n",loop1,functionsList[loop1]);
-                printf("functionsList[%d] = %s\n",loop2,functionsList[loop2]);
-                if(strcpy(functionsList[loop1],functionsList[loop2]) == 0){
-                    printf("Two functions with the same name in the scope\n");
-                    exit(0);
-                }
-            }
-        }
-        i = 0;
-
-        /*
-        loop1 = 0;
-        loop2 = 0;
-        for(loop1 = 0;loop1 < i;loop){
-            for(){
-
-            }
-        }
-        */
-        /*
-        #if DEBUG_MODE == 4
-        while(functionsList[k]){
-            printf("ss%s  ",functionsList[k-1]);
-            k = k+1;
-            printf("\n");
-        }      
-        #endif
-            printf("I'm ok");
-            */
-        hight = hight->parent;
-        if(!hight){
-            break;
-        }
-        (*smt) = hight;
-        printf("\n");
-        
+    while((*smt)->before){
+        (*smt) = (*smt)->before;
     }
+    while((*smt)->next){
+        if((*smt)->type == 0){
+            functionsList[i] = (char*)malloc(sizeof((*smt)->next->name) + 1);
+            strcpy(functionsList[i],(*smt)->next->name);
+            #if DEBUG_MODE == 4
+                printf("%s  ",functionsList[i]);    
+            #endif
+            functionsList[i+1] = NULL;
+            i = i+1;
+        }        
+        (*smt) = (*smt)->next;
+    }
+    #if DEBUG_MODE == 4
+        printf("\nNew entery:\n");
+    #endif
+    
+    for(loop1 = 0; loop1 < i; loop1 = loop1 + 1){
+        for(loop2 = loop1 + 1; loop2 < i; loop2 = loop2 + 1){
+            #if DEBUG_MODE == 4
+                printf("functionsList[%d] = %s\n",loop1,functionsList[loop1]);
+                printf("functionsList[%d] = %s\n\n",loop2,functionsList[loop2]); 
+            #endif
+            
+            if(strcmp(functionsList[loop1],functionsList[loop2]) == 0){
+                printf("Two functions with the same name in the scope\n");
+                exit(0);
+            }
+        }
+    }
+
+    for(loop1 = 0; loop1 < i; loop1 = loop1 + 1){
+        free(functionsList[loop1]);
+    }
+    free(functionsList);
 }
 
 void testingAfterSymbolTableBuiltUp(){
