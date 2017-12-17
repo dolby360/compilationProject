@@ -1,5 +1,6 @@
 #include "symb.h"
-
+#include <stdlib.h>
+#include <time.h>
 
 void init(){
     smt = (symbTable**)malloc(sizeof(symbTable*));
@@ -79,22 +80,20 @@ void thereAreNoTwoFunctionsWithTheSameNameInTheScope(){
     int i=0;
     int k = 1;
     
-
-
-    
     while((*smt)->before){
         (*smt) = (*smt)->before;
     }
     while((*smt)->next){
-        if((*smt)->type == 0){
+        if((*smt)->type == PROCEDURE_DEF){
             functionsList[i] = (char*)malloc(sizeof((*smt)->next->name) + 1);
             strcpy(functionsList[i],(*smt)->next->name);
-            #if DEBUG_MODE == 4
+            #if DEBUG_MODE == 4  
                 printf("%s  ",functionsList[i]);    
             #endif
             functionsList[i+1] = NULL;
             i = i+1;
         }        
+        if(!(*smt)->next){break;}
         (*smt) = (*smt)->next;
     }
     #if DEBUG_MODE == 4
@@ -114,11 +113,115 @@ void thereAreNoTwoFunctionsWithTheSameNameInTheScope(){
             }
         }
     }
-
-    for(loop1 = 0; loop1 < i; loop1 = loop1 + 1){
-        free(functionsList[loop1]);
+    static int llop = 0;
+    while( llop < i ){
+        free(functionsList[llop]);//WTF is going on here???
+        llop = llop + 1;
     }
     free(functionsList);
+    i = 0;
+}
+
+/*Mission four*/
+void theAreNoTwoVariablesWithTheSameNmaeInTheScope(){
+    static int loop1 = 0;
+    static int loop2 = 0;
+    char** functionsList;
+    static int i = 0;
+    functionsList = (char**)malloc(sizeof(char*));
+    
+    while((*smt)->before){
+        (*smt) = (*smt)->before;
+    }
+    while((*smt)->next){
+        if((*smt)->type == DECLARATION_DEF){
+            while((*smt)->type != IDENTIFIER_DEF){
+                if(!(*smt)->next){break;}
+                //printf("%s  ",(*smt)->name); 
+                (*smt) = (*smt)->next;
+            }
+            if(!(*smt)->next){break;}
+            functionsList[i] = (char*)malloc(sizeof((*smt)->name) + 1);
+            strcpy(functionsList[i],(*smt)->name);
+            #if DEBUG_MODE == 5  
+                printf("%s  ",functionsList[i]);    
+            #endif
+            functionsList[i+1] = NULL;
+            i = i+1;
+        }        
+        if(!(*smt)->next){break;}
+        (*smt) = (*smt)->next;
+    }
+    #if DEBUG_MODE == 5
+        printf("\nNew entery:\n");
+    #endif
+    
+    for(loop1 = 0; loop1 < i; loop1 = loop1 + 1){
+        for(loop2 = loop1 + 1; loop2 < i; loop2 = loop2 + 1){
+            #if DEBUG_MODE == 5
+                printf("functionsList[%d] = %s\n",loop1,functionsList[loop1]);
+                printf("functionsList[%d] = %s\n\n",loop2,functionsList[loop2]); 
+            #endif
+            
+            if(strcmp(functionsList[loop1],functionsList[loop2]) == 0){
+                printf("Two variables with the same name in the scope\n");
+                exit(0);
+            }
+        }
+    }
+    static int llp = 0;
+    for(llp = 0; llp < i; llp = llp + 1){
+        free(functionsList[llp]);
+    }
+    free(functionsList);
+    i = 0;
+}
+
+void functionsDefinedBeforeTheyHaveBeenCalled(){
+    
+    if((*smt)->type != PROC_CALL_DEF){
+        return;
+    }
+    static char* funcName;
+    
+    funcName = (char*)malloc(sizeof((*smt)->name)+1);
+    strcpy(funcName,(*smt)->name);
+
+    static symbTable* temp;
+    temp = (*smt);
+
+    while(temp->before){
+        temp = temp->before;
+    }
+    while(temp->child){
+        temp = temp->child;
+    }
+
+    static symbTable* hight;
+    hight = temp;
+
+    
+    while(hight){
+        while(temp){
+            if(strcmp(temp->name,funcName) == 0 && (temp->before->type == PROC_STATEMENT ||
+                temp->before->type == PROCEDURE_DEF)){
+                /*TODO:*/
+                //free(funcName);
+                //free(temp);
+                //free(hight);
+                return;
+            }
+            temp = temp->next;
+        }
+        hight = hight->parent;
+        temp = hight;
+    }
+    /*TODO:*/
+    //free(funcName);
+    //free(temp);
+    //free(hight);
+    printf("ERROR: no declaration for the function - %s",funcName);
+    exit(0);
 }
 
 void testingAfterSymbolTableBuiltUp(){
@@ -173,7 +276,9 @@ void buildSymbTable(node* root,int nest){
 
                 /*Mission three*/
                 thereAreNoTwoFunctionsWithTheSameNameInTheScope();
-                
+                /*Mission four*/
+                theAreNoTwoVariablesWithTheSameNmaeInTheScope();
+
                 while((*smt)->before){
                     (*smt) = (*smt)->before;
                 }
@@ -305,6 +410,7 @@ void buildSymbTable(node* root,int nest){
                 after that increase the pointer
                 */
                 checkMain();
+
                 (*smt)->next = (symbTable*)malloc(sizeof(symbTable));
                 (*smt)->next->parent = NULL;
                 (*smt)->next->type = root->tokenDef;
@@ -317,6 +423,8 @@ void buildSymbTable(node* root,int nest){
                 #if DEBUG_MODE == 1
                     printf("(*smt)->next->name:   %s\n",(*smt)->name);
                 #endif
+                /*Mission five*/
+                functionsDefinedBeforeTheyHaveBeenCalled();
             }
 
         }

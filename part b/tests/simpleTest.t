@@ -1,17 +1,20 @@
 int man(){
+    int masdn();
     int f = l;
-    int madin(){
-    }
+    masdn();
 
     int madwin(){
     }
-    int madin(){
+    int manas(){
     }
+    void masdn(){
+
+    }
+    int l;
     o = 34;
 }
 int main(){
-    
 }
-void massn(){
+void ffman(){
 
 }

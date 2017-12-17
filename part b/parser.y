@@ -56,7 +56,7 @@
 %type <str> COMMA       
 
 %%
-S: PROGRAM { /*printPreOrder($1,0);*/ printSymbTable($1); };
+S: PROGRAM {/*printPreOrder($1,0);*/ printSymbTable($1); };
 
 PROGRAM:  MULTI_PROC {$$=makeNode("",$1,NULL,NULL,NULL);};
 
@@ -130,18 +130,18 @@ OPTIONAL_COMMENT:   COMMENT                     {}
 RETURN_STATEMENT: KEY_RETURN EXP SEMICOLON { $$ = makeNode("return",$2,NULL,NULL,NULL); };
 
 PROC_STATEMENT:      
-            PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C SEMICOLON{ $$ = makeNode ($1->token,$2,$4,NULL,NULL); }
-            |PROCEDURE ID PARAN_O PARAN_C SEMICOLON{ $$ = makeNode ($1->token,$2,NULL,NULL,NULL); }
+            PROCEDURE ID PARAN_O MULT_PARAMS PARAN_C SEMICOLON{ $$ = makeNodeWithDef (PROC_STATEMENT,$1->token,$2,$4,NULL,NULL); }
+            |PROCEDURE ID PARAN_O PARAN_C SEMICOLON{ $$ = makeNodeWithDef (PROC_STATEMENT,$1->token,$2,NULL,NULL,NULL); }
             ;  
 
-PROC_CALL : ID PARAN_O MULT_EXP PARAN_C { $$ = makeNode($1->token,$1, $3,NULL,NULL); }
-          | ID PARAN_O PARAN_C { $$ = makeNode($1->token,$1, NULL,NULL,NULL); }
+PROC_CALL : ID PARAN_O MULT_EXP PARAN_C { $$ = makeNodeWithDef(PROC_CALL_DEF,$1->token,$1, $3,NULL,NULL); }
+          | ID PARAN_O PARAN_C { $$ = makeNodeWithDef(PROC_CALL_DEF,$1->token,$1, NULL,NULL,NULL); }
           ;
 
 
-VARS :  PROCEDURE EXP           { $$ = makeNodeWithDef (DECLARATION_DEF,"",$1,$2,NULL,NULL); } 
-        |PROCEDURE MULT_EXP      { $$ = makeNodeWithDef (DECLARATION_DEF,"",$1,$2,NULL,NULL); } 
-        |PROCEDURE ASSIGNMENT   { $$ = makeNodeWithDef (DECLARATION_DEF,"",$1,$2,NULL,NULL); } 
+VARS :  PROCEDURE EXP           { $$ = makeNodeWithDef (DECLARATION_DEF,"decleration",$1,$2,NULL,NULL); } 
+        |PROCEDURE MULT_EXP      { $$ = makeNodeWithDef (DECLARATION_DEF,"decleration",$1,$2,NULL,NULL); } 
+        |PROCEDURE ASSIGNMENT   { $$ = makeNodeWithDef (DECLARATION_DEF,"decleration",$1,$2,NULL,NULL); } 
         ;
 
 
@@ -250,7 +250,7 @@ MULT_EXP : MULT_EXP COMMA EXP { $$ = makeNode(""/*Multiple Expressions*/,$1,$3,N
 STR : STRING_LITERAL { $$ = makeNode(yytext,NULL,NULL,NULL,NULL); }
     ;
 
-ID: IDENTIFIER {$$ = makeNode(yytext,NULL,NULL,NULL,NULL); };
+ID: IDENTIFIER {$$ = makeNodeWithDef(IDENTIFIER_DEF,yytext,NULL,NULL,NULL,NULL); };
 %%
 
 

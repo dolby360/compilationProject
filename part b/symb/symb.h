@@ -39,10 +39,16 @@ void printSymbTable();
 void init();
 void testingAfterSymbolTableBuiltUp();
 
+
+
 /*Mission one*/
 void checkIfMainDoseNotExist();
 /*Mission two*/
 void checkIfMainGetArguments();
 /*Mission three*/
 void thereAreNoTwoFunctionsWithTheSameNameInTheScope();
+/*Mission four*/
+void theAreNoTwoVariablesWithTheSameNmaeInTheScope();
+/*Mission five*/
+void functionsDefinedBeforeTheyHaveBeenCalled();
 #endif
