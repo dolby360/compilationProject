@@ -39,6 +39,22 @@ node* endOfBlock(){
     return nodeToReturn;
 }
 
+node* endOfParameter(){
+    node* nodeToReturn = (node*)malloc(sizeof(node));
+
+    nodeToReturn->token = (char*)malloc(sizeof("endOfParameter" + 1));
+    strcpy(nodeToReturn->token,"endOfParameter");
+
+    nodeToReturn->nodeOne = NULL ;
+    nodeToReturn->nodeTwo = NULL;
+    nodeToReturn->nodeThree = NULL ;
+    nodeToReturn->nodeFour = NULL;
+
+    nodeToReturn->tokenDef = END_OF_PARAMETERS_IN_FUNC;
+
+    return nodeToReturn;
+}
+
 node* makeNodeWithDef(int def, char* token_ ,node* nodeOne_ ,node* nodeTwo_,node* nodeThree_, node* nodeFour_){
     node* nodeToReturn = (node*)malloc(sizeof(node));
 

@@ -18,15 +18,14 @@ typedef struct symbTable{
     struct symbTable* parent;
     struct symbTable* next;
     struct symbTable* before;
-    //amout of recived parameters
-    //int numOfRecivedPar;
-    //char* returnVal;
 }symbTable;
 
 static symbTable** smt;
 static symbTable* head;
-static bool mainAlreadyExist;
-
+static symbTable* helper1;
+static symbTable* helper2;
+static int mainAlreadyExist;
+static int lastType;
 /*
 TODO: Function that free all memory.
 */
@@ -51,4 +50,9 @@ void thereAreNoTwoFunctionsWithTheSameNameInTheScope();
 void theAreNoTwoVariablesWithTheSameNmaeInTheScope();
 /*Mission five*/
 void functionsDefinedBeforeTheyHaveBeenCalled();
+/*Mission six*/
+void variablesAreDefinedBeforeUsed();
+/*Mission seven*/
+void numberOfArgumentsInTheCallingFunctionAreFits();
+/*Mission */
 #endif

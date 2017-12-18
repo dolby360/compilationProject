@@ -1,13 +1,12 @@
 #include "symb.h"
-#include <stdlib.h>
-#include <time.h>
+
 
 void init(){
     smt = (symbTable**)malloc(sizeof(symbTable*));
     (*smt)  = (symbTable*)malloc(sizeof(symbTable));
     (*smt)->name = NULL;
     head = *smt;
-    mainAlreadyExist;
+    mainAlreadyExist = 0;
 }
 
 int lookup(symbTable* looker){
@@ -25,7 +24,7 @@ void returnTheSmtPointerToTheBeginning(){
 
 /*Mission one*/
 void checkIfMainDoseNotExist(){
-    if(!mainAlreadyExist){
+    if(mainAlreadyExist == 0){
         printf("ERROR: main not decleared\n");
         exit(0);
     }
@@ -107,7 +106,9 @@ void thereAreNoTwoFunctionsWithTheSameNameInTheScope(){
                 printf("functionsList[%d] = %s\n\n",loop2,functionsList[loop2]); 
             #endif
             
-            if(strcmp(functionsList[loop1],functionsList[loop2]) == 0){
+            if(strcmp(functionsList[loop1],functionsList[loop2]) == 0 
+            && strcmp(functionsList[loop1],"main") != 0 
+            ){
                 printf("Two functions with the same name in the scope\n");
                 exit(0);
             }
@@ -176,7 +177,7 @@ void theAreNoTwoVariablesWithTheSameNmaeInTheScope(){
     free(functionsList);
     i = 0;
 }
-
+/*Mission five*/
 void functionsDefinedBeforeTheyHaveBeenCalled(){
     
     if((*smt)->type != PROC_CALL_DEF){
@@ -222,6 +223,109 @@ void functionsDefinedBeforeTheyHaveBeenCalled(){
     //free(hight);
     printf("ERROR: no declaration for the function - %s",funcName);
     exit(0);
+}
+
+/*Mission six*/
+void variablesAreDefinedBeforeUsed(){
+    if(
+    (*smt)->type != IDENTIFIER_DEF  
+    ||((*smt)->before && (*smt)->before->type == PROCEDURE_DEF)
+    ||((*smt)->before && (*smt)->before->type == DECLARATION_DEF)
+    ||((*smt)->before && (*smt)->before->type == PROC_CALL_DEF)
+    ||((*smt)->before && (*smt)->before->type == PROC_STATEMENT)
+    ||((*smt)->before->before->before && (*smt)->before->before->before->type == DECLARATION_DEF)
+    ){
+        return;
+    }
+    #if DEBUG_MODE == 6
+        printf("%s  %d  \n",(*smt)->name,(*smt)->type);
+        //if(strcpy((*smt)->name,"b") == 0){ printf("%s  %d  \n",(*smt)->name,(*smt)->type); }
+    #endif
+
+    static char* variableName;
+    
+    variableName = (char*)malloc(sizeof((*smt)->name)+1);
+    strcpy(variableName,(*smt)->name);
+    
+    static symbTable* temp;
+    temp = (*smt);
+    static bool stateToCheckIfItIsParameter = true;
+    
+    while(temp->before){
+        if(strcmp(temp->name,"endOfParameter") == 0){
+            while(temp->before){temp = temp->before;}
+        }
+        if(temp->type == PARAMS_DEF || temp->type == PROC_CALL_DEF){
+            return;
+        }
+        if(temp->before){temp = temp->before;}
+    }
+    while(temp->child){
+        temp = temp->child;
+    }
+
+    static symbTable* hight;
+    hight = temp;
+
+    while(hight){
+        while(temp){
+            if(!temp->before){
+                if(!temp->before->before){
+                }
+            }else{
+                if(strcmp(temp->name,variableName) == 0 && temp->before->type == DECLARATION_DEF
+                ||strcmp(temp->name,variableName) == 0 && temp->before->before->type == DECLARATION_DEF
+                ){
+                    /*TODO:*/
+                    //free(variableName);
+                    //free(temp);
+                    //free(hight);
+                    return;
+                }
+            }
+            temp = temp->next;
+        }
+        hight = hight->parent;
+        temp = hight;
+    }
+    /*TODO:*/
+    //free(variableName);
+    //free(temp);
+    //free(hight);
+    printf("ERROR: no declaration for the variable - %s",variableName);
+    exit(0);
+}
+
+/*Mission seven*/
+void numberOfArgumentsInTheCallingFunctionAreFits(){/*
+    if((*smt)->type != PROC_CALL_DEF){
+        return;
+    }
+    
+    helper1 = (*smt);
+    helper2 = helper1;
+
+    static int countPar1 = 0;
+    while(helper1->before){
+        if(helper2->type == PROCEDURE_DEF && strcmp(helper2->next->type,funcName) == 0){
+            while(strcmp(helper2->name,endOfParameter)==0){
+                countPar1 = countPar1 + 1;
+            }
+        }
+        helper2 = helper2->before;
+    }
+
+    char* funcName = helper1->name;
+    static int countPar2 = 0;
+    while(helper1->before){
+        if(helper1->type == PROCEDURE_DEF && strcmp(helper1->next->type,funcName) == 0){
+            while(strcmp(helper1->name,endOfParameter)==0){
+                countPar2 = countPar2 + 1;
+            }
+        }
+        helper1 = helper1->before;
+    }
+*/
 }
 
 void testingAfterSymbolTableBuiltUp(){
@@ -315,7 +419,7 @@ void buildSymbTable(node* root,int nest){
                 (*smt)->next->next = NULL;
                 (*smt)->next->before = (*smt);
                 (*smt) = (*smt)->next;
-
+                
                 /*
                 Then a second node with the value
                 */                
@@ -336,7 +440,7 @@ void buildSymbTable(node* root,int nest){
                 /*
                 Now we just going upstairs to open new layer
                 */
-
+                
                 while((*smt)->before){
                     (*smt) = (*smt)->before;
                 }
@@ -420,11 +524,16 @@ void buildSymbTable(node* root,int nest){
                 (*smt)->next->next = NULL;
                 (*smt)->next->before = (*smt);
                 (*smt) = (*smt)->next;
+        
                 #if DEBUG_MODE == 1
                     printf("(*smt)->next->name:   %s\n",(*smt)->name);
                 #endif
                 /*Mission five*/
                 functionsDefinedBeforeTheyHaveBeenCalled();
+                /*Mission six*/
+                variablesAreDefinedBeforeUsed();
+                /*Mission seven*/
+                numberOfArgumentsInTheCallingFunctionAreFits();
             }
 
         }
@@ -439,30 +548,29 @@ void buildSymbTable(node* root,int nest){
 void checkMain(){
     //If this is a main function declaration.
     //And main already declared
-    if( strcmp((*smt)->name,"main")==0 && 
+    if( (*smt) && strcmp((*smt)->name,"main")==0 && 
     (*smt)->before != NULL && 
     (*smt)->before->type == PROCEDURE_DEF &&
-    mainAlreadyExist
+    mainAlreadyExist > 1
     ){
         printf("ERROR: main already decleared\n");
         exit(0);
     }
     #if DEBUG_MODE == 2
-    if( (*smt)->before ){  
+    if((*smt) && (*smt)->before ){  
         printf("Before type = %d\n",(*smt)->before->type); 
         printf("(*smt)->name = %s\n\n",(*smt)->name); 
         }
     #endif
     //If this is a main function declaration.
     //And main not declared yet.
-    if( strcmp((*smt)->name,"main")==0 && 
+    if( (*smt) && strcmp((*smt)->name,"main")==0 && 
     (*smt)->before != NULL && 
-    (*smt)->before->type == PROCEDURE_DEF &&
-    !mainAlreadyExist
+    (*smt)->before->type == PROCEDURE_DEF
     ){
         #if DEBUG_MODE == 2
             printf("Set mainAlready... to true\n\n");
         #endif
-        mainAlreadyExist = true;
+        mainAlreadyExist = mainAlreadyExist + 1;
     }
 }

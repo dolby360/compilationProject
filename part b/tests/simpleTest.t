@@ -1,20 +1,21 @@
-int man(){
-    int masdn();
-    int f = l;
-    masdn();
-
-    int madwin(){
-    }
-    int manas(){
-    }
-    void masdn(){
-
-    }
+int main(){
     int l;
+    int o;
+    void masdn(){
+        
+    }
+
+    void h(int lk,char k){
+
+    }
+    h(d,k);
     o = 34;
 }
-int main(){
+
+int maffin(){
+
 }
+
 void ffman(){
 
 }
