@@ -84,18 +84,18 @@ PROC_STETMENT_MULT_PARAMS:  ID COMMA MULT_PARAMS { $$ = makeNode("",$1,$3,NULL,N
                             |ID {$$=$1;}
                             ;
 
-PROCEDURE:  KEY_BOOLEAN { $$=makeNode("boolean",NULL,NULL,NULL,NULL); }
-            |KEY_CHAR   { $$=makeNode("char",NULL,NULL,NULL,NULL); }
-            |KEY_CHARP  { $$=makeNode("charp",NULL,NULL,NULL,NULL); }
-            |KEY_INT    { $$=makeNode("int",NULL,NULL,NULL,NULL); }
-            |KEY_INTP   { $$=makeNode("intp",NULL,NULL,NULL,NULL); }
-            |KEY_STRING { $$=makeNode("string",NULL,NULL,NULL,NULL); }
-            |KEY_VOID   { $$=makeNode("void",NULL,NULL,NULL,NULL); }
+PROCEDURE:  KEY_BOOLEAN { $$=makeNodeWithDef(BOOLEAN_DEF,"boolean",NULL,NULL,NULL,NULL); }
+            |KEY_CHAR   { $$=makeNodeWithDef(CHAR_DEF,"char",NULL,NULL,NULL,NULL); }
+            |KEY_CHARP  { $$=makeNodeWithDef(CHARP_DEF,"charp",NULL,NULL,NULL,NULL); }
+            |KEY_INT    { $$=makeNodeWithDef(INT_DEF,"int",NULL,NULL,NULL,NULL); }
+            |KEY_INTP   { $$=makeNodeWithDef(INTP_DEF,"intp",NULL,NULL,NULL,NULL); }
+            |KEY_STRING { $$=makeNodeWithDef(STRING_DEF,"string",NULL,NULL,NULL,NULL); }
+            |KEY_VOID   { $$=makeNodeWithDef(VOID_DEF,"void",NULL,NULL,NULL,NULL); }
             ;
 
 
-MULT_PARAMS:    PROCEDURE ID COMMA MULT_PARAMS { $$ = makeNodeWithDef(PARAMS_DEF,$1->token,$2,$4,NULL,NULL); }
-                |PROCEDURE ID {$$ = makeNodeWithDef(PARAMS_DEF,$1->token,$2,endOfParameter(),NULL,NULL);}
+MULT_PARAMS:    PROCEDURE ID COMMA MULT_PARAMS {  $$ = makeNodeWithDef(PARAMS_DEF,$1->token,$2,$4,NULL,NULL); }
+                |PROCEDURE ID {  $$ = makeNodeWithDef(PARAMS_DEF,$1->token,$2,endOfParameter(),NULL,NULL);}
                 ;
 
 BLOCK_W:    BRA_O OPTIONAL_COMMENT MULT_STATEMENT BRA_C {$$ = $3;}
@@ -226,8 +226,6 @@ AFTER_ATETMENT_NO_PARAN:    STATEMENT                               {$$ = $1;}
 BOOL_TYPE : TRUE_LITERAL { $$ = makeNode("true", NULL,NULL,NULL,NULL); }
           | FALSE_LITERAL { $$ = makeNode("false", NULL, NULL,NULL,NULL); }
           ;
-
-
 
 PAR_EXP : PARAN_O EXP PARAN_C { $$ = makeNode("",$2,NULL,NULL,NULL); }
         ;

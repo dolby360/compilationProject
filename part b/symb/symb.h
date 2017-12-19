@@ -13,6 +13,8 @@ typedef struct symbTable{
     int type;
     char* name;
     int scope;
+    bool m7;
+    bool m8;
     // if scope increased
     struct symbTable* child;
     struct symbTable* parent;
@@ -37,8 +39,8 @@ void buildSymbTable(node* root,int nest);
 void printSymbTable();
 void init();
 void testingAfterSymbolTableBuiltUp();
-
-
+int getVariableType(symbTable* local1);
+int getProcedureNumber(char* p);
 
 /*Mission one*/
 void checkIfMainDoseNotExist();
@@ -54,5 +56,8 @@ void functionsDefinedBeforeTheyHaveBeenCalled();
 void variablesAreDefinedBeforeUsed();
 /*Mission seven*/
 void numberOfArgumentsInTheCallingFunctionAreFits();
-/*Mission */
+/*Mission eight*/
+void typeOfArgumentsInTheCallingFunctionAreFits();
+/*Mission nine*/
+void returnValueIsTheSameAsTheFunctioType();
 #endif

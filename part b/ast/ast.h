@@ -13,6 +13,7 @@ It may not recognize the folder.
 typedef struct node{
     int     tokenDef;
     char*   token;
+    int     numberOfParameters;/*Number of parameter in function*/
     struct  node* nodeOne;
     struct  node* nodeTwo;
     struct  node* nodeThree;
@@ -20,7 +21,6 @@ typedef struct node{
 }node;
 
 node* makeNode(char* token_ ,node* nodeOne_ ,node* nodeTwo_,node* nodeThree_, node* nodeFour_);
-
 node* makeNodeWithDef(int def, char* token_ ,node* nodeOne_ ,node* nodeTwo_,node* nodeThree_, node* nodeFour_);
 node* endOfBlock();
 node* endOfParameter();

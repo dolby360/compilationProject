@@ -649,7 +649,7 @@ typedef struct {
 } YYSTACKDATA;
 /* variables for the parser stack */
 static YYSTACKDATA yystack;
-#line 255 "parser.y"
+#line 253 "parser.y"
 
 
 
@@ -924,39 +924,39 @@ case 13:
 break;
 case 14:
 #line 87 "parser.y"
-	{ yyval.n=makeNode("boolean",NULL,NULL,NULL,NULL); }
+	{ yyval.n=makeNodeWithDef(BOOLEAN_DEF,"boolean",NULL,NULL,NULL,NULL); }
 break;
 case 15:
 #line 88 "parser.y"
-	{ yyval.n=makeNode("char",NULL,NULL,NULL,NULL); }
+	{ yyval.n=makeNodeWithDef(CHAR_DEF,"char",NULL,NULL,NULL,NULL); }
 break;
 case 16:
 #line 89 "parser.y"
-	{ yyval.n=makeNode("charp",NULL,NULL,NULL,NULL); }
+	{ yyval.n=makeNodeWithDef(CHARP_DEF,"charp",NULL,NULL,NULL,NULL); }
 break;
 case 17:
 #line 90 "parser.y"
-	{ yyval.n=makeNode("int",NULL,NULL,NULL,NULL); }
+	{ yyval.n=makeNodeWithDef(INT_DEF,"int",NULL,NULL,NULL,NULL); }
 break;
 case 18:
 #line 91 "parser.y"
-	{ yyval.n=makeNode("intp",NULL,NULL,NULL,NULL); }
+	{ yyval.n=makeNodeWithDef(INTP_DEF,"intp",NULL,NULL,NULL,NULL); }
 break;
 case 19:
 #line 92 "parser.y"
-	{ yyval.n=makeNode("string",NULL,NULL,NULL,NULL); }
+	{ yyval.n=makeNodeWithDef(STRING_DEF,"string",NULL,NULL,NULL,NULL); }
 break;
 case 20:
 #line 93 "parser.y"
-	{ yyval.n=makeNode("void",NULL,NULL,NULL,NULL); }
+	{ yyval.n=makeNodeWithDef(VOID_DEF,"void",NULL,NULL,NULL,NULL); }
 break;
 case 21:
 #line 97 "parser.y"
-	{ yyval.n = makeNodeWithDef(PARAMS_DEF,yystack.l_mark[-3].n->token,yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
+	{  yyval.n = makeNodeWithDef(PARAMS_DEF,yystack.l_mark[-3].n->token,yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 22:
 #line 98 "parser.y"
-	{yyval.n = makeNodeWithDef(PARAMS_DEF,yystack.l_mark[-1].n->token,yystack.l_mark[0].n,endOfParameter(),NULL,NULL);}
+	{  yyval.n = makeNodeWithDef(PARAMS_DEF,yystack.l_mark[-1].n->token,yystack.l_mark[0].n,endOfParameter(),NULL,NULL);}
 break;
 case 23:
 #line 101 "parser.y"
@@ -1303,43 +1303,43 @@ case 108:
 	{ yyval.n = makeNode("false", NULL, NULL,NULL,NULL); }
 break;
 case 109:
-#line 232 "parser.y"
+#line 230 "parser.y"
 	{ yyval.n = makeNode("",yystack.l_mark[-1].n,NULL,NULL,NULL); }
 break;
 case 110:
-#line 235 "parser.y"
+#line 233 "parser.y"
 	{ yyval.n = makeNode("ABS",yystack.l_mark[-1].n,NULL,NULL,NULL); }
 break;
 case 111:
-#line 236 "parser.y"
+#line 234 "parser.y"
 	{ yyval.n = makeNode("ABS",yystack.l_mark[-1].n,NULL,NULL,NULL); }
 break;
 case 112:
-#line 239 "parser.y"
+#line 237 "parser.y"
 	{ yyval.n = makeNode("&", yystack.l_mark[0].n, NULL,NULL,NULL); }
 break;
 case 113:
-#line 240 "parser.y"
+#line 238 "parser.y"
 	{ yyval.n = makeNode("&", yystack.l_mark[0].n ,NULL,NULL,NULL); }
 break;
 case 114:
-#line 243 "parser.y"
+#line 241 "parser.y"
 	{ yyval.n = makeNode("^", yystack.l_mark[0].n, NULL,NULL,NULL); }
 break;
 case 115:
-#line 246 "parser.y"
+#line 244 "parser.y"
 	{ yyval.n = makeNode(""/*Multiple Expressions*/,yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 116:
-#line 247 "parser.y"
+#line 245 "parser.y"
 	{ yyval.n = yystack.l_mark[0].n; }
 break;
 case 117:
-#line 250 "parser.y"
+#line 248 "parser.y"
 	{ yyval.n = makeNode(yytext,NULL,NULL,NULL,NULL); }
 break;
 case 118:
-#line 253 "parser.y"
+#line 251 "parser.y"
 	{yyval.n = makeNodeWithDef(IDENTIFIER_DEF,yytext,NULL,NULL,NULL,NULL); }
 break;
 #line 1346 "y.tab.c"

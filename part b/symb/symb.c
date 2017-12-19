@@ -297,35 +297,230 @@ void variablesAreDefinedBeforeUsed(){
 }
 
 /*Mission seven*/
-void numberOfArgumentsInTheCallingFunctionAreFits(){/*
-    if((*smt)->type != PROC_CALL_DEF){
+void numberOfArgumentsInTheCallingFunctionAreFits(){
+    
+    if(strcmp((*smt)->name,"endOfParameter") != 0 || (*smt)->m7 == 1){
         return;
     }
+    (*smt)->m7 = 1; // I have been here
     
+    if((*smt)->before->before->type == PROCEDURE_DEF){
+        return;
+    }
+
     helper1 = (*smt);
-    helper2 = helper1;
+    
+    
+    #if DEBUG_MODE == 7
+        //printf("%s,  %s, %d\n",(*smt)->before->name,(*smt)->name,(*smt)->m7);
+    #endif
 
     static int countPar1 = 0;
     while(helper1->before){
-        if(helper2->type == PROCEDURE_DEF && strcmp(helper2->next->type,funcName) == 0){
-            while(strcmp(helper2->name,endOfParameter)==0){
-                countPar1 = countPar1 + 1;
+        //printf("helper1->type: %d\n",helper1->type);
+        if(helper1->type == PARAMS_DEF){
+            
+            countPar1 = 0;
+            return;
+            
+        }
+        if( helper1->type == PROC_CALL_DEF ){
+            #if DEBUG_MODE == 7
+                //printf("\n=>%s\n",helper1->next->name);
+            #endif
+            countPar1 = countPar1 - 2;
+            
+            break;
+        }     
+        countPar1 = countPar1 + 1;
+        helper1 = helper1->before;
+    }
+    helper2 = helper1;
+    #if DEBUG_MODE == 7
+        printf("num of parameters: %d,  %s\n",countPar1,helper2->name);
+    #endif
+    
+    
+    static char* funcName;
+    funcName = helper2->name;
+    //printf("==>%d\n",helper2->type);
+    //printf("==>%s\n\n",funcName);
+    
+    // while(helper2->before){
+    //     printf("==>%d\n",helper2->before->type);
+    //     printf("==>%s\n\n",helper2->before->name);
+    //     helper2 = helper2->before;
+    // }
+
+    static int countPar2 = 0;
+    while(helper2->before){
+        
+        if(helper2->before->type == PROCEDURE_DEF && strcmp(helper2->name,funcName) == 0){          
+            while(strcmp(helper2->name,"endOfParameter")!=0){
+                if(helper2->type == IDENTIFIER_DEF){
+                    countPar2 = countPar2 + 1;
+                }
+                helper2 = helper2->next;
+            }
+            countPar2 -= 1;
+            if(countPar2 > countPar1){
+                //printf("==>%d\n",countPar2);
+                //printf("==>%d\n",countPar1);
+                printf("To few arguments in function %s\n",funcName);
+                exit(0);
+            }
+            else if( countPar2 < countPar1){
+                //printf("==>%d\n",countPar2);
+                //printf("==>%d\n",countPar1);
+                printf("To many arguments in function %s\n",funcName);
+                exit(0);
+            }
+            else{
+                countPar1 = 0;
+                return;
             }
         }
         helper2 = helper2->before;
     }
+    countPar1 = 0;
+}
 
-    char* funcName = helper1->name;
-    static int countPar2 = 0;
-    while(helper1->before){
-        if(helper1->type == PROCEDURE_DEF && strcmp(helper1->next->type,funcName) == 0){
-            while(strcmp(helper1->name,endOfParameter)==0){
-                countPar2 = countPar2 + 1;
+int getVariableType(symbTable* local1){
+    symbTable* local2;
+
+    static char* saveVarName;
+    saveVarName = local1->name;
+        
+    while(local1->before){
+        local1 = local1->before;
+    }
+    while(local1->child){
+        local1 = local1->child;
+    }
+    local2 = local1;
+
+    // printf("%s\n",local1->next->name);
+    while(local2){
+        //printf("1%s\n",local1->name);
+        while(local1){
+            //printf("%d %s\n",local1->type,local1->name);
+            if(strcmp(local1->name,saveVarName) == 0  
+            && local1->before
+            && local1->before->before
+            && local1->before->before->type == DECLARATION_DEF)
+            {
+                //printf("3%s\n",local1->before->name);
+                return local1->before->type;
             }
+            //printf("4%s\n",local1->name);
+            if(!local1->next){break;}
+            local1 = local1->next;
+        }
+        //printf("5%s\n",local1->name);
+        if(local2->parent == NULL){break;}
+        local2 = local2->parent;
+        local1 = local2;
+    }
+    return 666;
+}
+
+
+/*Mission eight*/
+void typeOfArgumentsInTheCallingFunctionAreFits(){
+
+    if(strcmp((*smt)->name,"endOfParameter") != 0 || (*smt)->m8 == 1){
+        return;
+    }
+    (*smt)->m8 = 1; // I have been here
+    
+    if((*smt)->before->before->type == PROCEDURE_DEF){
+        return;
+    }
+    static symbTable* temp;
+    static int i = 0;
+
+    int allTypes[256];
+
+    helper1 = (*smt);
+
+    while(helper1->before){
+        
+        if(helper1->type == PARAMS_DEF || helper1->before->type == PARAMS_DEF){
+            //printf("%s   %d\n",helper1->before->name,helper1->before->type);
+            return;
+        }
+        if( helper1->type == PROC_CALL_DEF ){
+            break;
+        }     
+        if(helper1->type == IDENTIFIER_DEF){
+            temp =  helper1;
+            //printf("%s\n",temp->name);
+            
+            allTypes[i] = getVariableType(temp);
+            //printf("=>%d\n",allTypes[i]);
+            i += 1;
         }
         helper1 = helper1->before;
     }
-*/
+    int n = 0;
+    #if DEBUG_MODE == 8
+        for(n = 0;n < i; n += 1){
+            printf("%d\n",allTypes[n]);
+        }
+    #endif
+    
+
+    #if DEBUG_MODE == 8
+        //printf("%s\n",getVariableType(temp));
+    #endif
+   
+
+    helper2 = helper1;
+    #if DEBUG_MODE == 8
+        printf("=>%s\n",helper2->name);
+    #endif
+    
+    
+    static char* funcName;
+    funcName = helper2->name;
+    n = 0;
+
+    while(helper2->before){
+        if(helper2->before->type == PROCEDURE_DEF && strcmp(helper2->name,funcName) == 0){          
+            while(strcmp(helper2->name,"endOfParameter")!=0){
+                #if DEBUG_MODE == 8
+                    printf("%s  %d\n",helper2->name,helper2->type);
+                #endif
+                
+                if(IS_STATMENT(getProcedureNumber(helper2->name))){
+                    
+                    if(allTypes[n] != helper2->type){
+                        printf("ERROR: variable type not match");
+                        exit(0);
+                    }
+                    n = n+1;
+                }
+                helper2 = helper2->next;
+            }
+            break;
+        }
+        helper2 = helper2->before;
+    }
+}
+
+/*Mission nine*/
+void returnValueIsTheSameAsTheFunctioType(){
+    if(strcmp((*smt)->before->name,"return") != 0){return;}
+    static symbTable* local;
+    static int type = 0;
+    local = (*smt);
+    type = getVariableType(local);
+    while(local){
+        
+        local = local->before;
+        if(!local->before){break;}
+    }
+    printf("%d",type);
 }
 
 void testingAfterSymbolTableBuiltUp(){
@@ -448,6 +643,8 @@ void buildSymbTable(node* root,int nest){
                 (*smt)->parent = (symbTable*)malloc(sizeof(symbTable));
                 (*smt)->parent->child = (*smt);
                 (*smt) = (*smt)->parent;
+                (*smt)->parent = NULL; 
+                (*smt)->before = NULL;
 
                 #if DEBUG_MODE == 1
                     printf("2)NEW ENV:   %s\n",(*smt)->child->name);
@@ -524,7 +721,6 @@ void buildSymbTable(node* root,int nest){
                 (*smt)->next->next = NULL;
                 (*smt)->next->before = (*smt);
                 (*smt) = (*smt)->next;
-        
                 #if DEBUG_MODE == 1
                     printf("(*smt)->next->name:   %s\n",(*smt)->name);
                 #endif
@@ -534,6 +730,10 @@ void buildSymbTable(node* root,int nest){
                 variablesAreDefinedBeforeUsed();
                 /*Mission seven*/
                 numberOfArgumentsInTheCallingFunctionAreFits();
+                /*Mission eight*/
+                typeOfArgumentsInTheCallingFunctionAreFits();
+                /*Mission nine*/
+                returnValueIsTheSameAsTheFunctioType();
             }
 
         }
@@ -573,4 +773,23 @@ void checkMain(){
         #endif
         mainAlreadyExist = mainAlreadyExist + 1;
     }
+}
+
+int getProcedureNumber(char* p){
+    if(strcmp(p,"char") == 0){
+        return CHAR_DEF;
+    }else if(strcmp(p,"charp") == 0){
+        return CHARP_DEF;
+    }else if(strcmp(p,"int") == 0){
+        return INT_DEF;
+    }else if(strcmp(p,"intp") == 0){
+        return INTP_DEF;
+    }else if(strcmp(p,"string") == 0){
+        return STRING_DEF;
+    }else if(strcmp(p,"void") == 0){
+        return VOID_DEF;
+    }else if(strcmp(p,"boolean") == 0){
+        return BOOLEAN_DEF;
+    }
+    return 666;
 }
