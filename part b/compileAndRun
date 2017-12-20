@@ -16,7 +16,7 @@ echo "**********"
 
 lex lex.l > /dev/null 2>&1
 yacc parser.y > /dev/null 2>&1
-cc -Wall symb/symb.c ast/print_ast.c ast/ast.c -o Program y.tab.c -ll -Ly 
+cc -Wall symb/symb2.c symb/symb.c ast/print_ast.c ast/ast.c -o Program y.tab.c -ll -Ly 
 if [ "$?" -eq "1" ]
 	then 	
         echo ""

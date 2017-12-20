@@ -2,7 +2,12 @@ int main(){
     int r;
     int f;
 
-    string y[r + 1 + 'd'];
+    int k(){}
+
+    for(r = 0; r + 7 ;r = r + 1){
+
+    }
+
 }
 
 int maffin(){

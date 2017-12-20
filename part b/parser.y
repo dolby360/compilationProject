@@ -160,43 +160,43 @@ LHS : ID { $$ = $1; }
     | DEREF { $$ = $1; }
     ;
 
-STR_INDEX : ID SQ_BRA_O EXP SQ_BRA_C { $$ = makeNode("", $1, $3,NULL,NULL) ;};
+STR_INDEX : ID SQ_BRA_O EXP SQ_BRA_C { $$ = makeNode("", $1, $3,endOfStringIndex(),NULL) ;};
 
 EXP : ID                    { $$ = $1; }
     | INTEGER_LITERAL       { $$ = makeNode(yytext, NULL, NULL,NULL,NULL); }
     | CHAR_LITERAL          { $$ = makeNode(yytext, NULL, NULL,NULL,NULL); }
     | STR_INDEX             { $$ = $1; }
-    | BOOL_TYPE             { $$ = makeNode("boolean", $1, NULL,NULL,NULL); }
+    | BOOL_TYPE             { $$ = makeNodeWithDef(BOOL_DEF,"boolean", $1, NULL,NULL,NULL); }
     | OP_DEREFERENCE EXP    { $$ = makeNode("dereference", $2, NULL,NULL,NULL); }
     | PROC_CALL             { $$ = $1; }
     | PAR_EXP               { $$ = $1; }
     | SIZE_OF               { $$ = $1; }
-    | KEY_NULL              { $$ = makeNode("null",NULL,NULL,NULL,NULL);}
-    | OP_NOT EXP            { $$ = makeNode("!", $2, NULL,NULL,NULL); }
+    | KEY_NULL              { $$ = makeNodeWithDef(NULL_DEF,"null",NULL,NULL,NULL,NULL);}
+    | OP_NOT EXP            { $$ = makeNodeWithDef(NOT_DEF,"!", $2, NULL,NULL,NULL); }
     | EXP OP_PLUS EXP       { $$ = makeNode("+",$1,$3,NULL,NULL); }
     | EXP OP_MINUS EXP      { $$ = makeNode("-",$1,$3,NULL,NULL); }
     | EXP OP_MULTI EXP      { $$ = makeNode("*",$1,$3,NULL,NULL); }
     | EXP OP_DIV EXP        { $$ = makeNode("/",$1,$3,NULL,NULL); }
-    | EXP OP_LT EXP         { $$ = makeNode("<",$1,$3,NULL,NULL); }
-    | EXP OP_GT EXP         { $$ = makeNode(">",$1,$3,NULL,NULL); }
-    | EXP OP_LE EXP         { $$ = makeNode("<=",$1,$3,NULL,NULL);}
-    | EXP OP_GE EXP         { $$ = makeNode(">=",$1,$3,NULL,NULL);}
-    | EXP OP_EQ EXP         { $$ = makeNode("==",$1,$3,NULL,NULL);}
-    | EXP OP_NE EXP         { $$ = makeNode("!=",$1,$3,NULL,NULL);}
-    | EXP OP_AND EXP        { $$ = makeNode("&&",$1,$3,NULL,NULL);}
-    | EXP OP_OR EXP         { $$ = makeNode("||",$1,$3,NULL,NULL);}
-    | PTR OP_LT PTR         { $$ = makeNode("<",$1,$3,NULL,NULL); }
-    | PTR OP_GT PTR         { $$ = makeNode(">",$1,$3,NULL,NULL); }
-    | PTR OP_LE PTR         { $$ = makeNode("<=",$1,$3,NULL,NULL);}
-    | PTR OP_GE PTR         { $$ = makeNode(">=",$1,$3,NULL,NULL); }
-    | PTR OP_EQ PTR         { $$ = makeNode("==",$1,$3,NULL,NULL); }
-    | PTR OP_NE PTR         { $$ = makeNode("!=",$1,$3,NULL,NULL); }
-    | PTR OP_AND PTR        { $$ = makeNode("&&",$1,$3,NULL,NULL); }
-    | PTR OP_OR PTR         { $$ = makeNode("||",$1,$3,NULL,NULL); }
+    | EXP OP_LT EXP         { $$ = makeNodeWithDef(LT_DEF,"<",$1,$3,NULL,NULL); }
+    | EXP OP_GT EXP         { $$ = makeNodeWithDef(GT_DEF,">",$1,$3,NULL,NULL); }
+    | EXP OP_LE EXP         { $$ = makeNodeWithDef(LE_DEF,"<=",$1,$3,NULL,NULL);}
+    | EXP OP_GE EXP         { $$ = makeNodeWithDef(GE_DEF,">=",$1,$3,NULL,NULL);}
+    | EXP OP_EQ EXP         { $$ = makeNodeWithDef(EQ_DEF,"==",$1,$3,NULL,NULL);}
+    | EXP OP_NE EXP         { $$ = makeNodeWithDef(NE_DEF,"!=",$1,$3,NULL,NULL);}
+    | EXP OP_AND EXP        { $$ = makeNodeWithDef(AND_DEF,"&&",$1,$3,NULL,NULL);}
+    | EXP OP_OR EXP         { $$ = makeNodeWithDef(OR_DEF,"||",$1,$3,NULL,NULL);}
+    | PTR OP_LT PTR         { $$ = makeNodeWithDef(LT_DEF,"<",$1,$3,NULL,NULL); }
+    | PTR OP_GT PTR         { $$ = makeNodeWithDef(GT_DEF,">",$1,$3,NULL,NULL); }
+    | PTR OP_LE PTR         { $$ = makeNodeWithDef(LE_DEF,"<=",$1,$3,NULL,NULL);}
+    | PTR OP_GE PTR         { $$ = makeNodeWithDef(GE_DEF,">=",$1,$3,NULL,NULL); }
+    | PTR OP_EQ PTR         { $$ = makeNodeWithDef(EQ_DEF,"==",$1,$3,NULL,NULL); }
+    | PTR OP_NE PTR         { $$ = makeNodeWithDef(NE_DEF,"!=",$1,$3,NULL,NULL); }
+    | PTR OP_AND PTR        { $$ = makeNodeWithDef(AND_DEF,"&&",$1,$3,NULL,NULL); }
+    | PTR OP_OR PTR         { $$ = makeNodeWithDef(OR_DEF,"||",$1,$3,NULL,NULL); }
     | PROC_STETMENT         { $$ = $1; }
     ;
 
-FOR_STETMENT: KEY_FOR PARAN_O ASS_OR_EXP SEMICOLON EXP SEMICOLON ASS_OR_EXP PARAN_C BLOCK { $$ = makeNode("for",$3,$5,$7,NULL); }
+FOR_STETMENT: KEY_FOR PARAN_O ASS_OR_EXP SEMICOLON EXP SEMICOLON ASS_OR_EXP PARAN_C BLOCK { $$ = makeNodeWithDef(FOR_DEF,"for",$3,$5,$7,NULL); }
             ;
 
 ASS_OR_EXP: ASSIGNMENT  {$$ = $1;}
@@ -210,12 +210,12 @@ BLOCK : BRA_O MULT_STATEMENT BRA_C {$$ = $2;}
       | BRA_O BRA_C {$$ = makeNode("{}",NULL,NULL,NULL,NULL);}
       ;
 
-COND :  KEY_IF PARAN_O EXP PARAN_C BLOCK                                                     {$$ = makeNode("if",$3,$5,NULL,NULL); }
-        | KEY_IF PARAN_O EXP PARAN_C AFTER_ATETMENT_NO_PARAN                                   {$$ = makeNode("if",$3,$5,NULL,NULL); }
-        | KEY_IF PARAN_O EXP PARAN_C BLOCK KEY_ELSE BLOCK                                      { $$ = makeNode("if", $3, makeNode("else", $5, $7,NULL,NULL),NULL,NULL);}
-        | KEY_IF PARAN_O EXP PARAN_C AFTER_ATETMENT_NO_PARAN KEY_ELSE AFTER_ATETMENT_NO_PARAN  { $$ = makeNode("if", $3, makeNode("else", $5, $7,NULL,NULL),NULL,NULL);}
-        | KEY_IF PARAN_O EXP PARAN_C AFTER_ATETMENT_NO_PARAN KEY_ELSE BLOCK                    { $$ = makeNode("if", $3, makeNode("else", $5, $7,NULL,NULL),NULL,NULL);}
-        | KEY_IF PARAN_O EXP PARAN_C BLOCK KEY_ELSE AFTER_ATETMENT_NO_PARAN                    { $$ = makeNode("if", $3, makeNode("else", $5, $7,NULL,NULL),NULL,NULL);}
+COND :  KEY_IF PARAN_O EXP PARAN_C BLOCK                                                     {$$ = makeNodeWithDef(IF_DEF,"if",$3,$5,NULL,NULL); }
+        | KEY_IF PARAN_O EXP PARAN_C AFTER_ATETMENT_NO_PARAN                                   {$$ = makeNodeWithDef(IF_DEF,"if",$3,$5,NULL,NULL); }
+        | KEY_IF PARAN_O EXP PARAN_C BLOCK KEY_ELSE BLOCK                                      { $$ = makeNodeWithDef(IF_DEF,"if", $3, makeNode("else", $5, $7,NULL,NULL),NULL,NULL);}
+        | KEY_IF PARAN_O EXP PARAN_C AFTER_ATETMENT_NO_PARAN KEY_ELSE AFTER_ATETMENT_NO_PARAN  { $$ = makeNodeWithDef(IF_DEF,"if", $3, makeNode("else", $5, $7,NULL,NULL),NULL,NULL);}
+        | KEY_IF PARAN_O EXP PARAN_C AFTER_ATETMENT_NO_PARAN KEY_ELSE BLOCK                    { $$ = makeNodeWithDef(IF_DEF,"if", $3, makeNode("else", $5, $7,NULL,NULL),NULL,NULL);}
+        | KEY_IF PARAN_O EXP PARAN_C BLOCK KEY_ELSE AFTER_ATETMENT_NO_PARAN                    { $$ = makeNodeWithDef(IF_DEF,"if", $3, makeNode("else", $5, $7,NULL,NULL),NULL,NULL);}
         ;
 
 AFTER_ATETMENT_NO_PARAN:    STATEMENT                               {$$ = $1;}

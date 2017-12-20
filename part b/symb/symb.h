@@ -41,6 +41,9 @@ void init();
 void testingAfterSymbolTableBuiltUp();
 int getVariableType(symbTable* local1);
 int getProcedureNumber(char* p);
+int getFunctionType(symbTable* p);
+void getThisPointerToTheBeginning(symbTable* takeMeBack);
+
 
 /*Mission one*/
 void checkIfMainDoseNotExist();
@@ -60,4 +63,12 @@ void numberOfArgumentsInTheCallingFunctionAreFits();
 void typeOfArgumentsInTheCallingFunctionAreFits();
 /*Mission nine*/
 void returnValueIsTheSameAsTheFunctioType();
+/*Mission ten*/
+void returnTypeEquelToIdentifierType();
+/*Mission eleven*/
+void expressionInIfStatmentIsBoolean(symbTable* p);
+/*Mission twelfth*/
+void theConditionTypeInForLoopIsBoolean(symbTable* p);
+/*Mission thirteen*/
+void variablesInStringIndexAreIntegers(symbTable* p);
 #endif

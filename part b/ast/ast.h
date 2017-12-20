@@ -24,6 +24,7 @@ node* makeNode(char* token_ ,node* nodeOne_ ,node* nodeTwo_,node* nodeThree_, no
 node* makeNodeWithDef(int def, char* token_ ,node* nodeOne_ ,node* nodeTwo_,node* nodeThree_, node* nodeFour_);
 node* endOfBlock();
 node* endOfParameter();
+node* endOfStringIndex();
 node* getAstAsaTree();
 
 #endif

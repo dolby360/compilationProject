@@ -1,14 +1,21 @@
 int main(){
     int r;
     int f;
+    int pp;
+    int h(){
 
-    string y[r + 1 + 'd'];
+    }
+    int k(){}
+
+    int o;
+    o = h();
+
 }
 
 int maffin(){
     int l;
 
-    if(l == 1){
+    if(9 + 1){
         //dds
     }
 }

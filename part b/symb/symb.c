@@ -67,7 +67,7 @@ void checkIfMainGetArguments(){
         }
         (*smt) = hight;
     }
-    free(hight);
+    //free(hight);
 }
 
 /*Mission three*/
@@ -172,9 +172,9 @@ void theAreNoTwoVariablesWithTheSameNmaeInTheScope(){
     }
     static int llp = 0;
     for(llp = 0; llp < i; llp = llp + 1){
-        free(functionsList[llp]);
+        //free(functionsList[llp]);
     }
-    free(functionsList);
+    //free(functionsList);
     i = 0;
 }
 /*Mission five*/
@@ -386,40 +386,42 @@ void numberOfArgumentsInTheCallingFunctionAreFits(){
 }
 
 int getVariableType(symbTable* local1){
-    symbTable* local2;
+    symbTable* local2; 
+    symbTable* temp;
+    temp = local1;
 
     static char* saveVarName;
-    saveVarName = local1->name;
+    saveVarName = temp->name;
         
-    while(local1->before){
-        local1 = local1->before;
+    while(temp->before){
+        temp = temp->before;
     }
-    while(local1->child){
-        local1 = local1->child;
+    while(temp->child){
+        temp = temp->child;
     }
-    local2 = local1;
+    local2 = temp;
 
-    // printf("%s\n",local1->next->name);
+    // printf("%s\n",temp->next->name);
     while(local2){
-        //printf("1%s\n",local1->name);
-        while(local1){
-            //printf("%d %s\n",local1->type,local1->name);
-            if(strcmp(local1->name,saveVarName) == 0  
-            && local1->before
-            && local1->before->before
-            && local1->before->before->type == DECLARATION_DEF)
+        //printf("1%s\n",temp->name);
+        while(temp){
+            //printf("%d %s\n",temp->type,temp->name);
+            if(strcmp(temp->name,saveVarName) == 0  
+            && temp->before
+            && temp->before->before
+            && temp->before->before->type == DECLARATION_DEF)
             {
-                //printf("3%s\n",local1->before->name);
-                return local1->before->type;
+                //printf("3%s\n",temp->before->name);
+                return temp->before->type;
             }
-            //printf("4%s\n",local1->name);
-            if(!local1->next){break;}
-            local1 = local1->next;
+            //printf("4%s\n",temp->name);
+            if(!temp->next){break;}
+            temp = temp->next;
         }
-        //printf("5%s\n",local1->name);
+        //printf("5%s\n",temp->name);
         if(local2->parent == NULL){break;}
         local2 = local2->parent;
-        local1 = local2;
+        temp = local2;
     }
     return 666;
 }
@@ -516,11 +518,49 @@ void returnValueIsTheSameAsTheFunctioType(){
     local = (*smt);
     type = getVariableType(local);
     while(local){
+        if(local->type == PROCEDURE_DEF){
+            if(getProcedureNumber(local->name) == type){
+                return;
+            }else{
+                printf("ERROR: you returned illegal type");
+                exit(0);
+            }
+        }
         
-        local = local->before;
         if(!local->before){break;}
+        local = local->before;
     }
-    printf("%d",type);
+    #if DEBUG_MODE == 9
+        printf("%d",type);
+    #endif
+    
+}
+
+/*Mission ten*/
+void returnTypeEquelToIdentifierType(){
+    symbTable* local;
+    local = (*smt);
+
+
+    while(local){
+        if(
+        strcmp(local->name,"=") == 0
+        && local->next
+        && local->next->next
+        && local->next->type == IDENTIFIER_DEF
+        && local->next->next->type == PROC_CALL_DEF
+        ){
+            //printf("=>%s  %s\n",local->next->name,local->next->next->name);
+            //printf("%d\n\n",getFunctionType(local->next->next));
+            
+            if(getVariableType(local->next) != getFunctionType(local->next->next)){
+                printf("ERROR: The function have different type from variable");
+                exit(0);
+            }
+        }
+        if(!local->before){break;}
+        local = local->before;
+    }
 }
 
 void testingAfterSymbolTableBuiltUp(){
@@ -549,7 +589,7 @@ void printSymbTable(node* root){
             printf("\n");
         }
     #endif
-    free(hight);
+    //free(hight);
 }
 
 void buildSymbTable(node* root,int nest){
@@ -577,7 +617,14 @@ void buildSymbTable(node* root,int nest){
                 thereAreNoTwoFunctionsWithTheSameNameInTheScope();
                 /*Mission four*/
                 theAreNoTwoVariablesWithTheSameNmaeInTheScope();
-
+                /*Mission ten*/
+                returnTypeEquelToIdentifierType();
+                /*Mission eleven*/
+                expressionInIfStatmentIsBoolean((*smt));
+                /*Mission twelfth*/
+                theConditionTypeInForLoopIsBoolean((*smt));
+                
+                
                 while((*smt)->before){
                     (*smt) = (*smt)->before;
                 }
@@ -790,6 +837,35 @@ int getProcedureNumber(char* p){
         return VOID_DEF;
     }else if(strcmp(p,"boolean") == 0){
         return BOOLEAN_DEF;
+    }
+    return 666;
+}
+
+int getFunctionType(symbTable* p){
+    symbTable* local;
+    symbTable* hi;
+
+    local = p;
+    while(local){
+        if(!local->before){break;}
+        local = local->before;
+    }
+    while(local){
+        if(!local->child){break;}
+        local = local->child;
+    }
+
+    hi = local;
+    while(hi){
+        while(local){
+            //if(strcmp(local->name,"h") == 0){printf("%d  %s\n",local->before->type,local->name);}
+            if(local->before && local->before->type == PROCEDURE_DEF && strcmp(p->name,local->name) == 0){
+                return(getProcedureNumber(local->before->name));
+            }
+            local = local->next;
+        }
+        hi = hi->parent;
+        local = hi;
     }
     return 666;
 }
