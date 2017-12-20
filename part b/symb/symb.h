@@ -71,4 +71,9 @@ void expressionInIfStatmentIsBoolean(symbTable* p);
 void theConditionTypeInForLoopIsBoolean(symbTable* p);
 /*Mission thirteen*/
 void variablesInStringIndexAreIntegers(symbTable* p);
+/*Mission fourteen*/
+void typeBeforeIndexIsString(symbTable* p);
+/*Mission fiveteen*/
+void variablesFromTheBothAssignmentSideAreTheSame(symbTable* p);
+/*Mission sixteen*/
 #endif

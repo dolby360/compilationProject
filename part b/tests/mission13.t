@@ -1,16 +1,8 @@
 int main(){
     int r;
     int f;
-    char l;
-    string o;
-    charp gll;
 
-
-    //l = null;
-    o="ddasf";
-    int func(){
-        gll = null;
-    }
+    string y[r + 1 + 'd'];
 }
 
 int maffin(){

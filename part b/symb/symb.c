@@ -580,7 +580,7 @@ void printSymbTable(node* root){
     #if DEBUG_MODE == 0
         while(hight){
             while(head){
-                printf("%s",head->name);
+                printf("%s %d|",head->name,head->type);
                 printf("\t");
                 head = head->next;
             }
@@ -623,8 +623,13 @@ void buildSymbTable(node* root,int nest){
                 expressionInIfStatmentIsBoolean((*smt));
                 /*Mission twelfth*/
                 theConditionTypeInForLoopIsBoolean((*smt));
-                
-                
+                /*Mission thirteen*/
+                variablesInStringIndexAreIntegers((*smt));
+                /*Mission fourteen*/
+                typeBeforeIndexIsString((*smt));
+                /*Mission fiveteen*/
+                variablesFromTheBothAssignmentSideAreTheSame((*smt));
+
                 while((*smt)->before){
                     (*smt) = (*smt)->before;
                 }

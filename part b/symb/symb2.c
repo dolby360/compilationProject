@@ -51,5 +51,88 @@ void theConditionTypeInForLoopIsBoolean(symbTable* p){
 
 /*Mission thirteen*/
 void variablesInStringIndexAreIntegers(symbTable* p){
+    static symbTable* temp;
+    static symbTable* temp2;
+ 
+    temp = p;
     
+    while(temp){
+        
+        if(temp->type == END_OF_PARAMETERS_IN_STRING_INDEX){
+            while(strcmp(temp->name,"startIndex") != 0){temp = temp->before;}
+                temp2 = temp->next->next;
+                while(temp2->type != END_OF_PARAMETERS_IN_STRING_INDEX){
+                    if(
+                        temp2->type != INTEGER_LITERAL_DEF 
+                        && getVariableType(temp2) != INT_DEF
+                        && temp2->type != OP_DEF
+                        ){
+                        printf("ERROR: illegal type ->%s\n",temp2->name);
+                        exit(0);
+                    }
+                    temp2 = temp2->next;
+                }
+        }
+        temp = temp->before;
+    }
+}
+
+/*Mission fourteen*/
+void typeBeforeIndexIsString(symbTable* p){
+    static symbTable* temp;
+    static symbTable* temp2;
+ 
+    temp = p;
+    
+    while(temp){
+        if(temp->type == END_OF_PARAMETERS_IN_STRING_INDEX){
+            while(strcmp(temp->name,"startIndex") != 0){temp = temp->before;}
+                temp2 = temp->next;
+                if(getVariableType(temp2) != STRING_DEF){
+                    printf("ERROR: illegal type ->%s\n",temp2->name);
+                    exit(0);
+                }
+        }
+        temp = temp->before;
+    }
+}
+
+/*Mission fiveteen*/
+variablesFromTheBothAssignmentSideAreTheSame(symbTable* p){
+    static symbTable* temp;
+    static symbTable* temp2;
+ 
+    temp = p;
+
+    while(temp){
+        if(temp->type == ASSIGNMENT_DEF){
+            temp2 = temp;
+            if(getVariableType(temp2->next) == CHARP_DEF || getVariableType(temp2->next) == INTP_DEF){
+                if(
+                    temp2->next->next->type != NULL_DEF 
+                    && getVariableType(temp2->next) != getVariableType(temp2->next->next)
+                ){
+                    printf("ERROR: illegal types \n->%s\n->%s",temp2->next->name,temp2->next->next->name);
+                    exit(0);
+                }else{
+                    temp = temp->before;
+                    continue;
+                }
+            }
+            if(getVariableType(temp2->next) == STRING_DEF){
+                if(temp2->next->next->type != STRING_LITERAL_DEF){
+                    printf("ERROR: illegal types \n->%s\n->%s",temp2->next->name,temp2->next->next->name);
+                    exit(0);
+                }else{
+                    temp = temp->before;
+                    continue;
+                }
+            }
+            if(getVariableType(temp2->next) != getVariableType(temp2->next->next)){
+                printf("ERROR: illegal types \n->%s\n->%s",temp2->next->name,temp2->next->next->name);
+                exit(0);
+            }
+        }
+        temp = temp->before;
+    }
 }

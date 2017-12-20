@@ -146,12 +146,12 @@ VARS :  PROCEDURE EXP           { $$ = makeNodeWithDef (DECLARATION_DEF,"declera
 
 
 
-ASSIGNMENT : LHS ASSIGN EXP { $$ = makeNode("=", $1, $3,NULL,NULL); }
-           | LHS ASSIGN STR { $$ = makeNode("=", $1, $3,NULL,NULL);}
-           | LHS ASSIGN PTR { $$ = makeNode("=", $1, $3,NULL,NULL);}
-           | LHS ASSIGN ID PARAN_O MULT_EXP PARAN_C  { $$ = makeNode("=", $1, $3,$5,NULL);   }
-           | LHS ASSIGN ID PARAN_O PARAN_C              { $$ = makeNode("=", $1, $3,NULL,NULL); }
-           | LHS ASSIGN KEY_NULL {$$ = makeNode("=", $1, makeNode("NULL POINTER",NULL,NULL,NULL,NULL),NULL,NULL); }
+ASSIGNMENT : LHS ASSIGN EXP         { $$ = makeNodeWithDef(ASSIGNMENT_DEF,"=", $1, $3,NULL,NULL); }
+           | LHS ASSIGN STR         { $$ = makeNodeWithDef(ASSIGNMENT_DEF,"=", $1, $3,NULL,NULL);}
+           | LHS ASSIGN PTR         { $$ = makeNodeWithDef(ASSIGNMENT_DEF,"=", $1, $3,NULL,NULL);}
+           | LHS ASSIGN ID PARAN_O MULT_EXP PARAN_C     { $$ = makeNodeWithDef(ASSIGNMENT_DEF,"=", $1, $3,$5,NULL);   }
+           | LHS ASSIGN ID PARAN_O PARAN_C              { $$ = makeNodeWithDef(ASSIGNMENT_DEF,"=", $1, $3,NULL,NULL); }
+           | LHS ASSIGN KEY_NULL    {$$ = makeNodeWithDef(ASSIGNMENT_DEF,"=", $1, makeNodeWithDef(NULL_DEF,"null",NULL,NULL,NULL,NULL),NULL,NULL); }
            ;
 
 
@@ -160,10 +160,10 @@ LHS : ID { $$ = $1; }
     | DEREF { $$ = $1; }
     ;
 
-STR_INDEX : ID SQ_BRA_O EXP SQ_BRA_C { $$ = makeNode("", $1, $3,endOfStringIndex(),NULL) ;};
+STR_INDEX : ID SQ_BRA_O EXP SQ_BRA_C { $$ = makeNode("startIndex", $1, $3,endOfStringIndex(),NULL) ;};
 
 EXP : ID                    { $$ = $1; }
-    | INTEGER_LITERAL       { $$ = makeNode(yytext, NULL, NULL,NULL,NULL); }
+    | INTEGER_LITERAL       { $$ = makeNodeWithDef(INTEGER_LITERAL_DEF,yytext, NULL, NULL,NULL,NULL); }
     | CHAR_LITERAL          { $$ = makeNode(yytext, NULL, NULL,NULL,NULL); }
     | STR_INDEX             { $$ = $1; }
     | BOOL_TYPE             { $$ = makeNodeWithDef(BOOL_DEF,"boolean", $1, NULL,NULL,NULL); }
@@ -173,10 +173,10 @@ EXP : ID                    { $$ = $1; }
     | SIZE_OF               { $$ = $1; }
     | KEY_NULL              { $$ = makeNodeWithDef(NULL_DEF,"null",NULL,NULL,NULL,NULL);}
     | OP_NOT EXP            { $$ = makeNodeWithDef(NOT_DEF,"!", $2, NULL,NULL,NULL); }
-    | EXP OP_PLUS EXP       { $$ = makeNode("+",$1,$3,NULL,NULL); }
-    | EXP OP_MINUS EXP      { $$ = makeNode("-",$1,$3,NULL,NULL); }
-    | EXP OP_MULTI EXP      { $$ = makeNode("*",$1,$3,NULL,NULL); }
-    | EXP OP_DIV EXP        { $$ = makeNode("/",$1,$3,NULL,NULL); }
+    | EXP OP_PLUS EXP       { $$ = makeNodeWithDef(OP_DEF,"+",$1,$3,NULL,NULL); }
+    | EXP OP_MINUS EXP      { $$ = makeNodeWithDef(OP_DEF,"-",$1,$3,NULL,NULL); }
+    | EXP OP_MULTI EXP      { $$ = makeNodeWithDef(OP_DEF,"*",$1,$3,NULL,NULL); }
+    | EXP OP_DIV EXP        { $$ = makeNodeWithDef(OP_DEF,"/",$1,$3,NULL,NULL); }
     | EXP OP_LT EXP         { $$ = makeNodeWithDef(LT_DEF,"<",$1,$3,NULL,NULL); }
     | EXP OP_GT EXP         { $$ = makeNodeWithDef(GT_DEF,">",$1,$3,NULL,NULL); }
     | EXP OP_LE EXP         { $$ = makeNodeWithDef(LE_DEF,"<=",$1,$3,NULL,NULL);}
@@ -245,7 +245,7 @@ MULT_EXP : EXP COMMA MULT_EXP{ $$ = makeNode(""/*Multiple Expressions*/,$1,$3,NU
          | EXP { $$ = $1; }
          ;
 
-STR : STRING_LITERAL { $$ = makeNode(yytext,NULL,NULL,NULL,NULL); }
+STR : STRING_LITERAL { $$ = makeNodeWithDef(STRING_LITERAL_DEF,yytext,NULL,NULL,NULL,NULL); }
     ;
 
 ID: IDENTIFIER {$$ = makeNodeWithDef(IDENTIFIER_DEF,yytext,NULL,NULL,NULL,NULL); };

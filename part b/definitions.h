@@ -38,7 +38,10 @@
 
 #define FOR_DEF     27
 #define END_OF_PARAMETERS_IN_STRING_INDEX 28
-
+#define INTEGER_LITERAL_DEF 29
+#define OP_DEF 30
+#define ASSIGNMENT_DEF 31
+#define STRING_LITERAL_DEF 32
 
 typedef enum {false=0, true=1} bool;
 

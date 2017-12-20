@@ -2,14 +2,13 @@ int main(){
     int r;
     int f;
     char l;
-    string o;
-    charp gll;
 
+    string o[7];
+    
+    r[f]="f";
 
-    //l = null;
-    o="ddasf";
-    int func(){
-        gll = null;
+    if(l == 1){
+        //dds
     }
 }
 
