@@ -42,6 +42,7 @@
 #define OP_DEF 30
 #define ASSIGNMENT_DEF 31
 #define STRING_LITERAL_DEF 32
+#define ABS_DEF 33
 
 typedef enum {false=0, true=1} bool;
 

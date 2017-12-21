@@ -76,4 +76,5 @@ void typeBeforeIndexIsString(symbTable* p);
 /*Mission fiveteen*/
 void variablesFromTheBothAssignmentSideAreTheSame(symbTable* p);
 /*Mission sixteen*/
+void aBunchOfSemantics(symbTable* p);
 #endif

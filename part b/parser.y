@@ -230,8 +230,9 @@ BOOL_TYPE : TRUE_LITERAL { $$ = makeNode("true", NULL,NULL,NULL,NULL); }
 PAR_EXP : PARAN_O EXP PARAN_C { $$ = makeNode("",$2,NULL,NULL,NULL); }
         ;
 
-SIZE_OF : OP_ABS ID OP_ABS { $$ = makeNode("ABS",$2,NULL,NULL,NULL); }
-        | OP_ABS STR OP_ABS { $$ = makeNode("ABS",$2,NULL,NULL,NULL); }
+SIZE_OF : OP_ABS ID OP_ABS { $$ = makeNodeWithDef(ABS_DEF,"ABS",$2,NULL,NULL,NULL); }
+        | OP_ABS INTEGER_LITERAL OP_ABS { $$ = makeNodeWithDef(ABS_DEF,"ABS",$2,NULL,NULL,NULL); }
+        | OP_ABS STR OP_ABS { $$ = makeNodeWithDef(ABS_DEF,"ABS",$2,NULL,NULL,NULL); }
         ;
 
 PTR : OP_ADDRESS_OF ID { $$ = makeNode("&", $2, NULL,NULL,NULL); }

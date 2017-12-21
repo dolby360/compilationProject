@@ -629,6 +629,9 @@ void buildSymbTable(node* root,int nest){
                 typeBeforeIndexIsString((*smt));
                 /*Mission fiveteen*/
                 variablesFromTheBothAssignmentSideAreTheSame((*smt));
+                /*Mission sixteen*/
+                aBunchOfSemantics((*smt));
+
 
                 while((*smt)->before){
                     (*smt) = (*smt)->before;
