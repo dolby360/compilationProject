@@ -235,11 +235,11 @@ SIZE_OF : OP_ABS ID OP_ABS { $$ = makeNodeWithDef(ABS_DEF,"ABS",$2,NULL,NULL,NUL
         | OP_ABS STR OP_ABS { $$ = makeNodeWithDef(ABS_DEF,"ABS",$2,NULL,NULL,NULL); }
         ;
 
-PTR : OP_ADDRESS_OF ID { $$ = makeNode("&", $2, NULL,NULL,NULL); }
-    | OP_ADDRESS_OF STR_INDEX { $$ = makeNode("&", $2 ,NULL,NULL,NULL); }
+PTR : OP_ADDRESS_OF ID { $$ = makeNodeWithDef(OP_ADDRESS_OF_DEF,"&", $2, NULL,NULL,NULL); }
+    | OP_ADDRESS_OF STR_INDEX { $$ = makeNodeWithDef(OP_ADDRESS_OF_DEF,"&", $2 ,NULL,NULL,NULL); }
     ;
 
-DEREF : OP_DEREFERENCE ID { $$ = makeNode("^", $2, NULL,NULL,NULL); }
+DEREF : OP_DEREFERENCE ID { $$ = makeNodeWithDef(POINTER_DEF,"^", $2, NULL,NULL,NULL); }
       ;
 
 MULT_EXP : EXP COMMA MULT_EXP{ $$ = makeNode(""/*Multiple Expressions*/,$1,$3,NULL,NULL); }

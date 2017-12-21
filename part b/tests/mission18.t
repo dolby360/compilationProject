@@ -3,8 +3,9 @@ int main(){
     int h;
     int u;
     
-    charp p1;
-    intp p3;
+    char p1;
+    string p2;
+    int p3;
     boolean p4;
 
 
@@ -19,8 +20,9 @@ int main(){
         d = d + h;
     }
 
-    p1 = ^p1;
-    p3 = ^p3;
+    p1 = &p1;
+    p2 = &p2;
+    p3 = &p3;
     /*problem here*/
     p4 = &p4;
 

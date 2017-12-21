@@ -631,7 +631,10 @@ void buildSymbTable(node* root,int nest){
                 variablesFromTheBothAssignmentSideAreTheSame((*smt));
                 /*Mission sixteen*/
                 aBunchOfSemantics((*smt));
-
+                /*Mission seventeen*/
+                ampersandIsJustBeforefitsType((*smt));
+                /*Mission nineteen*/
+                pointerJustForPointer((*smt));
 
                 while((*smt)->before){
                     (*smt) = (*smt)->before;

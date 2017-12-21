@@ -269,3 +269,41 @@ void aBunchOfSemantics(symbTable* p){
         temp = temp->before;
     }
 }
+
+/*Mission seventeen*/
+void ampersandIsJustBeforefitsType(symbTable* p){
+    static symbTable* temp;
+    static symbTable* temp2;
+    static int i = 0;
+    temp = p;
+
+    while(temp){
+        if(temp->type == OP_ADDRESS_OF_DEF){
+            i = getVariableType(temp->next);
+            if(i != CHAR_DEF && i != INT_DEF && i != STRING_DEF){
+                printf("ERROR: illegal type ->%s\n",temp->next->name);
+                exit(0);
+            }
+        }
+        temp = temp->before;
+    }
+}
+
+/*Mission nineteen*/
+void pointerJustForPointer(symbTable* p){
+    static symbTable* temp;
+    static symbTable* temp2;
+    static int i = 0;
+    temp = p;
+
+    while(temp){
+        if(temp->type == POINTER_DEF){
+            i = getVariableType(temp->next);
+            if(i != CHARP_DEF && i != INTP_DEF){
+                printf("ERROR: illegal type ->%s\n",temp->next->name);
+                exit(0);
+            }
+        }
+        temp = temp->before;
+    }
+}

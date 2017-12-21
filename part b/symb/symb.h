@@ -77,4 +77,8 @@ void typeBeforeIndexIsString(symbTable* p);
 void variablesFromTheBothAssignmentSideAreTheSame(symbTable* p);
 /*Mission sixteen*/
 void aBunchOfSemantics(symbTable* p);
+/*Mission eighteen*/
+void ampersandIsJustBeforefitsType(symbTable* p);
+/*Mission nineteen*/
+void pointerJustForPointer(symbTable* p);
 #endif

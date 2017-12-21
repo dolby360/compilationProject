@@ -1313,15 +1313,15 @@ case 112:
 break;
 case 113:
 #line 238 "parser.y"
-	{ yyval.n = makeNode("&", yystack.l_mark[0].n, NULL,NULL,NULL); }
+	{ yyval.n = makeNodeWithDef(OP_ADDRESS_OF_DEF,"&", yystack.l_mark[0].n, NULL,NULL,NULL); }
 break;
 case 114:
 #line 239 "parser.y"
-	{ yyval.n = makeNode("&", yystack.l_mark[0].n ,NULL,NULL,NULL); }
+	{ yyval.n = makeNodeWithDef(OP_ADDRESS_OF_DEF,"&", yystack.l_mark[0].n ,NULL,NULL,NULL); }
 break;
 case 115:
 #line 242 "parser.y"
-	{ yyval.n = makeNode("^", yystack.l_mark[0].n, NULL,NULL,NULL); }
+	{ yyval.n = makeNodeWithDef(POINTER_DEF,"^", yystack.l_mark[0].n, NULL,NULL,NULL); }
 break;
 case 116:
 #line 245 "parser.y"
