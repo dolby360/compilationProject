@@ -3,7 +3,11 @@ int main(){
     int f;
     int pp;
     int h(){
-
+        int k1;
+        int k2;
+        if(k1 == k2){
+          /*nothing*/
+        }
     }
     int k(){}
 

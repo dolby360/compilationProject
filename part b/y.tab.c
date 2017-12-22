@@ -1121,7 +1121,7 @@ case 64:
 break;
 case 65:
 #line 170 "parser.y"
-	{ yyval.n = makeNode("dereference", yystack.l_mark[0].n, NULL,NULL,NULL); }
+	{ yyval.n = makeNodeWithDef(POINTER_DEF,"^", yystack.l_mark[0].n, NULL,NULL,NULL); }
 break;
 case 66:
 #line 171 "parser.y"

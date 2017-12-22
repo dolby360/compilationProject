@@ -1,25 +1,29 @@
 int main(){
     int d;
-    int faa;
     int u;
     
-    int foo(){
+    int fool(){
         int k1;
         int k2;
         if(k1 == k2){
             return k1;
         }
     }
-    char o;
-    o = 'g';
 
-    return o;
+    d = foo();
+
+    int foo(){
+
+    }
+
+
+
+    return d;
 }
 
-int maffin(){
-
+int srgf(){
 }
 
-void ffman(){
+void adrgf(){
 
 }

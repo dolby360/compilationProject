@@ -1,6 +1,7 @@
-int main(){
+int maardftgein(){
+    /*no main*/
     int d;
-    int faa;
+    int h;
     int u;
     
     int foo(){
@@ -10,16 +11,14 @@ int main(){
             return k1;
         }
     }
-    char o;
-    o = 'g';
 
-    return o;
+
+    return d;
 }
 
-int maffin(){
-
+int srgf(){
 }
 
-void ffman(){
+void adrgf(){
 
 }

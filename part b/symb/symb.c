@@ -6,11 +6,6 @@ void init(){
     (*smt)  = (symbTable*)malloc(sizeof(symbTable));
     (*smt)->name = NULL;
     head = *smt;
-    mainAlreadyExist = 0;
-}
-
-int lookup(symbTable* looker){
-    
 }
 
 void returnTheSmtPointerToTheBeginning(){
@@ -24,8 +19,32 @@ void returnTheSmtPointerToTheBeginning(){
 
 /*Mission one*/
 void checkIfMainDoseNotExist(){
-    if(mainAlreadyExist == 0){
+    symbTable* temp;
+
+    temp = (*smt);
+
+    static int count = 0;
+
+    while(temp->before){
+        temp  = temp->before;
+    }
+    while(temp->child){
+        temp = temp->child;
+    }
+
+    while(temp){
+        if(strcmp(temp->name,"main") == 0 ){
+            count = count + 1;
+        }
+        temp = temp->next;
+    }
+
+    if(count == 0){
         printf("ERROR: main not decleared\n");
+        exit(0);
+    }
+    if(count > 1){
+        printf("ERROR: to many main functions, need to be just one.\n");
         exit(0);
     }
 }
@@ -589,6 +608,9 @@ void printSymbTable(node* root){
             printf("\n");
         }
     #endif
+    #if DEBUG_MODE == -1
+        printf("Semantic pass\n");
+    #endif
     //free(hight);
 }
 
@@ -656,7 +678,7 @@ void buildSymbTable(node* root,int nest){
                 }
                 
             }else if(NEW_ENVIRONMENT(root->tokenDef) && nest != 0){
-                checkMain();
+                
                 //In this case we see new environment.
 
                 /*
@@ -768,7 +790,6 @@ void buildSymbTable(node* root,int nest){
                 /*Create Temp and concate to the list
                 after that increase the pointer
                 */
-                checkMain();
 
                 (*smt)->next = (symbTable*)malloc(sizeof(symbTable));
                 (*smt)->next->parent = NULL;
@@ -803,35 +824,7 @@ void buildSymbTable(node* root,int nest){
     }
 }
 
-void checkMain(){
-    //If this is a main function declaration.
-    //And main already declared
-    if( (*smt) && strcmp((*smt)->name,"main")==0 && 
-    (*smt)->before != NULL && 
-    (*smt)->before->type == PROCEDURE_DEF &&
-    mainAlreadyExist > 1
-    ){
-        printf("ERROR: main already decleared\n");
-        exit(0);
-    }
-    #if DEBUG_MODE == 2
-    if((*smt) && (*smt)->before ){  
-        printf("Before type = %d\n",(*smt)->before->type); 
-        printf("(*smt)->name = %s\n\n",(*smt)->name); 
-        }
-    #endif
-    //If this is a main function declaration.
-    //And main not declared yet.
-    if( (*smt) && strcmp((*smt)->name,"main")==0 && 
-    (*smt)->before != NULL && 
-    (*smt)->before->type == PROCEDURE_DEF
-    ){
-        #if DEBUG_MODE == 2
-            printf("Set mainAlready... to true\n\n");
-        #endif
-        mainAlreadyExist = mainAlreadyExist + 1;
-    }
-}
+
 
 int getProcedureNumber(char* p){
     if(strcmp(p,"char") == 0){

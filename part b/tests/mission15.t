@@ -6,18 +6,21 @@ int main(){
     charp gll;
 
 
-    //l = null;
+    l = null;
     o="ddasf";
-    int func(){
-        gll = null;
-    }
+
+    gll = null;
+    
+    ///*problem here*/
+    l = f;
 }
 
 int maffin(){
     int l;
-
-    if(l == 1){
-        //dds
+    void foo(){
+        if(l == 1){
+            //dds
+        }
     }
 }
 

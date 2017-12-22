@@ -1,6 +1,10 @@
 int main(){
     void h(char k,int k,int sd){
-
+        int k1;
+        int k2;
+        if(k1 == k2){
+          /*nothing*/
+        }
     }
     int k(){}
 
@@ -8,7 +12,6 @@ int main(){
     int o;
     o = 34;
 
-    //k(A,B,C);
 }
 
 int maffin(){

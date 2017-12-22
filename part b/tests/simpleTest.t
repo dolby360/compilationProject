@@ -4,7 +4,7 @@ int main(){
     int u;
     
     charp p1;
-    intp p3;
+    intp p2;
     boolean p4;
 
 
@@ -20,17 +20,22 @@ int main(){
     }
 
     p1 = ^p1;
-    p3 = ^p3;
+    p2 = ^p2;
     /*problem here*/
-    p4 = &p4;
+    p4 = ^p4;
 
 
     return d;
 }
 
 int maffin(){
+    int l;
+    void foo(){
+        if(l == 1){
+            //dds
+        }
+    }
 }
-
 void ffman(){
 
 }

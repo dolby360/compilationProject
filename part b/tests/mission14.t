@@ -14,9 +14,10 @@ int main(){
 
 int maffin(){
     int l;
-
-    if(l == 1){
-        //dds
+    void foo(){
+        if(l == 1){
+            //dds
+        }
     }
 }
 

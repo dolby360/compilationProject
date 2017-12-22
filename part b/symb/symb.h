@@ -26,14 +26,12 @@ static symbTable** smt;
 static symbTable* head;
 static symbTable* helper1;
 static symbTable* helper2;
-static int mainAlreadyExist;
 static int lastType;
 /*
 TODO: Function that free all memory.
 */
 
 void returnTheSmtPointerToTheBeginning();
-void checkMain();
 int lookup(symbTable* looker);
 void buildSymbTable(node* root,int nest);
 void printSymbTable();

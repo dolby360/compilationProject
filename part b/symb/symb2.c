@@ -107,7 +107,8 @@ variablesFromTheBothAssignmentSideAreTheSame(symbTable* p){
     while(temp){
         if(temp->type == ASSIGNMENT_DEF){
             temp2 = temp;
-            if(temp2->next->type != ABS_DEF ){temp = temp->before;continue;}
+            //printf("%s  %d\n",temp2->next->next->name,temp2->next->next->type);
+            if(temp2->next->next->type == ABS_DEF || temp2->next->next->type == POINTER_DEF  || temp2->next->next->type == OP_ADDRESS_OF_DEF ){temp = temp->before;continue;}
             if(getVariableType(temp2->next) == CHARP_DEF || getVariableType(temp2->next) == INTP_DEF){
                 if(
                     temp2->next->next->type != NULL_DEF 
@@ -144,6 +145,14 @@ variablesFromTheBothAssignmentSideAreTheSame(symbTable* p){
                 printf("ERROR: illegal types \n");
                 exit(0);
             }
+            //printf("%d  %d  %d  %d",temp2->next->type,temp2->next->next->type,(getVariableType(temp2->next->next)));
+            // if(temp2->next->type == IDENTIFIER_DEF && temp2->next->next->type == IDENTIFIER_DEF
+            //     && (getVariableType(temp2->next) != getVariableType(temp2->next->next)
+            // )    
+            // ){
+            //     printf("ERROR: illegal types \n->%s\n->%s",temp2->next->name,temp2->next->next->name);
+            //     exit(0);
+            // }
         }
         temp = temp->before;
     }
@@ -200,7 +209,8 @@ void aBunchOfSemantics(symbTable* p){
             (getVariableType(temp->next) == INT_DEF && getVariableType(temp->next->next) != INT_DEF)
             ||(getVariableType(temp->next) != INT_DEF && getVariableType(temp->next->next) == INT_DEF)
             ){
-                if(getVariableType(temp->next->next) != INTEGER_LITERAL_DEF && getVariableType(temp->next->next) != IDENTIFIER_DEF){temp = temp->before;continue;}
+                //printf("->%s  %d\n",temp->next->next->name,temp->next->next->type);
+                if(getVariableType(temp->next->next) != INTEGER_LITERAL_DEF && temp->next->next->type != IDENTIFIER_DEF){temp = temp->before;continue;}
                 printf("ERROR: types ->%s  \n->%s   \nnot matches\n",temp->next->name,temp->next->next->name);
                 exit(0);
             }
@@ -209,7 +219,7 @@ void aBunchOfSemantics(symbTable* p){
             (getVariableType(temp->next) == BOOLEAN_DEF && getVariableType(temp->next->next) != BOOLEAN_DEF)
             ||(getVariableType(temp->next) != BOOLEAN_DEF && getVariableType(temp->next->next) == BOOLEAN_DEF)
             ){
-                if(getVariableType(temp->next->next) != INTEGER_LITERAL_DEF && getVariableType(temp->next->next) != IDENTIFIER_DEF){temp = temp->before;continue;}
+                if(getVariableType(temp->next->next) != INTEGER_LITERAL_DEF && temp->next->next->type != IDENTIFIER_DEF){temp = temp->before;continue;}
                 printf("ERROR: types ->%s  \n->%s   \nnot matches\n",temp->next->name,temp->next->next->name);
                 exit(0);
             }
@@ -218,7 +228,7 @@ void aBunchOfSemantics(symbTable* p){
             (getVariableType(temp->next) == CHAR_DEF && getVariableType(temp->next->next) != CHAR_DEF)
             ||(getVariableType(temp->next) != CHAR_DEF && getVariableType(temp->next->next) == CHAR_DEF)
             ){
-                if(getVariableType(temp->next->next) != INTEGER_LITERAL_DEF && getVariableType(temp->next->next) != IDENTIFIER_DEF){temp = temp->before;continue;}
+                if(getVariableType(temp->next->next) != INTEGER_LITERAL_DEF && temp->next->next->type != IDENTIFIER_DEF){temp = temp->before;continue;}
                 printf("ERROR: types ->%s  \n->%s   \nnot matches\n",temp->next->name,temp->next->next->name);
                 exit(0);
             }
@@ -227,7 +237,7 @@ void aBunchOfSemantics(symbTable* p){
             (getVariableType(temp->next) == INTP_DEF && getVariableType(temp->next->next) != INTP_DEF)
             ||(getVariableType(temp->next) != INTP_DEF && getVariableType(temp->next->next) == INTP_DEF)
             ){
-                if(getVariableType(temp->next->next) != INTEGER_LITERAL_DEF && getVariableType(temp->next->next) != IDENTIFIER_DEF){temp = temp->before;continue;}
+                if(getVariableType(temp->next->next) != INTEGER_LITERAL_DEF && temp->next->next->type != IDENTIFIER_DEF){temp = temp->before;continue;}
                 printf("ERROR: types ->%s  \n->%s   \nnot matches\n",temp->next->name,temp->next->next->name);
                 exit(0);
             }
@@ -236,7 +246,7 @@ void aBunchOfSemantics(symbTable* p){
             (getVariableType(temp->next) == CHARP_DEF && getVariableType(temp->next->next) != CHARP_DEF)
             ||(getVariableType(temp->next) != CHARP_DEF && getVariableType(temp->next->next) == CHARP_DEF)
             ){
-                if(getVariableType(temp->next->next) != INTEGER_LITERAL_DEF && getVariableType(temp->next->next) != IDENTIFIER_DEF){temp = temp->before;continue;}
+                if(getVariableType(temp->next->next) != INTEGER_LITERAL_DEF && temp->next->next->type != IDENTIFIER_DEF){temp = temp->before;continue;}
                 printf("ERROR: types ->%s  \n->%s   \nnot matches\n",temp->next->name,temp->next->next->name);
                 exit(0);
             }
@@ -250,8 +260,8 @@ void aBunchOfSemantics(symbTable* p){
                 printf("ERROR: type ->%s should be int\n",temp->before->name);
                 exit(0);
             }
-            if(getVariableType(temp->next) != INT_DEF){
-                printf("ERROR: type ->%s should be int\n",temp->next->name);
+            if(getVariableType(temp->next) != INT_DEF && getVariableType(temp->next) != STRING_DEF){
+                printf("ERROR: type ->%s should be int or string\n",temp->next->name);
                 exit(0);
             }
         }
@@ -270,7 +280,7 @@ void aBunchOfSemantics(symbTable* p){
     }
 }
 
-/*Mission seventeen*/
+/*Mission eighteen*/
 void ampersandIsJustBeforefitsType(symbTable* p){
     static symbTable* temp;
     static symbTable* temp2;

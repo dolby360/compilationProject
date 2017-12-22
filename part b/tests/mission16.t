@@ -3,8 +3,9 @@ int main(){
     int h;
     int u;
     boolean t;
-
-    if(d == h && 0 == 0){
+    string str;
+    
+    if(d == h || 0 == 0){
         /*nothing*/
     }
 
@@ -34,6 +35,12 @@ int main(){
 }
 
 int maffin(){
+    int l;
+    void foo(){
+        if(l == 1){
+            //dds
+        }
+    }
 }
 
 void ffman(){

@@ -1,6 +1,6 @@
 int main(){
     int d;
-    int faa;
+    int d;
     int u;
     
     int foo(){
@@ -10,16 +10,19 @@ int main(){
             return k1;
         }
     }
-    char o;
-    o = 'g';
 
-    return o;
+    int fool(){
+
+    }
+
+
+
+    return d;
 }
 
-int maffin(){
-
+int srgf(){
 }
 
-void ffman(){
+void adrgf(){
 
 }

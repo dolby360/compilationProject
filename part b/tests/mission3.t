@@ -10,16 +10,17 @@ int main(){
             return k1;
         }
     }
-    char o;
-    o = 'g';
+    /*problem here*/
+    int foo(){
 
-    return o;
+    }
+
+    return d;
 }
 
-int maffin(){
-
+int srgf(){
 }
 
-void ffman(){
+void adrgf(){
 
 }
