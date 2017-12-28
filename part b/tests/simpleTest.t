@@ -1,41 +1,7 @@
-int main(){
-    int d;
-    int h;
-    int u;
-    
-    charp p1;
-    intp p2;
-    boolean p4;
+void print(int x){}
 
-
-    boolean t;
-
-    if(d == h && 0 == 0){
-        /*nothing*/
-    }
-
-
-    while(d == h && 0 == 0){
-        d = d + h;
-    }
-
-    p1 = ^p1;
-    p2 = ^p2;
-    /*problem here*/
-    p4 = ^p4;
-
-
-    return d;
-}
-
-int maffin(){
-    int l;
-    void foo(){
-        if(l == 1){
-            //dds
-        }
-    }
-}
-void ffman(){
-
+int main()
+{
+int x=5;
+print(x);
 }

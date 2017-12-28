@@ -4,8 +4,7 @@ int main(){
     int u;
     
     charp p1;
-    string p2;
-    intp p3;
+    intp p2;
     boolean p4;
 
 
