@@ -45,7 +45,7 @@
 #define ABS_DEF 33
 #define OP_ADDRESS_OF_DEF 34
 #define POINTER_DEF 35
-
+#define CHAR_LITERAL_DEF 37
 
 typedef enum {false=0, true=1} bool;
 
@@ -56,5 +56,5 @@ typedef enum {false=0, true=1} bool;
 
 
 //Max debug mode for now 9
-#define DEBUG_MODE 0
+#define DEBUG_MODE -2
 #endif

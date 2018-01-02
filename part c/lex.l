@@ -30,8 +30,9 @@ OCT				0[1-7][0-7]*
 BIN				[0-1]+b 
 STRING			\"[^\n\"]*\" 
 
-COMMENT1	[//].*
+COMMENT1	"//"[^\n]*
 COMMENT2	[\/\*]([^\n]*\n+)+[\*][\/]
+COMMENT3	\/\*([^*]|[\r\n]|(\*([^/]|[\r\n])))*\*\/
 %%
 
 boolean         {return KEY_BOOLEAN;}
@@ -77,7 +78,7 @@ null            {return KEY_NULL;}
 
 {COMMENT1}		{return COMMENT;}
 {COMMENT2}		{return COMMENT;}
-	
+{COMMENT3}		{return COMMENT;}
 
 true|TRUE       {yylval.num = 1;return TRUE_LITERAL;}
 false|FALSE     {yylval.num = 0;return FALSE_LITERAL;}

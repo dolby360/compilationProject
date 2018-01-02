@@ -8,10 +8,10 @@
 
     #define YYSTPARAN_CE struct node*
 
-    #include "ast/print_ast.h"
-    #include "symb/symb.h"
+    #include "TAC/TAC.h"
+    //#include "symb/symb.h"
     #include "definitions.h"
-
+    
     
 %}
 
@@ -56,7 +56,7 @@
 %type <str> COMMA       
 
 %%
-S: PROGRAM { /*printPreOrder($1,0);*/ printSymbTable($1); };
+S: PROGRAM { /*printPreOrder($1,0);*/ /*printSymbTable($1);*/ makeButtomUp($1);  printTreeAddressCode($1); };
 
 PROGRAM:  MULTI_PROC {$$=makeNode("",$1,NULL,NULL,NULL);};
 
@@ -150,7 +150,7 @@ ASSIGNMENT : LHS ASSIGN EXP         { $$ = makeNodeWithDef(ASSIGNMENT_DEF,"=", $
            | LHS ASSIGN STR         { $$ = makeNodeWithDef(ASSIGNMENT_DEF,"=", $1, $3,NULL,NULL);}
            | LHS ASSIGN PTR         { $$ = makeNodeWithDef(ASSIGNMENT_DEF,"=", $1, $3,NULL,NULL);}
            | LHS ASSIGN ID PARAN_O MULT_EXP PARAN_C     { $$ = makeNodeWithDef(ASSIGNMENT_DEF,"=", $1, $3,$5,NULL);   }
-           | LHS ASSIGN ID PARAN_O PARAN_C              { $$ = makeNodeWithDef(ASSIGNMENT_DEF,"=", $1, $3,NULL,NULL); }
+           | LHS ASSIGN ID PARAN_O PARAN_C              { $$ =makeNodeWithDef(ASSIGNMENT_DEF,"=", $1, $3,NULL,NULL); }
            | LHS ASSIGN KEY_NULL    {$$ = makeNodeWithDef(ASSIGNMENT_DEF,"=", $1, makeNodeWithDef(NULL_DEF,"null",NULL,NULL,NULL,NULL),NULL,NULL); }
            ;
 
@@ -160,10 +160,10 @@ LHS : ID { $$ = $1; }
     | DEREF { $$ = $1; }
     ;
 
-STR_INDEX : ID SQ_BRA_O EXP SQ_BRA_C { $$ = makeNode("startIndex", $1, $3,endOfStringIndex(),NULL) ;};
+STR_INDEX : ID SQ_BRA_O EXP SQ_BRA_C { $$ = makeNodeWithDef(STRING_ARRAY,"STR_index", $1, $3,NULL,NULL); };
 
 EXP : ID                    { $$ = $1; }
-    | INTEGER_LITERAL       { $$ = makeNodeWithDef(INTEGER_LITERAL_DEF,yytext, NULL, NULL,NULL,NULL); }
+    | INTEGER_LITERAL       { $$ = makeNodeWithDef(INTEGER_LITERAL_DEF,yytext, NULL, NULL ,NULL,NULL); }
     | CHAR_LITERAL          { $$ = makeNode(yytext, NULL, NULL,NULL,NULL); }
     | STR_INDEX             { $$ = $1; }
     | BOOL_TYPE             { $$ = makeNodeWithDef(BOOL_DEF,"boolean", $1, NULL,NULL,NULL); }
@@ -231,7 +231,7 @@ PAR_EXP : PARAN_O EXP PARAN_C { $$ = makeNode("",$2,NULL,NULL,NULL); }
         ;
 
 SIZE_OF : OP_ABS ID OP_ABS { $$ = makeNodeWithDef(ABS_DEF,"ABS",$2,NULL,NULL,NULL); }
-        | OP_ABS INTEGER_LITERAL OP_ABS { $$ = makeNodeWithDef(ABS_DEF,"ABS",$2,NULL,NULL,NULL); }
+        | OP_ABS INTEGER_LITERAL OP_ABS { $$ = makeNodeWithDef(ABS_DEF,"ABS",makeNode($2, NULL, NULL,NULL,NULL),NULL,NULL,NULL); }
         | OP_ABS STR OP_ABS { $$ = makeNodeWithDef(ABS_DEF,"ABS",$2,NULL,NULL,NULL); }
         ;
 
@@ -264,8 +264,11 @@ int main(){
 
 void yyerror(const char *msg){
 	//fprintf(stderr,"line %d: %s\n",yylineno ,msg);
+    /*
 	fflush(stdout);
 	fprintf(stderr, "Error: %s at line %d\n", msg,yylineno );
 	fprintf(stderr, "Parser does not expect '%s'\n",yytext);
+    */
+    fprintf(stderr, "ERROR: compilation error somthing is wrong with me %d\n",yylineno );
 }
 

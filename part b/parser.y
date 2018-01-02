@@ -56,7 +56,7 @@
 %type <str> COMMA       
 
 %%
-S: PROGRAM { /*printPreOrder($1,0);*/ printSymbTable($1); };
+S: PROGRAM { /*printPreOrder($1,0);*/ printSymbTable($1);printf("symantic is good\n"); };
 
 PROGRAM:  MULTI_PROC {$$=makeNode("",$1,NULL,NULL,NULL);};
 
@@ -164,7 +164,8 @@ STR_INDEX : ID SQ_BRA_O EXP SQ_BRA_C { $$ = makeNode("startIndex", $1, $3,endOfS
 
 EXP : ID                    { $$ = $1; }
     | INTEGER_LITERAL       { $$ = makeNodeWithDef(INTEGER_LITERAL_DEF,yytext, NULL, NULL,NULL,NULL); }
-    | CHAR_LITERAL          { $$ = makeNode(yytext, NULL, NULL,NULL,NULL); }
+    | CHAR_LITERAL          { $$ = makeNodeWithDef(CHAR_LITERAL_DEF,yytext, NULL, NULL,NULL,NULL); }
+    | PARAN_O EXP PARAN_C   { $$ = $2; }
     | STR_INDEX             { $$ = $1; }
     | BOOL_TYPE             { $$ = makeNodeWithDef(BOOL_DEF,"boolean", $1, NULL,NULL,NULL); }
     | OP_DEREFERENCE EXP    { $$ = makeNodeWithDef(POINTER_DEF,"^", $2, NULL,NULL,NULL); }
@@ -237,12 +238,13 @@ SIZE_OF : OP_ABS ID OP_ABS { $$ = makeNodeWithDef(ABS_DEF,"ABS",$2,NULL,NULL,NUL
 
 PTR : OP_ADDRESS_OF ID { $$ = makeNodeWithDef(OP_ADDRESS_OF_DEF,"&", $2, NULL,NULL,NULL); }
     | OP_ADDRESS_OF STR_INDEX { $$ = makeNodeWithDef(OP_ADDRESS_OF_DEF,"&", $2 ,NULL,NULL,NULL); }
+    
     ;
 
 DEREF : OP_DEREFERENCE ID { $$ = makeNodeWithDef(POINTER_DEF,"^", $2, NULL,NULL,NULL); }
       ;
 
-MULT_EXP : EXP COMMA MULT_EXP{ $$ = makeNode(""/*Multiple Expressions*/,$1,$3,NULL,NULL); }
+MULT_EXP : EXP COMMA MULT_EXP{$$ = makeNode(""/*Multiple Expressions*/,$1,$3,NULL,NULL); }
          | EXP { $$ = $1; }
          ;
 

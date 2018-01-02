@@ -1,7 +1,17 @@
-
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
+//-----------------------------------------------------------------------------------------//
+//From here all definition for assignmment 3
+//-----------------------------------------------------------------------------------------//
+
+#define VAR_SIZE    4
+#define CODE_SIZE   16
+#define STRING_ARRAY 32
+
+//-----------------------------------------------------------------------------------------//
+//From here all definition for assignmment 2
+//-----------------------------------------------------------------------------------------//
 
 #define PROCEDURE_DEF 0             /*New function*/
 #define IF_DEF 1                    /*If statement*/

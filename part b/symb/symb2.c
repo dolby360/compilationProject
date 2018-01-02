@@ -109,6 +109,7 @@ variablesFromTheBothAssignmentSideAreTheSame(symbTable* p){
             temp2 = temp;
             //printf("%s  %d\n",temp2->next->next->name,temp2->next->next->type);
             if(temp2->next->next->type == ABS_DEF || temp2->next->next->type == POINTER_DEF  || temp2->next->next->type == OP_ADDRESS_OF_DEF ){temp = temp->before;continue;}
+            if(getVariableType(temp->next) == CHAR_DEF && temp->next->next->type == CHAR_LITERAL_DEF){temp = temp->before;continue;}
             if(getVariableType(temp2->next) == CHARP_DEF || getVariableType(temp2->next) == INTP_DEF){
                 if(
                     temp2->next->next->type != NULL_DEF 

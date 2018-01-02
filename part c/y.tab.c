@@ -26,10 +26,10 @@
 
     #define YYSTPARAN_CE struct node*
 
-    #include "ast/print_ast.h"
-    #include "symb/symb.h"
+    #include "TAC/TAC.h"
+    /*#include "symb/symb.h"*/
     #include "definitions.h"
-
+    
     
 #line 18 "parser.y"
 #ifdef YYSTYPE
@@ -656,12 +656,15 @@ int main(){
 
 void yyerror(const char *msg){
 	//fprintf(stderr,"line %d: %s\n",yylineno ,msg);
+    /*
 	fflush(stdout);
 	fprintf(stderr, "Error: %s at line %d\n", msg,yylineno );
 	fprintf(stderr, "Parser does not expect '%s'\n",yytext);
+    */
+    fprintf(stderr, "ERROR: compilation error somthing is wrong with me %d\n",yylineno );
 }
 
-#line 665 "y.tab.c"
+#line 668 "y.tab.c"
 
 #if YYDEBUG
 #include <stdio.h>		/* needed for printf */
@@ -865,7 +868,7 @@ yyreduce:
     {
 case 1:
 #line 59 "parser.y"
-	{ /*printPreOrder($1,0);*/ printSymbTable(yystack.l_mark[0].n); }
+	{ /*printPreOrder($1,0);*/ /*printSymbTable($1);*/ makeButtomUp(yystack.l_mark[0].n);  printTreeAddressCode(yystack.l_mark[0].n); }
 break;
 case 2:
 #line 61 "parser.y"
@@ -1077,7 +1080,7 @@ case 53:
 break;
 case 54:
 #line 153 "parser.y"
-	{ yyval.n = makeNodeWithDef(ASSIGNMENT_DEF,"=", yystack.l_mark[-4].n, yystack.l_mark[-2].n,NULL,NULL); }
+	{ yyval.n =makeNodeWithDef(ASSIGNMENT_DEF,"=", yystack.l_mark[-4].n, yystack.l_mark[-2].n,NULL,NULL); }
 break;
 case 55:
 #line 154 "parser.y"
@@ -1097,7 +1100,7 @@ case 58:
 break;
 case 59:
 #line 163 "parser.y"
-	{ yyval.n = makeNode("startIndex", yystack.l_mark[-3].n, yystack.l_mark[-1].n,endOfStringIndex(),NULL) ;}
+	{ yyval.n = makeNodeWithDef(STRING_ARRAY,"STR_index", yystack.l_mark[-3].n, yystack.l_mark[-1].n,NULL,NULL); }
 break;
 case 60:
 #line 165 "parser.y"
@@ -1105,7 +1108,7 @@ case 60:
 break;
 case 61:
 #line 166 "parser.y"
-	{ yyval.n = makeNodeWithDef(INTEGER_LITERAL_DEF,yytext, NULL, NULL,NULL,NULL); }
+	{ yyval.n = makeNodeWithDef(INTEGER_LITERAL_DEF,yytext, NULL, NULL ,NULL,NULL); }
 break;
 case 62:
 #line 167 "parser.y"
@@ -1305,7 +1308,7 @@ case 110:
 break;
 case 111:
 #line 234 "parser.y"
-	{ yyval.n = makeNodeWithDef(ABS_DEF,"ABS",yystack.l_mark[-1].str,NULL,NULL,NULL); }
+	{ yyval.n = makeNodeWithDef(ABS_DEF,"ABS",makeNode(yystack.l_mark[-1].str, NULL, NULL,NULL,NULL),NULL,NULL,NULL); }
 break;
 case 112:
 #line 235 "parser.y"
@@ -1339,7 +1342,7 @@ case 119:
 #line 252 "parser.y"
 	{yyval.n = makeNodeWithDef(IDENTIFIER_DEF,yytext,NULL,NULL,NULL,NULL); }
 break;
-#line 1343 "y.tab.c"
+#line 1346 "y.tab.c"
     }
     yystack.s_mark -= yym;
     yystate = *yystack.s_mark;

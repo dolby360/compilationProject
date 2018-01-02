@@ -16,7 +16,8 @@ echo "**********"
 
 lex lex.l > /dev/null 2>&1
 yacc parser.y > /dev/null 2>&1
-cc -Wall symb/symb2.c symb/symb.c ast/print_ast.c ast/ast.c -o Program y.tab.c -ll -Ly 
+#cc -Wall symb/symb2.c symb/symb.c ast/print_ast.c ast/ast.c TAC/TAC.c -o Program y.tab.c -ll -Ly 
+cc -Wall TAC/TAC.c ast/print_ast.c ast/ast.c -o Program y.tab.c -ll -Ly 
 if [ "$?" -eq "1" ]
 	then 	
         echo ""
@@ -38,6 +39,13 @@ then
         echo "Test number 1 shuld pass"
         echo "simpleTest"
         echo "*****************************************************************************************************"
+        ./../../"part b"/out<tests/simpleTest.t
+        
+        if [ "$?" -eq "1" ]
+        then exit 1
+        fi
+        echo ""
+        echo ""
         ./Program<tests/simpleTest.t
 fi
 

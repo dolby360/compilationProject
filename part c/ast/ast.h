@@ -4,11 +4,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-/*
-Potential fail here
-It may not recognize the folder.
-*/
+
 #include "../definitions.h"
+#include "../TAC/TACtypes.h"
 
 typedef struct node{
     int     tokenDef;
@@ -18,6 +16,7 @@ typedef struct node{
     struct  node* nodeTwo;
     struct  node* nodeThree;
     struct  node* nodeFour;
+    struct  tac*  myTac;
 }node;
 
 node* makeNode(char* token_ ,node* nodeOne_ ,node* nodeTwo_,node* nodeThree_, node* nodeFour_);

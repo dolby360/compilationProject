@@ -256,6 +256,7 @@ void variablesAreDefinedBeforeUsed(){
     ){
         return;
     }
+
     #if DEBUG_MODE == 6
         printf("%s  %d  \n",(*smt)->name,(*smt)->type);
         //if(strcpy((*smt)->name,"b") == 0){ printf("%s  %d  \n",(*smt)->name,(*smt)->type); }
@@ -270,9 +271,15 @@ void variablesAreDefinedBeforeUsed(){
     temp = (*smt);
     static bool stateToCheckIfItIsParameter = true;
     
+
     while(temp->before){
         if(strcmp(temp->name,"endOfParameter") == 0){
-            while(temp->before){temp = temp->before;}
+            while(temp->before){
+                if(strcmp(temp->before->name,variableName)==0){
+                    return;
+                }
+                temp = temp->before;
+            }
         }
         if(temp->type == PARAMS_DEF || temp->type == PROC_CALL_DEF){
             return;
@@ -430,7 +437,7 @@ int getVariableType(symbTable* local1){
             && temp->before->before
             && temp->before->before->type == DECLARATION_DEF)
             {
-                //printf("3%s\n",temp->before->name);
+                printf("3%s\n",temp->before->name);
                 return temp->before->type;
             }
             //printf("4%s\n",temp->name);
