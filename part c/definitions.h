@@ -5,6 +5,7 @@
 //From here all definition for assignmment 3
 //-----------------------------------------------------------------------------------------//
 
+#define LABEL_SIZE  8
 #define VAR_SIZE    4
 #define CODE_SIZE   16
 #define STRING_ARRAY 32

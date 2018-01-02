@@ -12,6 +12,21 @@ tac* makeNewTac(){
     return toReturn;
 }
 
+void makeTopDown(node* ast){
+    if(ast){
+        if(ast->tokenDef == PROCEDURE_DEF){
+            ast->myTac = (tac*)malloc(sizeof(tac));
+            ast->myTac->label = (char*)malloc(sizeof(char) * LABEL_SIZE);
+            strcpy(ast->myTac->label,ast->nodeTwo->token);
+        }
+
+        makeTopDown(ast->nodeOne);
+        makeTopDown(ast->nodeTwo);
+        makeTopDown(ast->nodeThree);
+        makeTopDown(ast->nodeFour);
+    }
+}
+
 void makeButtomUp(node* ast){
     if(ast){
         makeButtomUp(ast->nodeOne);
@@ -55,8 +70,7 @@ void genIdentifier(node* ast){
 /*Here I'm taking care of the sring assign as well*/
 void genTacAssign(node* ast){
     if(ast->nodeTwo->tokenDef == STRING_ARRAY){
-        //When wee see string we do:
-
+        //When wee see this we do:
         /*
         x = y[i];
         We turning to =>
@@ -65,15 +79,15 @@ void genTacAssign(node* ast){
         t2 = t1+i
         x = *t2
 
-        So here te temp is =
+        So here te temp is = t2
         */
 
         /*
         Here i'm giving register for &y
         */
         char* temp;
-        temp = (char*)malloc(sizeof(char)*CODE_SIZE);
-        memset(temp,'\0',sizeof(char)*CODE_SIZE);
+        temp = (char*)malloc(sizeof(char)*VAR_SIZE);
+        memset(temp,'\0',sizeof(char)*VAR_SIZE);
         sprintf(temp,"t%d",forGen++);
 
         /*
@@ -101,16 +115,43 @@ void genTacAssign(node* ast){
     In this case we got a[2] = 'd';
     */
     }else if(ast->nodeOne->tokenDef == STRING_ARRAY){
-        return;
-        ast->myTac = (tac*)malloc(sizeof(tac)); 
-        ast->myTac->var = (char*)malloc(sizeof(ast->nodeOne->token) + 1);
+        //When wee see this we do:
+        /*
+        x[i] = y;
+        We turning to =>
 
-        strcpy(ast->myTac->var,ast->nodeOne->myTac->var);
+        t1 = &x
+        t2 = t1+i
+        *t2 = y
+
+        So here te temp is = t2
+        */
         
-        ast->myTac->code = (char*)malloc(sizeof(char)*CODE_SIZE);
-        sprintf(ast->myTac->code,"%s = %s",ast->nodeOne->myTac->var,ast->nodeTwo->myTac->var);
+        char* temp;
+        temp = (char*)malloc(sizeof(char)*VAR_SIZE);
+        memset(temp,'\0',sizeof(char)*VAR_SIZE);
+        sprintf(temp,"t%d",forGen++);
+        /*
+        Here I alocate mamory for the var and code in assign node
+        */
+        ast->myTac = (tac*)malloc(sizeof(tac));
+        ast->myTac->var = (char*)malloc(sizeof(char)*VAR_SIZE);
+        sprintf(ast->myTac->var,"t%d",forGen++);
+        
+        ast->myTac->code = (char*)malloc(sizeof(char) * CODE_SIZE * CODE_SIZE);
+        sprintf(ast->myTac->code,
+        "%s = &%s\n%s = %s + %s\n*%s = %s",
+        ast->myTac->var,                    //t1
+        ast->nodeOne->nodeOne->myTac->var,  //x
+        temp,                               //t2
+        ast->myTac->var,                    //t1
+        ast->nodeOne->nodeTwo->myTac->var,  //i
+        temp,                               //t2
+        ast->nodeTwo->myTac->var            //y
+        );
         return;
     }
+
     ast->myTac = (tac*)malloc(sizeof(tac)); 
     ast->myTac->var = (char*)malloc(sizeof(ast->nodeOne->token) + 1);
     strcpy(ast->myTac->var,ast->nodeOne->myTac->var);
@@ -137,6 +178,9 @@ void printTreeAddressCode(node* ast){
         printTreeAddressCode(ast->nodeOne);
         printTreeAddressCode(ast->nodeTwo);
         if(ast->myTac && ast->myTac->code && strcmp(ast->myTac->code,"")!=0){
+            if(ast->myTac->label){
+                printf("%s\n",ast->myTac->label);
+            }
             printf("%s\n",ast->myTac->code);
         }
         printTreeAddressCode(ast->nodeThree);

@@ -56,7 +56,7 @@
 %type <str> COMMA       
 
 %%
-S: PROGRAM { /*printPreOrder($1,0);*/ /*printSymbTable($1);*/ makeButtomUp($1);  printTreeAddressCode($1); };
+S: PROGRAM { /*printPreOrder($1,0);*/ /*printSymbTable($1);*/ makeTopDown($1); makeButtomUp($1);  printTreeAddressCode($1); };
 
 PROGRAM:  MULTI_PROC {$$=makeNode("",$1,NULL,NULL,NULL);};
 

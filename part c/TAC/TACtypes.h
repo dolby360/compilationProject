@@ -4,6 +4,7 @@
 typedef struct tac{
     char* var;
     char* code;
+    char* label;
 }tac;
 
 #endif

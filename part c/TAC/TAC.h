@@ -10,6 +10,7 @@ void genIdentifier(node* ast);
 
 tac* makeNewTac();
 void makeButtomUp(node* ast);
+void makeTopDown(node* ast);
 void printTreeAddressCode(node* ast);
 
 #endif

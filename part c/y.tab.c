@@ -868,7 +868,7 @@ yyreduce:
     {
 case 1:
 #line 59 "parser.y"
-	{ /*printPreOrder($1,0);*/ /*printSymbTable($1);*/ makeButtomUp(yystack.l_mark[0].n);  printTreeAddressCode(yystack.l_mark[0].n); }
+	{ /*printPreOrder($1,0);*/ /*printSymbTable($1);*/ makeTopDown(yystack.l_mark[0].n); makeButtomUp(yystack.l_mark[0].n);  printTreeAddressCode(yystack.l_mark[0].n); }
 break;
 case 2:
 #line 61 "parser.y"
