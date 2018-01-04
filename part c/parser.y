@@ -56,7 +56,7 @@
 %type <str> COMMA       
 
 %%
-S: PROGRAM { /*printPreOrder($1,0);*/ /*printSymbTable($1);*/ makeTopDown($1); makeButtomUp($1);  printTreeAddressCode($1); };
+S: PROGRAM { /*printPreOrder($1,0);*/ /*printSymbTable($1);*/  makeButtomUp($1); makeTopDown($1); printTreeAddressCode($1); };
 
 PROGRAM:  MULTI_PROC {$$=makeNode("",$1,NULL,NULL,NULL);};
 
@@ -210,12 +210,12 @@ BLOCK : BRA_O MULT_STATEMENT BRA_C {$$ = $2;}
       | BRA_O BRA_C {$$ = makeNode("{}",NULL,NULL,NULL,NULL);}
       ;
 
-COND :  KEY_IF PARAN_O EXP PARAN_C BLOCK                                                     {$$ = makeNodeWithDef(IF_DEF,"if",$3,$5,NULL,NULL); }
+COND :  KEY_IF PARAN_O EXP PARAN_C BLOCK                                                       {$$ = makeNodeWithDef(IF_DEF,"if",$3,$5,NULL,NULL); }
         | KEY_IF PARAN_O EXP PARAN_C AFTER_ATETMENT_NO_PARAN                                   {$$ = makeNodeWithDef(IF_DEF,"if",$3,$5,NULL,NULL); }
-        | KEY_IF PARAN_O EXP PARAN_C BLOCK KEY_ELSE BLOCK                                      { $$ = makeNodeWithDef(IF_DEF,"if", $3, makeNode("else", $5, $7,NULL,NULL),NULL,NULL);}
-        | KEY_IF PARAN_O EXP PARAN_C AFTER_ATETMENT_NO_PARAN KEY_ELSE AFTER_ATETMENT_NO_PARAN  { $$ = makeNodeWithDef(IF_DEF,"if", $3, makeNode("else", $5, $7,NULL,NULL),NULL,NULL);}
-        | KEY_IF PARAN_O EXP PARAN_C AFTER_ATETMENT_NO_PARAN KEY_ELSE BLOCK                    { $$ = makeNodeWithDef(IF_DEF,"if", $3, makeNode("else", $5, $7,NULL,NULL),NULL,NULL);}
-        | KEY_IF PARAN_O EXP PARAN_C BLOCK KEY_ELSE AFTER_ATETMENT_NO_PARAN                    { $$ = makeNodeWithDef(IF_DEF,"if", $3, makeNode("else", $5, $7,NULL,NULL),NULL,NULL);}
+        | KEY_IF PARAN_O EXP PARAN_C BLOCK KEY_ELSE BLOCK                                      { $$ = makeNodeWithDef(IF_DEF,"if", $3, $5,makeNode("else", $7,NULL ,NULL,NULL),NULL);}
+        | KEY_IF PARAN_O EXP PARAN_C AFTER_ATETMENT_NO_PARAN KEY_ELSE AFTER_ATETMENT_NO_PARAN  { $$ = makeNodeWithDef(IF_DEF,"if", $3, $5,makeNode("else", $7,NULL ,NULL,NULL),NULL);}
+        | KEY_IF PARAN_O EXP PARAN_C AFTER_ATETMENT_NO_PARAN KEY_ELSE BLOCK                    { $$ = makeNodeWithDef(IF_DEF,"if", $3, $5,makeNode("else", $7,NULL ,NULL,NULL),NULL);}
+        | KEY_IF PARAN_O EXP PARAN_C BLOCK KEY_ELSE AFTER_ATETMENT_NO_PARAN                    { $$ = makeNodeWithDef(IF_DEF,"if", $3, $5,makeNode("else", $7,NULL ,NULL,NULL),NULL);}
         ;
 
 AFTER_ATETMENT_NO_PARAN:    STATEMENT                               {$$ = $1;}

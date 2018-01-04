@@ -9,6 +9,7 @@
 #define VAR_SIZE    4
 #define CODE_SIZE   16
 #define STRING_ARRAY 32
+#define NEXT_SIZE   16
 
 //-----------------------------------------------------------------------------------------//
 //From here all definition for assignmment 2

@@ -868,7 +868,7 @@ yyreduce:
     {
 case 1:
 #line 59 "parser.y"
-	{ /*printPreOrder($1,0);*/ /*printSymbTable($1);*/ makeTopDown(yystack.l_mark[0].n); makeButtomUp(yystack.l_mark[0].n);  printTreeAddressCode(yystack.l_mark[0].n); }
+	{ /*printPreOrder($1,0);*/ /*printSymbTable($1);*/  makeButtomUp(yystack.l_mark[0].n); makeTopDown(yystack.l_mark[0].n); printTreeAddressCode(yystack.l_mark[0].n); }
 break;
 case 2:
 #line 61 "parser.y"
@@ -1264,19 +1264,19 @@ case 99:
 break;
 case 100:
 #line 215 "parser.y"
-	{ yyval.n = makeNodeWithDef(IF_DEF,"if", yystack.l_mark[-4].n, makeNode("else", yystack.l_mark[-2].n, yystack.l_mark[0].n,NULL,NULL),NULL,NULL);}
+	{ yyval.n = makeNodeWithDef(IF_DEF,"if", yystack.l_mark[-4].n, yystack.l_mark[-2].n,makeNode("else", yystack.l_mark[0].n,NULL ,NULL,NULL),NULL);}
 break;
 case 101:
 #line 216 "parser.y"
-	{ yyval.n = makeNodeWithDef(IF_DEF,"if", yystack.l_mark[-4].n, makeNode("else", yystack.l_mark[-2].n, yystack.l_mark[0].n,NULL,NULL),NULL,NULL);}
+	{ yyval.n = makeNodeWithDef(IF_DEF,"if", yystack.l_mark[-4].n, yystack.l_mark[-2].n,makeNode("else", yystack.l_mark[0].n,NULL ,NULL,NULL),NULL);}
 break;
 case 102:
 #line 217 "parser.y"
-	{ yyval.n = makeNodeWithDef(IF_DEF,"if", yystack.l_mark[-4].n, makeNode("else", yystack.l_mark[-2].n, yystack.l_mark[0].n,NULL,NULL),NULL,NULL);}
+	{ yyval.n = makeNodeWithDef(IF_DEF,"if", yystack.l_mark[-4].n, yystack.l_mark[-2].n,makeNode("else", yystack.l_mark[0].n,NULL ,NULL,NULL),NULL);}
 break;
 case 103:
 #line 218 "parser.y"
-	{ yyval.n = makeNodeWithDef(IF_DEF,"if", yystack.l_mark[-4].n, makeNode("else", yystack.l_mark[-2].n, yystack.l_mark[0].n,NULL,NULL),NULL,NULL);}
+	{ yyval.n = makeNodeWithDef(IF_DEF,"if", yystack.l_mark[-4].n, yystack.l_mark[-2].n,makeNode("else", yystack.l_mark[0].n,NULL ,NULL,NULL),NULL);}
 break;
 case 104:
 #line 221 "parser.y"
