@@ -25,21 +25,6 @@ void makeTopDown(node* ast){
                 ast->myTac->label = (char*)malloc(sizeof(char) * LABEL_SIZE);
                 strcpy(ast->myTac->label,ast->nodeOne->token);
             }
-        }else if(ast->tokenDef == IF_DEF){    
-            //Setup next
-            ast->myTac->nextTrue = (char*)malloc(sizeof(char)*NEXT_SIZE);
-            ast->myTac->nextFalse = (char*)malloc(sizeof(char)*NEXT_SIZE);
-            //Give label
-            ast->myTac->label = (char*)malloc(sizeof(char)*LABEL_SIZE);
-            sprintf(ast->myTac->label,"L%d",forNext);
-            //Set next
-            sprintf(ast->myTac->nextTrue,"L%d",++forNext);
-            sprintf(ast->myTac->nextFalse,"L%d",++forNext);
-
-            genExpForIfStatment(ast,ast->nodeOne);
-        }else if(ast->myTac->code && ast->tokenDef == IF_DEF){
-            ast->myTac->label = (char*)malloc(sizeof(char)*LABEL_SIZE);
-            sprintf(ast->myTac->label,"L%d",forNext);
         }
         makeTopDown(ast->nodeOne);
         makeTopDown(ast->nodeTwo);
@@ -66,13 +51,7 @@ void makeButtomUp(node* ast){
             ast->myTac = makeNewTac();
             //printf("11\n"); 
         }
-        //printf("2\n");
-        if(ast->tokenDef == IF_DEF){
-            //printf("2\n");
-            genCondition(ast);
-            //printf("22\n");
-        }
-        //printf("3\n");
+
         if(ast->tokenDef == ASSIGNMENT_DEF){
             //printf("6\n");
             genTacAssign(ast);
@@ -95,35 +74,6 @@ void makeButtomUp(node* ast){
     }
 }
 
-void genCondition(node* ast){
-    ast->myTac->code = (char*)malloc(sizeof(char)*CODE_SIZE*CODE_SIZE);
-
-    /*
-    char* temp;
-    temp = (char*)malloc(sizeof(char)*CODE_SIZE);
-    sprintf(temp,"\n%s:",ast->myTac->nextFalse);
-    strcat(ast->nodeTwo->myTac->code,temp);
-    */
-}
-
-void genExpForIfStatment(node* ifNode,node* ex){
-    if(ex){
-        if(ex->nodeOne && ex->nodeTwo){
-            if(ex->tokenDef == AND_DEF){
-                ex->myTac->code = (char*)malloc(sizeof(char)*CODE_SIZE);
-                sprintf(ex->myTac->code,"ifz %s %s %s goto %s",
-                ex->nodeOne->myTac->var,
-                ex->token,
-                ex->nodeTwo->myTac->var,
-                //ex->nodeTwo->myTac->label
-                ifNode->myTac->nextTrue
-                );
-            }
-        }
-        genExpForIfStatment(ifNode,ex->nodeOne);
-        genExpForIfStatment(ifNode,ex->nodeTwo);
-    }
-}
 
 void genIdentifier(node* ast){
     /*Mybe I need to check if is this a node that I'm expecting for*/
