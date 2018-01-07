@@ -868,7 +868,7 @@ yyreduce:
     {
 case 1:
 #line 59 "parser.y"
-	{ /*printPreOrder($1,0);*/ /*printSymbTable($1);*/  makeButtomUp(yystack.l_mark[0].n); makeTopDown(yystack.l_mark[0].n); printTreeAddressCode(yystack.l_mark[0].n); }
+	{ /*printPreOrder($1,0);*/ /*printSymbTable($1);*/makeButtomUp(yystack.l_mark[0].n); makeTopDown(yystack.l_mark[0].n); printTreeAddressCode(yystack.l_mark[0].n); }
 break;
 case 2:
 #line 61 "parser.y"
@@ -1244,7 +1244,7 @@ case 94:
 break;
 case 95:
 #line 206 "parser.y"
-	{ yyval.n = makeNode("while",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
+	{ yyval.n = makeNodeWithDef(WHILE_DEF,"while",yystack.l_mark[-2].n,yystack.l_mark[0].n,NULL,NULL); }
 break;
 case 96:
 #line 209 "parser.y"

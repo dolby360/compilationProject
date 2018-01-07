@@ -7,8 +7,11 @@ void genTacAssign(node* ast);
 void genTacOp(node* ast);
 void genIdentifier(node* ast);
 void genCondition(node* ast);
-void genExpForIfStatment(node* ifNode,node* ex);
+void genBooleanExp(node* ast);
+void genWhile(node* ast);
+void genFor(node* ast);
 
+char* freshLabel();
 tac* makeNewTac();
 void makeButtomUp(node* ast);
 void makeTopDown(node* ast);

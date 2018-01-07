@@ -56,7 +56,7 @@
 %type <str> COMMA       
 
 %%
-S: PROGRAM { /*printPreOrder($1,0);*/ /*printSymbTable($1);*/  makeButtomUp($1); makeTopDown($1); printTreeAddressCode($1); };
+S: PROGRAM { /*printPreOrder($1,0);*/ /*printSymbTable($1);*/makeButtomUp($1); makeTopDown($1); printTreeAddressCode($1); };
 
 PROGRAM:  MULTI_PROC {$$=makeNode("",$1,NULL,NULL,NULL);};
 
@@ -203,7 +203,7 @@ ASS_OR_EXP: ASSIGNMENT  {$$ = $1;}
             |EXP        {$$ = $1;}
             ;
 
-WHILE_STATEMENT : KEY_WHILE PARAN_O EXP PARAN_C BLOCK { $$ = makeNode("while",$3,$5,NULL,NULL); }
+WHILE_STATEMENT : KEY_WHILE PARAN_O EXP PARAN_C BLOCK { $$ = makeNodeWithDef(WHILE_DEF,"while",$3,$5,NULL,NULL); }
                 ;
 
 BLOCK : BRA_O MULT_STATEMENT BRA_C {$$ = $2;}

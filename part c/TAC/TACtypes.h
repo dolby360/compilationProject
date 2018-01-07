@@ -5,8 +5,8 @@ typedef struct tac{
     char* var;
     char* code;
     char* label;
-    char* nextTrue;
-    char* nextFalse;
+    char* trueLabel;
+    char* falseLabel;
 }tac;
 
 #endif

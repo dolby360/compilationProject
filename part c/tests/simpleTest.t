@@ -1,6 +1,3 @@
-
-
-
 void main(){
     string a[1000], b[1000];
     char c;
@@ -12,7 +9,7 @@ void main(){
     c = b[3];
 }
 
-int tobi(){
+int tobi60(){
     int i,j,k,l,x;
     boolean y,t;
 
@@ -20,8 +17,24 @@ int tobi(){
         i = 5;
     }
 
-    i = j;
+    l = j;
 
+    t = !y;
+
+
+    for(i = 0;j < k;j = j + 1){ 
+        l = 2; 
+        i = 9;
+    }
+
+    l = j;
+    /*
+    while(true){ 
+        l = 2; 
+    }
+
+    l = j;
+    */
     /*
     if(true){ 
         j = 3; 

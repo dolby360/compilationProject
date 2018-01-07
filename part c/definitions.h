@@ -57,7 +57,7 @@
 #define ABS_DEF 33
 #define OP_ADDRESS_OF_DEF 34
 #define POINTER_DEF 35
-
+#define WHILE_DEF 36
 
 typedef enum {false=0, true=1} bool;
 
