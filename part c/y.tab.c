@@ -1232,7 +1232,7 @@ case 91:
 break;
 case 92:
 #line 199 "parser.y"
-	{ yyval.n = makeNodeWithDef(FOR_DEF,"for",yystack.l_mark[-6].n,yystack.l_mark[-4].n,yystack.l_mark[-2].n,NULL); }
+	{ yyval.n = makeNodeWithDef(FOR_DEF,"for",yystack.l_mark[-6].n,yystack.l_mark[-4].n,yystack.l_mark[-2].n,yystack.l_mark[0].n); }
 break;
 case 93:
 #line 202 "parser.y"

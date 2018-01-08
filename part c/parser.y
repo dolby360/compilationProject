@@ -196,7 +196,7 @@ EXP : ID                    { $$ = $1; }
     | PROC_STETMENT         { $$ = $1; }
     ;
 
-FOR_STETMENT: KEY_FOR PARAN_O ASS_OR_EXP SEMICOLON EXP SEMICOLON ASS_OR_EXP PARAN_C BLOCK { $$ = makeNodeWithDef(FOR_DEF,"for",$3,$5,$7,NULL); }
+FOR_STETMENT: KEY_FOR PARAN_O ASS_OR_EXP SEMICOLON EXP SEMICOLON ASS_OR_EXP PARAN_C BLOCK { $$ = makeNodeWithDef(FOR_DEF,"for",$3,$5,$7,$9); }
             ;
 
 ASS_OR_EXP: ASSIGNMENT  {$$ = $1;}

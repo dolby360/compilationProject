@@ -5,6 +5,8 @@
 static int registers = 0; 
 /*labels*/
 static int labels = 0;
+/*memory*/
+static int memoryCounter = 0;
 
 char* freshLabel(){
     char* temp;
@@ -35,6 +37,62 @@ tac* makeNewTac(){
         
 //     }
 // }
+
+void ifConcatination(node* ast){
+
+    // char* temp;
+    // temp = (char*)malloc(sizeof(char)*LABEL_SIZE);
+    // sprintf(temp,"\n%s:",ast->myTac->falseLabel);
+    // if(!ast->nodeTwo->myTac->code){
+    //     ast->nodeTwo->myTac->code = (char*)malloc(sizeof(char)*CODE_SIZE);
+    // }
+    // //printf("%s\n",ast->nodeTwo->myTac->code);
+    // strcat(ast->nodeTwo->myTac->code,temp);
+
+    char* temp1;
+    temp1 = (char*)malloc(sizeof(char)*CODE_SIZE*CODE_SIZE);
+    node* temp2;
+    temp2 = (node*)malloc(sizeof(node));
+    *temp2 = *ast;
+
+    while(temp2->nodeTwo){
+        temp2 = temp2->nodeTwo;
+        //printf("%s\n",temp2->token);
+        //printf("%s\n",ast->token);
+    }
+    //sprintf(temp1,"\n%s:",ast->myTac->falseLabel);
+    sprintf(temp2->myTac->code,"\n%s:",ast->myTac->falseLabel);
+    //printf("%s\n",ast->token);
+}
+void countMemory(node* ast,int type){
+    if(ast){
+        countMemory(ast->nodeOne,type);
+        countMemory(ast->nodeTwo,type);
+        countMemory(ast->nodeThree,type);
+        countMemory(ast->nodeFour,type);
+
+        memoryCounter = memoryCounter + type;
+    }
+}
+
+/*Because the next function is recursive*/
+void preCountMemory__figurOutWhatIsTheType(node* ast){
+    switch(ast->nodeOne->tokenDef){
+        case BOOLEAN_DEF:
+            countMemory(ast,1);
+            break;
+        case CHAR_DEF:
+            countMemory(ast,1);
+            break;
+        case INT_DEF:
+            countMemory(ast,sizeof(int));
+            break;
+        case STRING_DEF:
+            countMemory(ast,1);
+            break;
+    }
+}
+
 void makeTopDown(node* ast){
     if(ast){
         if(ast->tokenDef == PROCEDURE_DEF){
@@ -45,24 +103,15 @@ void makeTopDown(node* ast){
                 ast->myTac->label = (char*)malloc(sizeof(char) * LABEL_SIZE);
                 strcpy(ast->myTac->label,ast->nodeOne->token);
             }
+        }else if(ast->tokenDef == DECLARATION_DEF){
+            preCountMemory__figurOutWhatIsTheType(ast);
+            
         }else if(ast->tokenDef == IF_DEF){
             //If the "if" have "else"
             if(ast->nodeThree){
                 return;
             }
-            // if(!ast->nodeOne->nodeOne->nodeOne->myTac->label){
-            //     printf("%s\n",ast->nodeTwo->myTac->falseLabel);
-            //     ast->nodeOne->nodeOne->nodeOne->myTac->label = (char*)malloc(sizeof(char)*LABEL_SIZE);
-            // }
-            //strcpy(ast->nodeOne->nodeOne->nodeOne->myTac->label,ast->nodeTwo->myTac->falseLabel);
-            char* temp;
-            temp = (char*)malloc(sizeof(char)*LABEL_SIZE);
-            sprintf(temp,"\n%s:",ast->myTac->falseLabel);
-            if(!ast->nodeTwo->myTac->code){
-                ast->nodeTwo->myTac->code = (char*)malloc(sizeof(char)*CODE_SIZE);
-            }
-            //printf("%s\n",ast->nodeTwo->myTac->code);
-            strcat(ast->nodeTwo->myTac->code,temp);
+            ifConcatination(ast);
         }else if(ast->tokenDef == WHILE_DEF){
             genWhile(ast);
         }else if(ast->tokenDef == FOR_DEF){
@@ -82,28 +131,36 @@ void genFor(node* ast){
     
     ast->nodeTwo->myTac->label = (char*)malloc(sizeof(char)*LABEL_SIZE);
     strcpy(ast->nodeTwo->myTac->label,ast->myTac->trueLabel);
-    printf("l\n");
-/*
+    
+    char* temp3;
+    temp3 = (char*)malloc(sizeof(char)*CODE_SIZE);
+
     ast->myTac->code = (char*)malloc(sizeof(char)*CODE_SIZE);
-    sprintf(ast->myTac->code,"ifz %s goto %s" 
-    ,ast->nodeOne->myTac->var
+    sprintf(temp3,"\nifz %s goto %s" 
+    ,ast->nodeTwo->myTac->var
     ,ast->myTac->falseLabel
     );
+    
+
+
+    strcat(ast->nodeTwo->myTac->code,temp3);
+
     char* temp1;
     temp1 = (char*)malloc(sizeof(char)*CODE_SIZE*CODE_SIZE);
     node* temp2;
     temp2 = (node*)malloc(sizeof(node));
     *temp2 = *ast;
 
+    temp2 = temp2->nodeFour; 
+
     while(temp2->nodeTwo){
         temp2 = temp2->nodeTwo;
         //printf("%s\n",temp2->token);
-        printf("%s\n",ast->token);
+        //printf("%s\n",ast->token);
     }
     //sprintf(temp1,"\n%s:",ast->myTac->falseLabel);
-    sprintf(temp2->myTac->code,"\n%s:",ast->myTac->falseLabel);
-    printf("%s\n",ast->token);
-    */
+    sprintf(temp2->myTac->code,"goto %s\n%s:",ast->myTac->trueLabel,ast->myTac->falseLabel);
+    //printf("%s\n",ast->token);
 }
 
 void genWhile(node* ast){
@@ -129,11 +186,11 @@ void genWhile(node* ast){
     while(temp2->nodeTwo){
         temp2 = temp2->nodeTwo;
         //printf("%s\n",temp2->token);
-        printf("%s\n",ast->token);
+        //printf("%s\n",ast->token);
     }
     //sprintf(temp1,"\n%s:",ast->myTac->falseLabel);
-    sprintf(temp2->myTac->code,"\n%s:",ast->myTac->falseLabel);
-    printf("%s\n",ast->token);
+    sprintf(temp2->myTac->code,"goto %s\n%s:",ast->myTac->trueLabel,ast->myTac->falseLabel);
+    //printf("%s\n",ast->token);
 }
 
 void makeButtomUp(node* ast){
@@ -174,9 +231,9 @@ void makeButtomUp(node* ast){
         }else if(!ast->nodeOne && !ast->nodeTwo){
             //printf("5\n");
             if(ast->myTac->var == NULL){
-                //printf("5\n");
-                genIdentifier(ast);
-                //printf("55\n");
+            //printf("5\n");
+            genIdentifier(ast);
+            //printf("55\n");
             }
         }
     }
@@ -246,6 +303,7 @@ void genCondition(node* ast){
         strcpy(ast->nodeThree->myTac->label,ast->myTac->falseLabel);
     }
 
+    
 }
 
 void genIdentifier(node* ast){
@@ -347,12 +405,52 @@ void genTacAssign(node* ast){
     ){
         return;
     }*/else{    
+        
         ast->myTac = (tac*)malloc(sizeof(tac)); 
         ast->myTac->var = (char*)malloc(sizeof(ast->nodeOne->token) + 1);
         strcpy(ast->myTac->var,ast->nodeOne->myTac->var);
         
-        ast->myTac->code = (char*)malloc(sizeof(char)*CODE_SIZE);
-        sprintf(ast->myTac->code,"%s = %s",ast->nodeOne->myTac->var,ast->nodeTwo->myTac->var);
+        char* temp;
+        temp = (char*)malloc(sizeof(char)*CODE_SIZE);
+        memset(temp,'\0',sizeof(char)*CODE_SIZE);
+        char* temp2;
+        temp2 = (char*)malloc(sizeof(char)*CODE_SIZE*CODE_SIZE);
+        memset(temp,'\0',sizeof(char)*CODE_SIZE*CODE_SIZE);
+
+        //ast->myTac->code = (char*)malloc(sizeof(char)*CODE_SIZE);
+        
+        if(!ast->nodeTwo->myTac->code || strcmp(ast->nodeTwo->myTac->code,"")!=0){
+            if(!ast->nodeTwo->myTac->code){
+                ast->myTac->code = (char*)malloc(sizeof(char)*CODE_SIZE);
+
+                if(!ast->nodeTwo->myTac->var){
+                    //printf("%s\n",ast->nodeTwo->token);
+                    sprintf(ast->myTac->code,"%s = %s",
+                    ast->nodeOne->myTac->var,
+                    ast->nodeTwo->token);
+                    return;
+                }
+                sprintf(ast->myTac->code,"%s = %s",
+                ast->nodeOne->myTac->var,
+                ast->nodeTwo->myTac->var);
+            }
+
+            return;
+        }
+
+        sprintf(temp2,"%s\n%s = %s",
+        ast->nodeTwo->myTac->code,
+        ast->nodeOne->myTac->var,
+        ast->nodeTwo->myTac->var);
+
+        // printf("%s\n",ast->token);
+        // printf("=>%s\n",ast->nodeTwo->myTac->code);
+        
+        free(ast->nodeTwo->myTac->code);
+        ast->nodeTwo->myTac->code = (char*)malloc(sizeof(char)*CODE_SIZE*CODE_SIZE);
+        memset(ast->nodeTwo->myTac->code,'\0',sizeof(char)*CODE_SIZE*CODE_SIZE);
+
+        strcpy(ast->nodeTwo->myTac->code,temp2);
     }
 }
 
@@ -370,7 +468,31 @@ void genTacOp(node* ast){
     ,ast->nodeTwo->myTac->var);
 }
 
+void printAssignmment(node* ast){
+    if(ast->myTac && ast->myTac->code 
+    && strcmp(ast->myTac->code,"")!=0
+    && ast->tokenDef == ASSIGNMENT_DEF
+    ){
+        printf("%s\n",ast->myTac->code);
+    }
+}
+void printNotAssignmment(node* ast){
+    if(ast->myTac && ast->myTac->code 
+    && strcmp(ast->myTac->code,"")!=0
+    && ast->tokenDef != ASSIGNMENT_DEF
+    ){
+        printf("%s\n",ast->myTac->code);
+    }
+}
+void printSize(){
+    static bool t = true;
+    if(t){
+        printf("Begin function: %d\n",memoryCounter);
+        t = false;
+    }
+}
 void printTreeAddressCode(node* ast){
+    printSize();
     if(ast){
         // if(
         // (ast->myTac 
@@ -387,11 +509,12 @@ void printTreeAddressCode(node* ast){
         }
 
         printTreeAddressCode(ast->nodeOne);
+        printNotAssignmment(ast);
+        printAssignmment(ast);
 
-        if(ast->myTac && ast->myTac->code && strcmp(ast->myTac->code,"")!=0){
-            printf("%s\n",ast->myTac->code);
-        }
         printTreeAddressCode(ast->nodeTwo);
+        
+
         printTreeAddressCode(ast->nodeThree);
         printTreeAddressCode(ast->nodeFour);
     }

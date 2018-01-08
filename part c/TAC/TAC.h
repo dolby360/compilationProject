@@ -10,6 +10,8 @@ void genCondition(node* ast);
 void genBooleanExp(node* ast);
 void genWhile(node* ast);
 void genFor(node* ast);
+void ifConcatination(node* ast);
+void countMemory(node* ast,int type);
 
 char* freshLabel();
 tac* makeNewTac();
